@@ -2,16 +2,15 @@ package ru.otus.danik_ik.homework01;
 
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static ru.otus.danik_ik.homework01.StringListViews.*;
 
 /**
- * Hello world!
- *
+ * Группировка слов по длине в отдельные коллекции
  */
 public class Main
 {
-  private final static String TEXT =
+  final static String TEXT =
       "Больше всего на свете я ненавижу обман и люблю честность и потому сразу честно признаюсь, что я вас (совсем немножко!) обманул: на самом деле это не НИКАКАЯ ГЛАВА, а НИКАКАЯ НЕ ГЛАВА – это просто-напросто… Думаете, так я вам и сказал? Нет, подождите. Вот дочитаете до конца, тогда узнаете! А не дочитаете – ну что ж, дело ваше. Только тогда – почти наверняка! – не сумеете правильно прочитать и всю книжку. Да, да!\n" +
       "Дело в том, что хотя перед вами – сказка, но сказка эта очень, очень не простая.\n" +
       "Начнем с начала, как советует Червонный Король (вам предстоит с ним скоро встретиться). И даже немножко раньше: с названия.\n" +
@@ -23,18 +22,41 @@ public class Main
       "А знаменита «Алиса» действительно сверх всякой меры. В особенности в тех странах, где говорят по-английски. Там ее знает каждый и любят все. И самое интересное, что, хотя эта сказка для детей, пожалуй, больше детей любят ее взрослые, а больше всех – самые взрослые из взрослых – ученые!\n" +
       "Да, сразу видно, что это очень и очень непростая сказка!\n";
 
-  private static Stream<String> getWords(String contents) {
-    return Pattern.compile("[\\P{L}]+").splitAsStream(contents);
-  }
-
-  private static Stream<String> getSampleWords() {
-    return getWords(TEXT);
-  }
-
   private Map<Integer, Collection<String>> wordsByLengths = new TreeMap<>();
 
+  public static void main( String[] args ) {
+    new Main().execute();
+  }
+
+  private void execute() {
+    collectSample();
+    printCollected();
+  }
+
+  private void collectSample() {
+    collectByLengths(TEXT);
+  }
+
+  private void printCollected() {
+
+    for (Map.Entry<Integer, Collection<String>> mapEntry: wordsByLengths.entrySet()) {
+      System.out.println("===================================");
+      System.out.println("Length: " + mapEntry.getKey());
+      System.out.println(getNormalizedView(mapEntry.getValue()));
+    }
+  }
+
+  public void collectByLengths(String source) {
+    getSampleWords(source)
+        .forEach(this::registerWord);
+  };
+
+  public Collection<String> getWordsByLength(Integer length) {
+    Collection<String> result = wordsByLengths.get(length);
+    return result == null ? Collections.emptyList() : result;
+  }
+
   private void registerWord(String word) {
-    // TODO: 14.04.2018  сохраняем списки слов по каждой длине
     Integer length = word.length();
     Collection<String> collection = wordsByLengths.get(length);
     if (collection == null) {
@@ -44,33 +66,11 @@ public class Main
     collection.add(word);
   }
 
-  private void collectByLengths() {
-    getSampleWords()
-        .forEach(this::registerWord);
-  };
-
-  private void execute() {
-    collectByLengths();
-    printCollected();
-  }
-  
-  private void printCollected() {
-    for (Map.Entry<Integer, Collection<String>> mapEntry: wordsByLengths.entrySet()) {
-      System.out.println("===================================");
-      System.out.println("Length: " + mapEntry.getKey());
-
-      // TODO: 14.04.2018 вынести получение нормализованного потока в отдельный метод
-      String words = mapEntry.getValue()
-          .parallelStream()
-          .map(String::toLowerCase)
-          .distinct()
-          .sorted()
-          .collect(Collectors.joining(", "));
-      System.out.println(words);
-    }
+  private static Stream<String> getSampleWords(String source) {
+    return getWords(source);
   }
 
-  public static void main( String[] args ) {
-    new Main().execute();
+  private static Stream<String> getWords(String contents) {
+    return Pattern.compile("[\\P{L}]+").splitAsStream(contents);
   }
 }
