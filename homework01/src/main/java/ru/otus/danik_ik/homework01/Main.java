@@ -1,5 +1,6 @@
 package ru.otus.danik_ik.homework01;
 
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -29,12 +30,39 @@ public class Main
     return getWords(TEXT);
   }
 
-  private static void registerWord(String word) {
+  private Map<Integer, Collection<String>> wordsByLengths = new TreeMap<>();
+
+  private void registerWord(String word) {
     // TODO: 14.04.2018  сохраняем списки слов по каждой длине
+    Integer length = word.length();
+    Collection<String> collection = wordsByLengths.get(length);
+    if (collection == null) {
+      collection = new LinkedList<>();
+      wordsByLengths.put(length, collection);
+    }
+    collection.add(word);
+  }
+
+  private void collectByLengths() {
+    getSampleWords()
+        .forEach(this::registerWord);
+  };
+
+  private void execute() {
+    collectByLengths();
+    printCollected();
+  }
+
+  private void printCollected() {
+    for (Map.Entry<Integer, Collection<String>> mapEntry: wordsByLengths.entrySet()) {
+      System.out.println("===================================");
+      System.out.println("Length: " + mapEntry.getKey());
+      String words = String.join(", ", mapEntry.getValue());
+      System.out.println(words);
+    }
   }
 
   public static void main( String[] args ) {
-    getSampleWords()
-        .forEach(Main::registerWord);
+    new Main().execute();
   }
 }
