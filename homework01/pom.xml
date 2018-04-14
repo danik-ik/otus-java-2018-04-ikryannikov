@@ -4,6 +4,9 @@
   <groupId>ru.otus.danik_ik</groupId>
   <artifactId>homework01</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <properties>
+    <com.google.guava.version>23.0</com.google.guava.version>
+  </properties>
   <developers>
     <developer>
       <name>Danila Ikryannikov</name>
@@ -41,6 +44,11 @@
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${com.google.guava.version}</version>
     </dependency>
   </dependencies>
 </project>
