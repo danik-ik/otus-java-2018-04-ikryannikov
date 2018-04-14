@@ -2,6 +2,7 @@ package ru.otus.danik_ik.homework01;
 
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -52,12 +53,19 @@ public class Main
     collectByLengths();
     printCollected();
   }
-
+  
   private void printCollected() {
     for (Map.Entry<Integer, Collection<String>> mapEntry: wordsByLengths.entrySet()) {
       System.out.println("===================================");
       System.out.println("Length: " + mapEntry.getKey());
-      String words = String.join(", ", mapEntry.getValue());
+
+      // TODO: 14.04.2018 вынести получение нормализованного потока в отдельный метод
+      String words = mapEntry.getValue()
+          .parallelStream()
+          .map(String::toLowerCase)
+          .distinct()
+          .sorted()
+          .collect(Collectors.joining(", "));
       System.out.println(words);
     }
   }
