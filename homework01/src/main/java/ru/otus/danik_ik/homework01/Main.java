@@ -57,7 +57,10 @@ public class Main
   }
 
   private void registerWord(String word) {
+    word = word.trim();
     Integer length = word.length();
+    if (length == 0)
+      return;
     Collection<String> collection = wordsByLengths.get(length);
     if (collection == null) {
       collection = new LinkedList<>();
