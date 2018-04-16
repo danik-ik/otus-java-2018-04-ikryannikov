@@ -1,5 +1,8 @@
 package ru.otus.danik_ik.homework01;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -22,7 +25,7 @@ public class Main
       "А знаменита «Алиса» действительно сверх всякой меры. В особенности в тех странах, где говорят по-английски. Там ее знает каждый и любят все. И самое интересное, что, хотя эта сказка для детей, пожалуй, больше детей любят ее взрослые, а больше всех – самые взрослые из взрослых – ученые!\n" +
       "Да, сразу видно, что это очень и очень непростая сказка!\n";
 
-  private Map<Integer, Collection<String>> wordsByLengths = new TreeMap<>();
+  private Multimap<Integer, String> wordsByLengths = ArrayListMultimap.create();
 
   public static void main( String[] args ) {
     new Main().execute();
@@ -39,7 +42,7 @@ public class Main
 
   private void printCollected() {
 
-    for (Map.Entry<Integer, Collection<String>> mapEntry: wordsByLengths.entrySet()) {
+    for (Map.Entry<Integer, Collection<String>> mapEntry: wordsByLengths.asMap().entrySet()) {
       System.out.println("===================================");
       System.out.println("Length: " + mapEntry.getKey());
       System.out.println(getNormalizedView(mapEntry.getValue()));
@@ -61,12 +64,7 @@ public class Main
     Integer length = word.length();
     if (length == 0)
       return;
-    Collection<String> collection = wordsByLengths.get(length);
-    if (collection == null) {
-      collection = new LinkedList<>();
-      wordsByLengths.put(length, collection);
-    }
-    collection.add(word);
+    wordsByLengths.put(length, word);
   }
 
   private static Stream<String> getSampleWords(String source) {
