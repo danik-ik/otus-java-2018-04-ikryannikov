@@ -5,6 +5,7 @@
   <artifactId>homework01</artifactId>
   <version>1.0-SNAPSHOT</version>
   <properties>
+    <project.name>Ikryannikov</project.name>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <com.google.guava.version>23.0</com.google.guava.version>
   </properties>
@@ -42,6 +43,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
+          <finalName>${project.name}</finalName>
           <archive>
             <manifest>
               <mainClass>ru.otus.danik_ik.homework01.Main</mainClass>
@@ -50,6 +52,7 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>
     </plugins>
