@@ -8,6 +8,7 @@
     <project.name>Ikryannikov</project.name>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <com.google.guava.version>23.0</com.google.guava.version>
+    <manifest.mainClass>ru.otus.danik_ik.homework01.Main</manifest.mainClass>
   </properties>
   <developers>
     <developer>
@@ -34,7 +35,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>ru.otus.danik_ik.homework01.Main</mainClass>
+              <mainClass>${mainClass}</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -46,7 +47,7 @@
           <finalName>${project.name}</finalName>
           <archive>
             <manifest>
-              <mainClass>ru.otus.danik_ik.homework01.Main</mainClass>
+              <mainClass>${mainClass}</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
