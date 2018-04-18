@@ -18,6 +18,7 @@
     </developer>
   </developers>
   <build>
+    <finalName>${project.name}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -44,7 +45,6 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
-          <finalName>${project.name}</finalName>
           <archive>
             <manifest>
               <mainClass>${mainClass}</mainClass>
@@ -53,7 +53,6 @@
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
-          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
         <executions>
           <execution>
