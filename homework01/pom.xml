@@ -8,7 +8,7 @@
     <project.name>Ikryannikov</project.name>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <com.google.guava.version>23.0</com.google.guava.version>
-    <manifest.mainClass>ru.otus.danik_ik.homework01.Main</manifest.mainClass>
+    <mainClass>ru.otus.danik_ik.homework01.Main</mainClass>
   </properties>
   <developers>
     <developer>
