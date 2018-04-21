@@ -1,10 +1,13 @@
 package ru.otus.danik_ik.homework02;
 
 import java.lang.String;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.net.InterfaceAddress;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
@@ -18,30 +21,39 @@ public class MainTest
     /**
      * Data for test.
      */
-    @Parameterized.Parameters(name = "{index}: («{1}»)")
+    @Parameterized.Parameters(name = "{index}: («{0}» if super for «{1}»: {2})")
     public static Iterable<Object[]> dataForTest() {
         return Arrays.asList(new Object[][]{
             /*  uncomment the lines below to create test cases
                 each row used as set of parameters for constructor */
-//      {"AAA", "AAA"},
-//      {"BBB", "bbb"},
-//      {"CCC", "Ccc"},
+            {Object.class, String.class, true},
+            {String.class, Object.class, false},
+            {Object.class, int.class, false},
+            {Object.class, boolean.class, false},
+            {Object.class, byte.class, false},
+            {Object.class, short.class, false},
+            {Object.class, long.class, false},
+            {Object.class, float.class, false},
+            {Object.class, double.class, false},
+            {Object.class, Integer.class, true},
         });
     }
 
     /**
      * Data for current instance (one row from result of dataForTest() )
      */
-    private String expected;
-    private String input;
+    private Class superclass;
+    private Class inheritedClass;
+    private boolean result;
 
-    public MainTest(String expected, String input) {
-        this.expected = expected;
-        this.input = input;
+    public MainTest(Class superclass, Class inheritedClass, boolean result) {
+        this.superclass = superclass;
+        this.inheritedClass = inheritedClass;
+        this.result = result;
     }
 
     @Test
-    public void testUppercase() throws Exception {
-        assertEquals(expected, input.toUpperCase());
+    public void testIsAssignableFrom() throws Exception {
+        assertEquals(result, superclass.isAssignableFrom(inheritedClass));
     }
 }
