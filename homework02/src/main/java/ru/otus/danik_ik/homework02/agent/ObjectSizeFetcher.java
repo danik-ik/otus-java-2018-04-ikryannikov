@@ -1,4 +1,4 @@
-package ru.otus.danik_ik.homework02;
+package ru.otus.danik_ik.homework02.agent;
 
 import java.lang.instrument.Instrumentation;
 

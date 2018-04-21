@@ -1,5 +1,7 @@
 package ru.otus.danik_ik.homework02;
 
+import ru.otus.danik_ik.homework02.agent.ObjectSizeFetcher;
+
 /**
  * Hello world!
  *

@@ -35,7 +35,7 @@
                             <mainClass>ru.otus.danik_ik.homework02.Main</mainClass>
                         </manifest>
                         <manifestEntries>
-                            <Premain-Class>ru.otus.danik_ik.homework02.ObjectSizeFetcher</Premain-Class>
+                            <Premain-Class>ru.otus.danik_ik.homework02.agent.ObjectSizeFetcher</Premain-Class>
                         </manifestEntries>
                     </archive>
                     <descriptorRefs>
