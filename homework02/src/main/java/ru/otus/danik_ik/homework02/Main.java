@@ -20,7 +20,29 @@ public class Main
         System.out.println(ObjectSizeCalculator.calcSize(""));
         System.out.println();
 
-        String[] ss = {"rgadfgadf","dasdasdgasdfgasdasda", "uffoufff"};
+        String[] ss;
+
+        ss = new String[]{};
+        System.out.println();
+        System.out.println("Array of 0 strings");
+        System.out.println(ObjectSizeCalculator.calcSize(ss));
+
+        ss = new String[]{"", "", ""};
+        System.out.println();
+        System.out.println("Array of 3 empty strings");
+        System.out.println(ObjectSizeCalculator.calcSize(ss));
+
+        ss = new String[]{new String("."), new String("."), new String(".")};
+        System.out.println();
+        System.out.println("Array of 3 equal one-char strings");
+        System.out.println(ObjectSizeCalculator.calcSize(ss));
+
+        ss = new String[]{new String("1"), new String("2"), new String("3")};
+        System.out.println();
+        System.out.println("Array of 3 different one-char strings");
+        System.out.println(ObjectSizeCalculator.calcSize(ss));
+
+        ss =  new String[]{"rgadfgadf","dasdasdgasdfgasdasda", "uffoufff"};
         System.out.println();
         System.out.println("Array of 3 strings");
         System.out.println(ObjectSizeCalculator.calcSize(ss));
