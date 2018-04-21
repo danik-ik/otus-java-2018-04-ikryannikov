@@ -1,16 +1,12 @@
 package ru.otus.danik_ik.homework02;
 
-import java.lang.String;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.net.InterfaceAddress;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Simple parametrized test.
@@ -21,7 +17,7 @@ public class MainTest
     /**
      * Data for test.
      */
-    @Parameterized.Parameters(name = "{index}: («{0}» if super for «{1}»: {2})")
+    @Parameterized.Parameters(name = "{index}: («{0}» is super for «{1}»: {2})")
     public static Iterable<Object[]> dataForTest() {
         return Arrays.asList(new Object[][]{
             /*  uncomment the lines below to create test cases
@@ -36,6 +32,8 @@ public class MainTest
             {Object.class, float.class, false},
             {Object.class, double.class, false},
             {Object.class, Integer.class, true},
+            {Object[].class, String[].class, true},
+            {Object[].class, int[].class, false},
         });
     }
 
