@@ -21,7 +21,8 @@ public class ObjectSizeCalculator {
     }
 
     private void addObjectSize(Object object) {
-        if (isVisited(object)) return;;
+        if (object == null) return;
+        if (isVisited(object)) return;
         visited.add(object);
 
         accumalator += ObjectSizeFetcher.getObjectSize(object);
