@@ -6,31 +6,52 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class ObjectSizeCalculator {
-    private Map<Object, Object> visited = new HashMap<>();
+    private Set<Object> visited = new HashSet<>();
     private long accumalator = 0;
 
     private ObjectSizeCalculator() {}
 
     public static long calcSize(Object object) {
-        return new ObjectSizeCalculator().addObjectSize(object);
+        return new ObjectSizeCalculator().calcSizeImpl(object);
     }
 
-    private long addObjectSize(Object object) {
-        accumalator += ObjectSizeFetcher.getObjectSize(object);
-        addRelatedObjects(object);
-
+    public long calcSizeImpl(Object object) {
+        addObjectSize(object);
         return accumalator;
+    }
+
+    private void addObjectSize(Object object) {
+        if (isVisited(object)) return;;
+        visited.add(object);
+
+        accumalator += ObjectSizeFetcher.getObjectSize(object);
+        addMembersIfObjectArray(object);
+        addRelatedObjects(object);
+    }
+
+    private void addMembersIfObjectArray(Object object) {
+        if (isObjectArray(object))
+            addArrayMembers(object);
+    }
+
+    private boolean isObjectArray(Object object) {
+        return object instanceof Object[];
+    }
+
+    private void addArrayMembers(Object object) {
+        for (Object member: (Object[])object) {
+            addObjectSize(member);
+        }
     }
 
     private void addRelatedObjects(Object parent) {
         for (Object child: getReferences(parent)) {
-            addAbsend(child);
+            addObjectSize(child);
         }
     }
 
-    private void addAbsend(Object o) {
-        if (!visited.containsKey(o))
-            addObjectSize(o);
+    private boolean isVisited(Object o) {
+        return visited.contains(o);
     }
 
     private Iterable<? extends Object> getReferences(Object object) {
