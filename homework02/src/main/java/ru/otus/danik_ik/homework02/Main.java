@@ -42,12 +42,14 @@ public class Main
         System.out.println("Array of 3 different one-char strings");
         System.out.println(ObjectSizeCalculator.calcSize(ss));
 
-        ss =  new String[]{"rgadfgadf","dasdasdgasdfgasdasda", "uffoufff"};
+        ss =  new String[]{randomString(), randomString(), randomString()};
         System.out.println();
-        System.out.println("Array of 3 strings");
+        System.out.println("Array of 3 random 100-char strings");
         System.out.println(ObjectSizeCalculator.calcSize(ss));
 
-        System.out.println("ArrayList");
+//        if (true) return;
+        System.out.println();
+        System.out.println("ArrayList (equal strings)");
         List<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(ss));
         System.out.println(ObjectSizeCalculator.calcSize(list));
@@ -55,5 +57,30 @@ public class Main
             list.add(new String("gk;sdfng;sfdg;bs;kbaf"));
             System.out.println(ObjectSizeCalculator.calcSize(list));
         }
+
+        System.out.println();
+        System.out.println("ArrayList (different strings)");
+        list = new ArrayList<>();
+        list.addAll(Arrays.asList(ss));
+        System.out.println(ObjectSizeCalculator.calcSize(list));
+        for (int i = 0; i < 100; i++) {
+            list.add(randomString());
+            System.out.println(ObjectSizeCalculator.calcSize(list));
+        }
+
+        ss = new String[]{new String("."), new String("."), new String(".")};
+        System.out.println();
+        System.out.println("Array of 3 equal one-char strings");
+        System.out.println(ObjectSizeCalculator.calcSize(ss));
+
+    }
+
+    private static String randomString() {
+        final char[] allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+        char[] result = new char[100];
+            for (int i = 0; i < result.length; i++) {
+                result[i] = allowedChars[(int)Math.random()*allowedChars.length];
+            }
+        return result.toString();
     }
 }
