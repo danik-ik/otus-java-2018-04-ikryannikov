@@ -42,7 +42,7 @@ public class Main
         System.out.println("Array of 3 different one-char strings");
         System.out.println(ObjectSizeCalculator.calcSize(ss));
 
-        ss =  new String[]{randomString(), randomString(), randomString()};
+        ss =  new String[]{randomString100(), randomString100(), randomString100()};
         System.out.println();
         System.out.println("Array of 3 random 100-char strings");
         System.out.println(ObjectSizeCalculator.calcSize(ss));
@@ -64,7 +64,7 @@ public class Main
         list.addAll(Arrays.asList(ss));
         System.out.println(ObjectSizeCalculator.calcSize(list));
         for (int i = 0; i < 100; i++) {
-            list.add(randomString());
+            list.add(randomString100());
             System.out.println(ObjectSizeCalculator.calcSize(list));
         }
 
@@ -75,12 +75,14 @@ public class Main
 
     }
 
-    private static String randomString() {
-        final char[] allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
-        char[] result = new char[100];
-            for (int i = 0; i < result.length; i++) {
-                result[i] = allowedChars[(int)Math.random()*allowedChars.length];
-            }
-        return result.toString();
+    private static String randomString100() {
+        final char[] allowedChars = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" +
+                "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя").toCharArray();
+        char[] sequence = new char[100];
+        for (int i = 0; i < sequence.length; i++) {
+            sequence[i] = allowedChars[(int)(Math.random()*allowedChars.length)];
+        }
+        String result = new String(sequence);
+        return result;
     }
 }
