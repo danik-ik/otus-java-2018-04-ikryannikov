@@ -15,10 +15,12 @@ public class MinimalSizeTest {
     /**
      * Data for test.
      */
-    @Parameterized.Parameters(name = "{index}")
+    @Parameterized.Parameters(name = "{index}: {2}")
     public static Iterable<Object[]> dataForTest() {
         return Arrays.asList(new Object[][]{
             {new String(), 40, "Empty string"},
+            {new long[0], 16 + 8 * 0, "array of 0 long"},
+            {new long[100], 16 + 8 * 100, "array of 100 long"},
         });
     }
 
