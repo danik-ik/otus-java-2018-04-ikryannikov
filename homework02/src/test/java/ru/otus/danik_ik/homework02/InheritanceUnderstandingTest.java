@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
  * Simple parametrized test.
  */
 @RunWith(Parameterized.class)
-public class MainTest
+public class InheritanceUnderstandingTest
 {
     /**
      * Data for test.
@@ -44,7 +44,7 @@ public class MainTest
     private Class inheritedClass;
     private boolean result;
 
-    public MainTest(Class superclass, Class inheritedClass, boolean result) {
+    public InheritanceUnderstandingTest(Class superclass, Class inheritedClass, boolean result) {
         this.superclass = superclass;
         this.inheritedClass = inheritedClass;
         this.result = result;
