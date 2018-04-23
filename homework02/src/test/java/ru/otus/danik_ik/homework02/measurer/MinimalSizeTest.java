@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 import static org.junit.Assert.assertTrue;
+import static ru.otus.danik_ik.homework02.util.StrUtil.randomString;
 
 /*  
     Для запуска данных текстов необходимо использовать javavgent.
@@ -29,7 +30,7 @@ public class MinimalSizeTest {
     public static Iterable<Object[]> dataForTest() {
         return Arrays.asList(new Object[][]{
             {new String(), 40, "Empty string"},
-            {randomString100(), 40, "100-char string"},
+            {randomString(100), 40, "100-char string"},
             {new long[0], 16 + 8 * 0, "array of 0 long"},
             {new long[100], 16 + 8 * 100, "array of 100 long"},
             {new String[]{"","",""}, 16 + 3 * 16, "array of 3 empty string"},
@@ -55,16 +56,5 @@ public class MinimalSizeTest {
         long size = ObjectSizeCalculator.calcSize(object);
         System.out.println(comment + ": " + size);
         assertTrue(size >= mustBeMoreOrEqual);
-    }
-
-    private static String randomString100() {
-        final char[] allowedChars = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" +
-                "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя").toCharArray();
-        char[] sequence = new char[100];
-        for (int i = 0; i < sequence.length; i++) {
-            sequence[i] = allowedChars[(int)(Math.random()*allowedChars.length)];
-        }
-        String result = new String(sequence);
-        return result;
     }
 }
