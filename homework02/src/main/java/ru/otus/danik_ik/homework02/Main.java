@@ -3,77 +3,64 @@ package ru.otus.danik_ik.homework02;
 import ru.otus.danik_ik.homework02.measurer.ObjectSizeCalculator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static ru.otus.danik_ik.homework02.util.StrUtil.randomString;
 
-/**
- * Hello world!
- *
- */
 public class Main
 {
     /*
         запускать jar сборки, указывая его же в параметре javaagent (см. run.cmd)
      */
     public static void main( String[] args ) {
-        System.out.println("Empty string");
-        System.out.println(ObjectSizeCalculator.calcSize(""));
-        System.out.println();
 
-        String[] ss;
+        testObject("", "Empty string");
+        testObject(randomString(100), "Random 100-char string");
+        testObject(randomString(1000), "Random 1000-char string");
+        testObject(new String[]{}, "Array of 0 strings");
+        testObject(new String[]{"", "", ""}, "Array of 3 empty strings");
+        testObject(new String[]{".", ".", "."}, "Array of 3 equal one-char string consts");
+        testObject(new String[]{new String("."), new String("."), new String(".")},
+                "Array of 3 new one-char strings");
+        testObject(new String[]{"1", "2", "3"}, "Array of 3 different one-char string consts");
 
-        ss = new String[]{};
-        System.out.println();
-        System.out.println("Array of 0 strings");
-        System.out.println(ObjectSizeCalculator.calcSize(ss));
+        testObject(new int[0], "int[0]");
+        testObject(new int[100], "int[100]");
+        testObject(new Integer[0], "Integer[0]");
+        testObject(new Integer[100], "Integer[100] non-initialized");
+        testObject(new long[0], "long[0]");
+        testObject(new long[100], "long[100]");
+        testObject(new Long[0], "Long[0]");
+        testObject(new Long[100], "Long[100]");
 
-        ss = new String[]{"", "", ""};
-        System.out.println();
-        System.out.println("Array of 3 empty strings");
-        System.out.println(ObjectSizeCalculator.calcSize(ss));
 
-        ss = new String[]{new String("."), new String("."), new String(".")};
-        System.out.println();
-        System.out.println("Array of 3 equal one-char strings");
-        System.out.println(ObjectSizeCalculator.calcSize(ss));
+        multiTest(new ArrayList(), "ArrayList of 100 empty strings", list->list.add(""), 100);
+        multiTest(new ArrayList(), "ArrayList of 100 random 100-char strings",
+                list->list.add(randomString(100)), 100);
+    }
 
-        ss = new String[]{new String("1"), new String("2"), new String("3")};
-        System.out.println();
-        System.out.println("Array of 3 different one-char strings");
-        System.out.println(ObjectSizeCalculator.calcSize(ss));
+    private static void testObject(Object object, String comment) {
+        printHeader(comment);
+        printSize(object);
+    }
 
-        ss =  new String[]{randomString(100), randomString(100), randomString(100)};
-        System.out.println();
-        System.out.println("Array of 3 random 100-char strings");
-        System.out.println(ObjectSizeCalculator.calcSize(ss));
-
-//        if (true) return;
-        System.out.println();
-        System.out.println("ArrayList (equal strings)");
-        List<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList(ss));
-        System.out.println(ObjectSizeCalculator.calcSize(list));
-        for (int i = 0; i < 100; i++) {
-            list.add(new String("gk;sdfng;sfdg;bs;kbaf"));
-            System.out.println(ObjectSizeCalculator.calcSize(list));
+    private static void multiTest(List object, String comment, Consumer<List> modifier, int count) {
+        testObject(object, comment);
+        for (int i = 0; i < count; i++) {
+            modifier.accept(object);
+            printSize(object);
         }
+    }
 
+    private static void printSize(Object object) {
+        System.out.println(ObjectSizeCalculator.calcSize(object));
+    }
+
+    private static void printHeader(String comment) {
         System.out.println();
-        System.out.println("ArrayList (different strings)");
-        list = new ArrayList<>();
-        list.addAll(Arrays.asList(ss));
-        System.out.println(ObjectSizeCalculator.calcSize(list));
-        for (int i = 0; i < 100; i++) {
-            list.add(randomString(100));
-            System.out.println(ObjectSizeCalculator.calcSize(list));
-        }
-
-        ss = new String[]{new String("."), new String("."), new String(".")};
-        System.out.println();
-        System.out.println("Array of 3 equal one-char strings");
-        System.out.println(ObjectSizeCalculator.calcSize(ss));
-
+        System.out.println("====================================================");
+        System.out.println(comment);
+        System.out.println("====================================================");
     }
 }
