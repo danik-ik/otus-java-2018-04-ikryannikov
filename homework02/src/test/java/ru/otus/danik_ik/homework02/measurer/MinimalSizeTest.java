@@ -1,5 +1,6 @@
 package ru.otus.danik_ik.homework02.measurer;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -9,7 +10,16 @@ import java.util.function.Supplier;
 
 import static org.junit.Assert.assertTrue;
 
-//@Ignore
+/*  
+    Для запуска данных текстов необходимо использовать javavgent.
+    Я их запускал под IDE с указанием в качестве агента предварительно
+    скомпилированного проекта.
+    
+    Как вписать их в Maven lifeCicle я, к сожалению, не занаю.
+    
+    Впрочем, не знаю я и конкретных целевых цифр (использую наивную оценку размера снизу)
+*/
+@Ignore
 @RunWith(Parameterized.class)
 public class MinimalSizeTest {
     /**
