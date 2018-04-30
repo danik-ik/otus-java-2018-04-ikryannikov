@@ -40,7 +40,7 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public boolean contains(Object o) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("contains");
     }
 
     @Override
@@ -108,12 +108,12 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public boolean remove(Object o) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("remove");
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("containsAll");
     }
 
     @Override
@@ -124,12 +124,12 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("removeAll");
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("retainAll");
     }
 
     @Override
