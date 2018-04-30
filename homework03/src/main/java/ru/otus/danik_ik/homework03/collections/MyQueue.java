@@ -45,7 +45,7 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new MyQueueIterator();
     }
 
     @Override
@@ -175,5 +175,26 @@ public class MyQueue<E> implements Queue<E> {
     public E peek() {
         if (isEmpty()) return null;
         return elements[head];
+    }
+
+    private class MyQueueIterator implements Iterator<E> {
+
+        private int carret;
+
+        public MyQueueIterator() {
+            carret = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return carret != tail;
+        }
+
+        @Override
+        public E next() {
+            int oldCarret = carret;
+            if (++carret >= arraySize) carret = 0;
+            return elements[oldCarret];
+        }
     }
 }

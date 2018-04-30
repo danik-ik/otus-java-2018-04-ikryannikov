@@ -4,6 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
@@ -175,5 +176,35 @@ public class TestMyQueue {
         assertEquals(null, target[3]);
     }
 
+    @Test
+    public void iteratorTest() {
+        Queue<String> q = new MyQueue<>(4);
+        Iterator<String> i = q.iterator();
+
+        assertFalse(i.hasNext());
+        testIteration(q, i,"1");
+        testIteration(q, i,"2");
+        testIteration(q, i,"3");
+        testIteration(q, i,"4");
+        testIteration(q, i,"5");
+        testIteration(q, i,"6");
+        testIteration(q, i,"7");
+        testIteration(q, i,"8");
+        testIteration(q, i,"9");
+
+    }
+
+    private void testIteration(Queue<String> q, Iterator<String> i, String s) {
+        assertFalse(i.hasNext());
+        q.add(s);
+        q.add(s+s);
+        assertTrue(i.hasNext());
+        assertEquals(s, i.next());
+        assertEquals(s + s, i.next());
+        assertFalse(i.hasNext());
+        q.remove();
+        q.remove();
+        assertFalse(i.hasNext());
+    }
 }
 
