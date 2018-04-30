@@ -53,7 +53,15 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] result = new Object[size()];
+
+        for (int i = head; i < arraySize && i < phantomTail(); i ++)
+            result[i - head] = elements[i];
+
+        for (int i = 0; tail < head && i < tail; i ++)
+            result[i + (arraySize - head)] = elements[i];
+
+        return result;
     }
 
     @Override
