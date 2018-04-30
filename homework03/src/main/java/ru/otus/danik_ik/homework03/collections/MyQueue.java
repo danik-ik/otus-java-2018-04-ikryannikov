@@ -55,11 +55,13 @@ public class MyQueue<E> implements Queue<E> {
     public Object[] toArray() {
         Object[] result = new Object[size()];
 
-        for (int i = head; i < arraySize && i < phantomTail(); i ++)
-            result[i - head] = elements[i];
+        int endIndex = tail >= head ? tail : arraySize;
+        System.arraycopy(elements, head, result, 0, endIndex - head);
 
-        for (int i = 0; tail < head && i < tail; i ++)
-            result[i + (arraySize - head)] = elements[i];
+        if (tail < head) {
+            int base = arraySize - head;
+            System.arraycopy(elements, 0, result, endIndex - head, tail);
+        }
 
         return result;
     }
