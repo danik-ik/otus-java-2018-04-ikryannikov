@@ -1,6 +1,5 @@
 package ru.otus.danik_ik.homework03.collections;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class MyQueue<E> implements Queue<E> {
@@ -51,27 +50,23 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public Object[] toArray() {
-        Object[] result = new Object[size()];
-
-        copyToExistsArray(result);
-
-        return result;
+        return toNewArray(Object[].class);
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
         int size = size();
         if (size > a.length)
-            return toArray((Class<T[]>) a.getClass());
+            return toNewArray((Class<T[]>) a.getClass());
 
         final T[] result = a;
-        copyToExistsArray(result);
+        ToExistsArray(result);
         if (size < result.length) result[size] = null;
 
         return result;
     }
 
-    private <T> T[] toArray(Class<T[]> destClass) {
+    private <T> T[] toNewArray(Class<T[]> destClass) {
         final Object[] in = elements;
         final T[] out;
 
@@ -86,7 +81,7 @@ public class MyQueue<E> implements Queue<E> {
         return out;
     }
 
-    private <T> void copyToExistsArray(T[] destination) {
+    private <T> void ToExistsArray(T[] destination) {
         int endIndex = tail >= head ? tail : arraySize;
         System.arraycopy(elements, head, destination, 0, endIndex - head);
 
