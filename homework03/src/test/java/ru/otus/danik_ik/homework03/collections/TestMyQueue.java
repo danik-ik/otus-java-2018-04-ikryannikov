@@ -75,7 +75,23 @@ public class TestMyQueue {
     }
 
     @Test
-    public void toArray() {
+    public void toArrayInbounds() {
+        Queue<String> q = new MyQueue<>(3);
+        String[] source = new String[]{"1","2","3"};
+
+        q.addAll(Arrays.asList(source));
+
+        Object[] target = q.toArray();
+
+        assertEquals(3, target.length);
+
+        assertEquals("1", (String)target[0]);
+        assertEquals("2", (String)target[1]);
+        assertEquals("3", (String)target[2]);
+    }
+
+    @Test
+    public void toArrayOverbound() {
         Queue<String> q = new MyQueue<>(3);
         String[] source = new String[]{"1","2","3"};
         q.add(null);
@@ -90,6 +106,12 @@ public class TestMyQueue {
         assertEquals("1", (String)target[0]);
         assertEquals("2", (String)target[1]);
         assertEquals("3", (String)target[2]);
+    }
+
+    @Test
+    public void toArrayEmpty() {
+        Queue<String> q = new MyQueue<>(3);
+        assertEquals(0, q.toArray().length);
     }
 }
 
