@@ -2,6 +2,7 @@ package ru.otus.danik_ik.homework03.collections;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 
 public class MyQueue<E> implements Queue<E> {
@@ -62,7 +63,17 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public boolean add(E e) {
-        return false;
+        if (! offer(e)) throw new IllegalStateException();
+        return true;
+    }
+
+    private void incTail() {
+        tail++;
+        if (tail == arraySize) tail = 0;
+    }
+
+    private boolean isFull() {
+        return size() == capacity;
     }
 
     @Override
@@ -92,31 +103,46 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public void clear() {
-
+        head = 0;
+        tail = 0;
     }
 
     @Override
     public boolean offer(E e) {
-        return false;
+        if (isFull()) return false;
+
+        elements[tail] = e;
+        incTail();
+        return true;
     }
 
     @Override
     public E remove() {
-        return null;
+        if (isEmpty()) throw new NoSuchElementException();
+        return elements[getAndIncHead()];
     }
 
     @Override
     public E poll() {
-        return null;
+        if (isEmpty()) return null;
+        return elements[getAndIncHead()];
+    }
+
+    private int getAndIncHead() {
+        int h = head++;
+        if (head == arraySize) head = 0;
+        return h;
     }
 
     @Override
     public E element() {
-        return null;
+        if (isEmpty()) throw new NoSuchElementException();
+        return elements[head];
     }
 
     @Override
     public E peek() {
-        return null;
+        if (isEmpty()) return null;
+        return elements[head];
     }
 }
