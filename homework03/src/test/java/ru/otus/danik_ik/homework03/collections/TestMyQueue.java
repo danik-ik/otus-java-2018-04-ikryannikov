@@ -74,5 +74,22 @@ public class TestMyQueue {
         assertEquals("3", q.remove());
     }
 
+    @Test
+    public void toArray() {
+        Queue<String> q = new MyQueue<>(3);
+        String[] source = new String[]{"1","2","3"};
+        q.add(null);
+        q.remove();
+
+        q.addAll(Arrays.asList(source));
+
+        Object[] target = q.toArray();
+
+        assertEquals(3, target.length);
+
+        assertEquals("1", (String)target[0]);
+        assertEquals("2", (String)target[1]);
+        assertEquals("3", (String)target[2]);
+    }
 }
 
