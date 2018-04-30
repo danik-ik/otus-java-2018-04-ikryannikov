@@ -1,9 +1,7 @@
 package ru.otus.danik_ik.homework03.collections;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Queue;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class MyQueue<E> implements Queue<E> {
 
@@ -63,12 +61,29 @@ public class MyQueue<E> implements Queue<E> {
     @Override
     public <T> T[] toArray(T[] a) {
         int size = size();
-        T[] result = size <= a.length ? a : (T[]) new Object[size];
+        if (size > a.length)
+            return toArray((Class<T[]>) a.getClass());
+
+        final T[] result = a;
 
         copyToArray(result);
         if (size < result.length) result[size] = null;
 
         return result;
+    }
+
+    private <T> T[] toArray(Class<T[]> destClass) {
+        final Object[] in = elements;
+        final T[] out;
+
+        int endIndex = tail >= head ? tail : arraySize;
+
+        out = Arrays.copyOfRange(in, head, endIndex, destClass);
+        if (tail < head) {
+            int base = arraySize - head;
+            System.arraycopy(in, 0, out, endIndex - head, tail);
+        }
+        return out;
     }
 
     private void copyToArray(Object[] destination) {
