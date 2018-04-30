@@ -6,14 +6,38 @@ import java.util.Queue;
 
 public class MyQueue<E> implements Queue<E> {
 
+    private static final String ERR_MSG_MIN_SIZE = "Размер очереди не может быть меньше 1";
+    private int capacity;
+    private int arraySize;
+    /*  Выбрана реализация без учёта рамера (считается по требованию). Чтобы отличить пустое и полное
+        состояния, в массиве будет лишний элемент -- "распорка" */
+    private int head = 0; // указатель на индекс "где взять"
+    private int tail = 0; // указатель на индекс "где положить" (всегда незаполненный! при заполнении
+                          // размера указывает на "распорку")
+
+    E[] elements;
+
+    public MyQueue(int capacity) {
+        if (capacity < 1) throw new IllegalArgumentException(ERR_MSG_MIN_SIZE);
+
+        this.capacity = capacity;
+        arraySize = capacity + 1;
+
+        elements = (E[]) new Object[arraySize];
+    }
+
     @Override
     public int size() {
-        return 0;
+        return (phantomTail() - head);
+    }
+
+    private int phantomTail() {
+        return tail >= head ? tail : tail + arraySize;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return head == tail;
     }
 
     @Override
