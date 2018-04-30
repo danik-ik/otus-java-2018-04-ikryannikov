@@ -55,20 +55,30 @@ public class MyQueue<E> implements Queue<E> {
     public Object[] toArray() {
         Object[] result = new Object[size()];
 
-        int endIndex = tail >= head ? tail : arraySize;
-        System.arraycopy(elements, head, result, 0, endIndex - head);
-
-        if (tail < head) {
-            int base = arraySize - head;
-            System.arraycopy(elements, 0, result, endIndex - head, tail);
-        }
+        copyToArray(result);
 
         return result;
     }
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        int size = size();
+        T[] result = size <= a.length ? a : (T[]) new Object[size];
+
+        copyToArray(result);
+        if (size < result.length) result[size] = null;
+
+        return result;
+    }
+
+    private void copyToArray(Object[] destination) {
+        int endIndex = tail >= head ? tail : arraySize;
+        System.arraycopy(elements, head, destination, 0, endIndex - head);
+
+        if (tail < head) {
+            int base = arraySize - head;
+            System.arraycopy(elements, 0, destination, endIndex - head, tail);
+        }
     }
 
     @Override
