@@ -88,7 +88,8 @@ public class MyQueue<E> implements Queue<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        for (E e: c) add(e);
+        return true;
     }
 
     @Override

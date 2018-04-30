@@ -3,6 +3,7 @@ package ru.otus.danik_ik.homework03.collections;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
@@ -55,6 +56,22 @@ public class TestMyQueue {
         assertTrue(q.offer("456"));
         assertEquals("456", q.peek());
         assertEquals("456", q.poll());
+    }
+
+    @Test (expected = IllegalStateException.class)
+    public void addAllThrowsOnOverflow() {
+        Queue<String> q = new MyQueue<>(2);
+        q.addAll(Arrays.asList(new String[]{"1","2","3"}));
+    }
+
+    @Test
+    public void addAll() {
+        Queue<String> q = new MyQueue<>(3);
+        q.addAll(Arrays.asList(new String[]{"1","2","3"}));
+
+        assertEquals("1", q.remove());
+        assertEquals("2", q.remove());
+        assertEquals("3", q.remove());
     }
 
 }
