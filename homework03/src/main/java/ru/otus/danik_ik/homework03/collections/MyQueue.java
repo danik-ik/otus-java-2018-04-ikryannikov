@@ -1,25 +1,10 @@
 package ru.otus.danik_ik.homework03.collections;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Queue;
 
-public class MyArrayList<E> implements List<E> {
-    private E[] data;
-    private final int DEFAULT_CAPACITY = 5;
-    private int count = 0;
-    private int capacity;
-
-    public MyArrayList() {
-        initData(DEFAULT_CAPACITY);
-    }
-
-    public MyArrayList(int capacity) {
-        initData(capacity);
-    }
-
-    private void initData(int initial_capacity) {
-        data = (E[]) new Object[initial_capacity];
-        capacity = initial_capacity;
-    }
+public class MyQueue<E> implements Queue<E> {
 
     @Override
     public int size() {
@@ -28,7 +13,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean isEmpty() {
-        return 0 == size();
+        return false;
     }
 
     @Override
@@ -72,11 +57,6 @@ public class MyArrayList<E> implements List<E> {
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
-    }
-
-    @Override
     public boolean removeAll(Collection<?> c) {
         return false;
     }
@@ -92,47 +72,27 @@ public class MyArrayList<E> implements List<E> {
     }
 
     @Override
-    public E get(int index) {
+    public boolean offer(E e) {
+        return false;
+    }
+
+    @Override
+    public E remove() {
         return null;
     }
 
     @Override
-    public E set(int index, E element) {
+    public E poll() {
         return null;
     }
 
     @Override
-    public void add(int index, E element) {
-
-    }
-
-    @Override
-    public E remove(int index) {
+    public E element() {
         return null;
     }
 
     @Override
-    public int indexOf(Object o) {
-        return 0;
-    }
-
-    @Override
-    public int lastIndexOf(Object o) {
-        return 0;
-    }
-
-    @Override
-    public ListIterator<E> listIterator() {
-        return null;
-    }
-
-    @Override
-    public ListIterator<E> listIterator(int index) {
-        return null;
-    }
-
-    @Override
-    public List<E> subList(int fromIndex, int toIndex) {
+    public E peek() {
         return null;
     }
 }
