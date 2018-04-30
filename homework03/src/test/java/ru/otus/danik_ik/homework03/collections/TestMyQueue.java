@@ -113,5 +113,43 @@ public class TestMyQueue {
         Queue<String> q = new MyQueue<>(3);
         assertEquals(0, q.toArray().length);
     }
+
+    @Test
+    public void toArrayTyped() {
+        // будет создан новый массив
+        Queue<String> q = new MyQueue<>(3);
+        String[] source = new String[]{"1","2","3"};
+
+        q.addAll(Arrays.asList(source));
+
+        String[] target = q.toArray(new String[0]);
+
+        assertEquals(3, target.length);
+
+        assertEquals("1", target[0]);
+        assertEquals("2", target[1]);
+        assertEquals("3", target[2]);
+    }
+
+    @Test
+    public void toArrayTypedSrc() {
+        // будет использован исходный массив
+        Queue<String> q = new MyQueue<>(3);
+        String[] source = new String[]{"1","2","3"};
+
+        q.addAll(Arrays.asList(source));
+
+        String[] prototype = new String[4];
+
+        String[] target = q.toArray(prototype);
+
+        assertTrue(prototype == target);
+
+        assertEquals("1", target[0]);
+        assertEquals("2", target[1]);
+        assertEquals("3", target[2]);
+        assertEquals(null, target[3]);
+    }
+
 }
 
