@@ -53,7 +53,7 @@ public class MyQueue<E> implements Queue<E> {
     public Object[] toArray() {
         Object[] result = new Object[size()];
 
-        copyToArray(result);
+        copyToExistsArray(result);
 
         return result;
     }
@@ -65,8 +65,7 @@ public class MyQueue<E> implements Queue<E> {
             return toArray((Class<T[]>) a.getClass());
 
         final T[] result = a;
-
-        copyToArray(result);
+        copyToExistsArray(result);
         if (size < result.length) result[size] = null;
 
         return result;
@@ -78,7 +77,8 @@ public class MyQueue<E> implements Queue<E> {
 
         int endIndex = tail >= head ? tail : arraySize;
 
-        out = Arrays.copyOfRange(in, head, endIndex, destClass);
+        // В случае перехода через границу источника out дополняется null-ссылками нужного класса
+        out = Arrays.copyOfRange(in, head, phantomTail(), destClass);
         if (tail < head) {
             int base = arraySize - head;
             System.arraycopy(in, 0, out, endIndex - head, tail);
@@ -86,7 +86,7 @@ public class MyQueue<E> implements Queue<E> {
         return out;
     }
 
-    private void copyToArray(Object[] destination) {
+    private <T> void copyToExistsArray(T[] destination) {
         int endIndex = tail >= head ? tail : arraySize;
         System.arraycopy(elements, head, destination, 0, endIndex - head);
 
