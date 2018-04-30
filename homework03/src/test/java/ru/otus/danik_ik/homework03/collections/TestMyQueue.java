@@ -96,6 +96,8 @@ public class TestMyQueue {
         String[] source = new String[]{"1","2","3"};
         q.add(null);
         q.remove();
+        q.add(null);
+        q.remove();
 
         q.addAll(Arrays.asList(source));
 
@@ -119,6 +121,28 @@ public class TestMyQueue {
         // будет создан новый массив
         Queue<String> q = new MyQueue<>(3);
         String[] source = new String[]{"1","2","3"};
+
+        q.addAll(Arrays.asList(source));
+
+        String[] target = q.toArray(new String[0]);
+
+        assertEquals(3, target.length);
+
+        assertEquals("1", target[0]);
+        assertEquals("2", target[1]);
+        assertEquals("3", target[2]);
+    }
+
+    @Test
+    public void toArrayTypedOverBounds() {
+        // будет создан новый массив
+        Queue<String> q = new MyQueue<>(3);
+        String[] source = new String[]{"1","2","3"};
+
+        q.add(null);
+        q.remove();
+        q.add(null);
+        q.remove();
 
         q.addAll(Arrays.asList(source));
 
