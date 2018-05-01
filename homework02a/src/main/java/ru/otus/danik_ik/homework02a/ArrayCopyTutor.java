@@ -58,6 +58,10 @@ public class ArrayCopyTutor {
         }
     }
 
+    private void printHeader(String s) {
+        System.out.println("=====  " + s + "  ======================");
+    }
+
     public void testAnimals() {
         addAnimal("Лошадь");
         addAnimal("Носорог");
@@ -70,8 +74,16 @@ public class ArrayCopyTutor {
         addAnimal("Тигр");
         addAnimal("Кошка");
         addAnimal("Черепаха");
+
+        printHeader("Исходный вариант");
+        showAnimals();
+
         insertAnimal(1, "Человек");
-        //deleteAnimal(2);
+        printHeader("После добавления человека в первую позицию");
+        showAnimals();
+
+        deleteAnimal(2);
+        printHeader("После удаления записи во второй позиции");
         showAnimals();
     }
 
