@@ -1,32 +1,45 @@
 package ru.otus.danik_ik.homework02b;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertFalse;
+import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
+
+@RunWith(Parameterized.class)
 public class StringTutorTest {
-    @Test
-    public void testcheckGreeting() {
-        assertTrue(new StringTutor().checkGreeting("Привет, Иван Иванов!"));
-        assertTrue(new StringTutor().checkGreeting("Привет,Петр Первый!"));
-        assertTrue(new StringTutor().checkGreeting("Привет, Петр Первый!"));
-        assertTrue(new StringTutor().checkGreeting("Привет, Петр Первый !"));
+    private final boolean expected;
+    private final String greeting;
+    private final String errorMessage;
 
-        assertFalse("В начале должно быть слово Привет и запятая",
-                new StringTutor().checkGreeting("Здравствуйте, Петр Первый!"));
-        assertFalse("В конце должен быть восклицательный знак",
-                new StringTutor().checkGreeting("Привет, Петр Первый"));
-        assertFalse("Имя слишком короткое",
-                new StringTutor().checkGreeting("Привет, Ли Сунь!"));
-        assertFalse("Фамилия слишком короткая",
-                new StringTutor().checkGreeting("Привет, Куй Ли!"));
-        assertFalse("Должны быть указаны и имя, и фамилия",
-                new StringTutor().checkGreeting("Привет, Петр!"));
-        assertFalse("Первая буква имени должна быть заглавной",
-                new StringTutor().checkGreeting("Привет, петр Первый!"));
-        assertFalse("Первая буква фамилии должна быть заглавной",
-                new StringTutor().checkGreeting("Привет, Петр первый!"));
+    public StringTutorTest(boolean expected, String greeting, String errorMessage) {
+        this.expected = expected;
+        this.greeting = greeting;
+        this.errorMessage = errorMessage;
+    }
+
+    @Parameterized.Parameters(name = " {index}) «{1}»: ожидается {0} // {2}")
+    public static Iterable<Object[]> dataForTest() {
+        return Arrays.asList(new Object[][]{
+                {true, "Привет, Иван Иванов!", ""},
+                {true, "Привет,Петр Первый!", ""},
+                {true, "Привет, Петр Первый!", ""},
+                {true, "Привет, Петр Первый !", ""},
+                {false, "Здравствуйте, Петр Первый!", "В начале должно быть слово Привет и запятая"},
+                {false, "Привет, Петр Первый", "В конце должен быть восклицательный знак"},
+                {false, "Привет, Ли Сунь!", "Имя слишком короткое"},
+                {false, "Привет, Куй Ли!", "Фамилия слишком короткая"},
+                {false, "Привет, Петр!", "Должны быть указаны и имя, и фамилия"},
+                {false, "Привет, петр Первый!", "Первая буква имени должна быть заглавной"},
+                {false, "Привет, Петр первый!", "Первая буква фамилии должна быть заглавной"},
+        });
+    }
+
+    @Test
+    public void testCheckGreeting() {
+        assertEquals(errorMessage, expected, new StringTutor().checkGreeting(greeting));
     }
 
 }
