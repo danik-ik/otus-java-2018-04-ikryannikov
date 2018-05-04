@@ -13,7 +13,7 @@ public class MyQueue<E> implements Queue<E> {
     private int tail = 0; // указатель на индекс "где положить" (всегда незаполненный! при заполнении
                           // размера указывает на "распорку")
 
-    E[] elements;
+    private E[] elements;
 
     public MyQueue(int capacity) {
         if (capacity < 1) throw new IllegalArgumentException(ERR_MSG_MIN_SIZE);
