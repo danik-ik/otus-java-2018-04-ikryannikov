@@ -50,7 +50,8 @@ public class ArrayCopyTutor {
     }
 
     public void deleteAnimal(int position) {
-        System.arraycopy(animals, position + 1, animals, position, --animals_size - position);
+        animals_size--;
+        System.arraycopy(animals, position + 1, animals, position, animals_size - position);
     }
 
     public void showAnimals() {
