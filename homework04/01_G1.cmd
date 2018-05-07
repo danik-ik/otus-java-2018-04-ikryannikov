@@ -1,1 +1,1 @@
-java -XX:+UseG1GC -cp .\target\classes ru.otus.danik_ik.homework04.Main
+java -XX:+UseG1GC -cp ./target/classes ru.otus.danik_ik.homework04.Main
