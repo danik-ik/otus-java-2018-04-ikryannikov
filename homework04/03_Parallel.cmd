@@ -1,0 +1,1 @@
+java -XX:+UseParallelGC -cp .\target\classes ru.otus.danik_ik.homework04.Main
