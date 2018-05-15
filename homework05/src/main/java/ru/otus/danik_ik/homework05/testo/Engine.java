@@ -8,15 +8,16 @@ import java.util.Optional;
 public class Engine {
     private final String target;
 
-    public static void execute(String target) {
+    public static void execute(String target) throws TargetNotFoundException {
         new Engine(target);
     }
 
-    private Engine(String target) {
+    private Engine(String target) throws TargetNotFoundException {
         this.target = target;
         if ( runAsPackage() ) return;
         if ( runAsClass() ) return;
-        System.out.println("Параметр должен быть полным именем класса или пакета");
+        throw new TargetNotFoundException("Параметр должен быть полным именем класса или пакета.\n" +
+                "Если это пакет, предварительно должен быть загружен хотя бы один класс из пакета.");
     };
 
     boolean runAsPackage() {
