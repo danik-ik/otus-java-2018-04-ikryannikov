@@ -1,9 +1,6 @@
 package ru.otus.danik_ik.homework05.testo;
 
-import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import static java.lang.ClassLoader.getSystemClassLoader;
 
 public class Engine {
     private final String target;
@@ -21,10 +18,21 @@ public class Engine {
     };
 
     boolean runAsPackage() {
-        return false;
+        Package it = getSystemClassLoader().getDefinedPackage(target);
+        if (it == null) return false;
+
+        // TODO: 15.05.2018 <<<< 
+        return true;
     }
 
     boolean runAsClass() {
-        return false;
+        try {
+            Class<?> it = Class.forName(target);
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+
+        // TODO: 15.05.2018 <<<<  
+        return true;
     }
 }
