@@ -10,20 +10,21 @@ public class Class2 {
 
     @After
     public void after() {
-        System.out.println("after method in ru.otus.danik_ik.homework05.testo.test1.Class12");
+        System.out.println("after method in ru.otus.danik_ik.homework05.testo.test1.Class2");
     }
 
     @Test
     public void test1() {
-        System.out.println("test1 method in ru.otus.danik_ik.homework05.testo.test1.Class12");
+        System.out.println("test1 method in ru.otus.danik_ik.homework05.testo.test1.Class2");
     }
 
     @Test
     public void test2() {
-        System.out.println("test2 method in ru.otus.danik_ik.homework05.testo.test1.Class12");
+        System.out.println("test2 method in ru.otus.danik_ik.homework05.testo.test1.Class2");
     }
+
     @Test
     public void test3() {
-        System.out.println("test3 method in ru.otus.danik_ik.homework05.testo.test1.Class12");
+        System.out.println("test3 method in ru.otus.danik_ik.homework05.testo.test1.Class2");
     }
 }
