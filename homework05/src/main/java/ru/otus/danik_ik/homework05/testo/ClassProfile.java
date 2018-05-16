@@ -36,6 +36,15 @@ public class ClassProfile {
         return defaultConstructor != null && !testMethods.isEmpty();
     }
 
+    public String getClassDescription() {
+        if (defaultConstructor == null)
+            return "Не тестовый класс: отсутствует конструктор по умолчанию";
+        if (testMethods.isEmpty())
+            return "Не тестовый класс: отсутствуют публичные методы без параметров с аннотацией @Test";
+        return "Это класс с тестами";
+    }
+
+
     public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         createInstance();
         executeBefore();
@@ -51,7 +60,17 @@ public class ClassProfile {
         }
         instance = defaultConstructor.newInstance();
     }
-    private void executeBefore() {}
-    private void executeEachTest() {}
-    private void executeAfter() {}
+
+    private void executeBefore() throws InvocationTargetException, IllegalAccessException {
+        beforeMethod.invoke(instance);
+    }
+
+    private void executeEachTest() throws InvocationTargetException, IllegalAccessException {
+        for (Method m : testMethods)
+            m.invoke(instance);
+    }
+
+    private void executeAfter() throws InvocationTargetException, IllegalAccessException {
+        afterMethod.invoke(instance);
+    }
 }
