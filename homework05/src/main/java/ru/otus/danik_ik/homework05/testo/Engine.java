@@ -21,6 +21,7 @@ public class Engine {
         Package it = getSystemClassLoader().getDefinedPackage(target);
         if (it == null) return false;
 
+        System.out.println("This is a package!");
         // TODO: 15.05.2018 <<<< 
         return true;
     }
@@ -32,7 +33,8 @@ public class Engine {
             return false;
         }
 
-        // TODO: 15.05.2018 <<<<  
+        System.out.println("This is a class!");
+        // TODO: 15.05.2018 <<<<
         return true;
     }
 }
