@@ -12,7 +12,6 @@ public class TestClass {
     private Method beforeMethod;
     private Method afterMethod;
     private List<Method> testMethods = new ArrayList<>();
-    private Object instance;
 
     public TestClass(Class target) {
         Constructor defaultConstructor;
@@ -53,32 +52,36 @@ public class TestClass {
 
 
     public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        createInstance();
-        executeBefore();
-        executeEachTest();
-        executeAfter();
+        for (Method test: testMethods){
+
+            System.out.println("---------------------------------");
+            System.out.println("running: " + test.getName());
+            Object instance = createInstance();
+            executeBefore(instance);
+            executeTest(instance, test);
+            executeAfter(instance);
+        }
     }
 
-    private void createInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void executeTest(Object instance, Method test) throws InvocationTargetException, IllegalAccessException {
+        test.invoke(instance);
+    }
+
+    private Object createInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         try {
             Constructor constructor = target.getDeclaredConstructor();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-        instance = defaultConstructor.newInstance();
+        return defaultConstructor.newInstance();
     }
 
-    private void executeBefore() throws InvocationTargetException, IllegalAccessException {
+    private void executeBefore(Object instance) throws InvocationTargetException, IllegalAccessException {
         if (beforeMethod == null) return;
         beforeMethod.invoke(instance);
     }
 
-    private void executeEachTest() throws InvocationTargetException, IllegalAccessException {
-        for (Method m : testMethods)
-            m.invoke(instance);
-    }
-
-    private void executeAfter() throws InvocationTargetException, IllegalAccessException {
+    private void executeAfter(Object instance) throws InvocationTargetException, IllegalAccessException {
         if (afterMethod == null) return;
         afterMethod.invoke(instance);
     }
