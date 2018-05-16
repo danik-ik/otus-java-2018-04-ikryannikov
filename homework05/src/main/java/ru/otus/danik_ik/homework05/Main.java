@@ -2,6 +2,7 @@ package ru.otus.danik_ik.homework05;
 
 import ru.otus.danik_ik.homework05.testo.Engine;
 import ru.otus.danik_ik.homework05.testo.TargetNotFoundException;
+import ru.otus.danik_ik.homework05.testo.TestException;
 
 public class Main
 {
@@ -25,8 +26,9 @@ public class Main
 
         try {
             Engine.execute(target);
-        } catch (TargetNotFoundException targetNotFoundException) {
-            System.out.println(targetNotFoundException.getMessage());
+        } catch (TestException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }
