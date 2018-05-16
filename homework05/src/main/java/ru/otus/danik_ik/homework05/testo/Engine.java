@@ -1,7 +1,5 @@
 package ru.otus.danik_ik.homework05.testo;
 
-import java.lang.reflect.InvocationTargetException;
-
 import static java.lang.ClassLoader.getSystemClassLoader;
 
 public class Engine {
@@ -42,13 +40,13 @@ public class Engine {
     }
 
     private void runTestsInClass(Class c) throws TestExecutionException {
-        ClassProfile profile = new ClassProfile(c);
-        if (!profile.isTest()) {
-            System.out.println(profile.getClassDescription());
+        TestClass test = new TestClass(c);
+        if (!test.isTest()) {
+            System.out.println(test.getClassDescription());
             return;
         }
         try {
-            profile.executeTests();
+            test.executeTests();
         } catch (Exception e) {
             throw new TestExecutionException(e);
         }

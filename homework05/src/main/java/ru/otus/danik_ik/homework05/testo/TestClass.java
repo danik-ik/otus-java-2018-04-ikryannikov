@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassProfile {
+public class TestClass {
     private final Class target;
     private final Constructor defaultConstructor;
     private Method beforeMethod;
@@ -14,7 +14,7 @@ public class ClassProfile {
     private List<Method> testMethods = new ArrayList<>();
     private Object instance;
 
-    public ClassProfile(Class target) {
+    public TestClass(Class target) {
         Constructor defaultConstructor;
         this.target = target;
         try {
