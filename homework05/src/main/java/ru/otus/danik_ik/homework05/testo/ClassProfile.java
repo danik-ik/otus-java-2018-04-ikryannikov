@@ -29,6 +29,13 @@ public class ClassProfile {
     }
 
     private void analizeAnnotations() {
+        Method[] methods = target.getMethods();
+        for (Method m: methods) {
+            if (m.getGenericParameterTypes().length != 0) continue;
+            if ( m.getAnnotation(Before.class) != null ) beforeMethod = m;
+            if ( m.getAnnotation(After.class) != null ) afterMethod = m;
+            if ( m.getAnnotation(Test.class) != null ) testMethods.add(m);
+        }
 
     }
 
@@ -62,6 +69,7 @@ public class ClassProfile {
     }
 
     private void executeBefore() throws InvocationTargetException, IllegalAccessException {
+        if (beforeMethod == null) return;
         beforeMethod.invoke(instance);
     }
 
@@ -71,6 +79,7 @@ public class ClassProfile {
     }
 
     private void executeAfter() throws InvocationTargetException, IllegalAccessException {
+        if (afterMethod == null) return;
         afterMethod.invoke(instance);
     }
 }
