@@ -51,7 +51,7 @@ class TestingEnvironment implements TestEnvironment {
     }
 
     @Override
-    public void testIsFail(Object instance, Method method) {
+    public void testIsFail(Object instance, Method method, String message) {
         failedTestsCount++;
     }
 

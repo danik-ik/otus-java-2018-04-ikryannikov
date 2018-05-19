@@ -71,7 +71,7 @@ public class TestClass {
         } catch (InvocationTargetException | IllegalAccessException e) {
             throw e;
         } catch (AssertionError e) {
-            environment.testIsFail(instance, test);
+            environment.testIsFail(instance, test, e.getMessage());
         } catch (Exception e) {
             environment.testThrewException(instance, test, e);
         }
