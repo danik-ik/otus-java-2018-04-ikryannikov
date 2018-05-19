@@ -12,10 +12,10 @@ import java.util.Collections;
 import static org.junit.Assert.*;
 
 public class EngineTest {
+    private TestingEnvironment environment;
 
     @Before
     public void setUp() throws Exception {
-        Counter.reset();
     }
 
     @After
@@ -24,51 +24,57 @@ public class EngineTest {
 
     @Test
     public void testPackageBefore() throws Exception {
-        Engine.execute(new testingtestPackageSupplier(), "ru.otus.danik_ik.homework05.testo.testingtest");
-        assertEquals(2, Counter.getBeforeCount());
+        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest");
+        assertEquals(2, environment.getBeforeCount());
     }
 
     @Test
     public void testPackageAfter() throws Exception {
-        Engine.execute(new testingtestPackageSupplier(), "ru.otus.danik_ik.homework05.testo.testingtest");
-        assertEquals(5, Counter.getAfterCount());
+        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest");
+        assertEquals(5, environment.getAfterCount());
     }
 
     @Test
     public void testPackageTests() throws Exception {
-        Engine.execute(new testingtestPackageSupplier(), "ru.otus.danik_ik.homework05.testo.testingtest");
-        assertEquals(5, Counter.getTestCount());
+        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest");
+        assertEquals(5, environment.getTestCount());
     }
 
     @Test
     public void testClass1Before() throws Exception {
-        Engine.execute(new Class1Supplier(), "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
-        assertEquals(2, Counter.getBeforeCount());
+        environment = new TestingEnvironment(new Class1Supplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
+        assertEquals(2, environment.getBeforeCount());
     }
 
     @Test
     public void testClass1After() throws Exception {
-        Engine.execute(new Class1Supplier(), "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
-        assertEquals(2, Counter.getAfterCount());
+        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
+        assertEquals(2, environment.getAfterCount());
     }
 
     @Test
     public void testClass1Tests() throws Exception {
-        Engine.execute(new Class1Supplier(), "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
-        assertEquals(2, Counter.getTestCount());
+        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
+        assertEquals(2, environment.getTestCount());
     }
 
 
     private class testingtestPackageSupplier implements ClassesSupplier {
         @Override
-        public Collection<Class<?>> get(String NameORPrefix) {
+        public Collection<Class<?>> getClasses(String nameOrPrefix) {
             return Arrays.asList(new Class<?>[]{Class1.class, Class2.class});
         }
     }
 
     private class Class1Supplier implements ClassesSupplier {
         @Override
-        public Collection<Class<?>> get(String NameORPrefix) {
+        public Collection<Class<?>> getClasses(String nameOrPrefix) {
             return Collections.singletonList(Class1.class);
         }
     }
