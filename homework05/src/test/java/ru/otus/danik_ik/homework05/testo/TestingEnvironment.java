@@ -6,13 +6,13 @@ import java.util.Collection;
 class TestingEnvironment implements TestEnvironment {
     private final ClassesSupplier classesSupplier;
 
-    private static int testCount = 0;
-    private static int beforeCount = 0;
-    private static int afterCount = 0;
+    private int testCount = 0;
+    private int beforeCount = 0;
+    private int afterCount = 0;
 
-    private static int okTestsCount = 0;
-    private static int failedTestsCount = 0;
-    private static int exceptionsInTestsCount = 0;
+    private int okTestsCount = 0;
+    private int failedTestsCount = 0;
+    private int exceptionsInTestsCount = 0;
 
     public TestingEnvironment(ClassesSupplier classesSupplier) {
         this.classesSupplier = classesSupplier;
@@ -60,27 +60,27 @@ class TestingEnvironment implements TestEnvironment {
         exceptionsInTestsCount++;
     }
 
-    public static int getTestCount() {
+    public int getTestCount() {
         return testCount;
     }
 
-    public static int getBeforeCount() {
+    public int getBeforeCount() {
         return beforeCount;
     }
 
-    public static int getAfterCount() {
+    public int getAfterCount() {
         return afterCount;
     }
 
-    public static int getOkTestsCount() {
+    public int getOkTestsCount() {
         return okTestsCount;
     }
 
-    public static int getFailedTestsCount() {
+    public int getFailedTestsCount() {
         return failedTestsCount;
     }
 
-    public static int getExceptionsInTestsCount() {
+    public int getExceptionsInTestsCount() {
         return exceptionsInTestsCount;
     }
 }
