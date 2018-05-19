@@ -1,4 +1,6 @@
-package ru.otus.danik_ik.homework05.testo;
+package ru.otus.danik_ik.homework05.environment;
+
+import ru.otus.danik_ik.homework05.testo.ClassesSupplier;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +23,7 @@ public class KnownClassesSupplier implements ClassesSupplier {
             .collect(Collectors.toSet());
 
     @Override
-    public Collection<Class<?>> get(String nameOrPrefix) {
+    public Collection<Class<?>> getClasses(String nameOrPrefix) {
         return KNOWN_CLASSES.stream()
                 .filter(it -> it.getCanonicalName().startsWith(nameOrPrefix))
                 .collect(Collectors.toSet());
