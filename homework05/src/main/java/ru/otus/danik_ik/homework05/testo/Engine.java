@@ -1,43 +1,31 @@
 package ru.otus.danik_ik.homework05.testo;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 import static java.lang.ClassLoader.getSystemClassLoader;
 
 public class Engine {
     private final String target;
+    private final ClassesSupplier classesSupplier;
 
-    public static void execute(String target) throws TargetNotFoundException, TestExecutionException {
-        new Engine(target);
-    }
-
-    private Engine(String target) throws TargetNotFoundException, TestExecutionException {
+    private Engine(ClassesSupplier classesSupplier, String target) throws TargetNotFoundException, TestExecutionException {
+        this.classesSupplier = classesSupplier;
         this.target = target;
-        if ( runAsPackage() ) return;
-        if ( runAsClass() ) return;
-        throw new TargetNotFoundException("Параметр должен быть полным именем класса или пакета.\n" +
-                "Если это пакет, предварительно должен быть загружен хотя бы один класс из пакета.");
+        execute();
     };
 
-    boolean runAsPackage() {
-        Package it = getSystemClassLoader().getDefinedPackage(target);
-        if (it == null) return false;
-
-        System.out.println("This is a package!");
-        // TODO: 15.05.2018 <<<< 
-        return true;
+    public static void execute(ClassesSupplier classesSupplier, String target) throws TargetNotFoundException, TestExecutionException {
+        new Engine(classesSupplier, target);
     }
 
-    boolean runAsClass() throws TestExecutionException {
-        Class<?> it;
-        try {
-            it = Class.forName(target);
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-
-        System.out.println("This is a class!");
-        runTestsInClass(it);
-        return true;
-    }
+    private void execute() throws TargetNotFoundException, TestExecutionException {
+        Collection<Class<?>> classes = classesSupplier.get(target);
+        if (classes.isEmpty())
+            throw new TargetNotFoundException("Параметр должен быть полным именем класса или пакета.\n" +
+                    "Если это пакет, предварительно должен быть загружен хотя бы один класс из пакета.");
+        for (Class<?> c: classes) runTestsInClass(c);
+    };
 
     private void runTestsInClass(Class c) throws TestExecutionException {
         TestClass test = new TestClass(c);
