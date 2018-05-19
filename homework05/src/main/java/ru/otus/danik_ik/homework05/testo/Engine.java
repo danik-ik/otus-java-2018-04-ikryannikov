@@ -25,7 +25,7 @@ public class Engine {
     };
 
     private void runTestsInClass(Class c) throws TestExecutionException {
-        TestClass test = new TestClass(c);
+        TestClass test = new TestClass(c, testEnvironment);
         System.out.println("---------------------------------");
         System.out.println(test.getClassDescription());
         if (test.isTest())

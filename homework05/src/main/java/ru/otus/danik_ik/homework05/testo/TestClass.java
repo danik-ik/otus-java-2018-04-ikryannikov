@@ -7,13 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestClass {
+    private final TestEnvironment environment;
     private final Class target;
     private final Constructor defaultConstructor;
     private Method beforeMethod;
     private Method afterMethod;
     private List<Method> testMethods = new ArrayList<>();
 
-    public TestClass(Class target) {
+    public TestClass(Class target, TestEnvironment environment) {
+        this.environment = environment;
         Constructor defaultConstructor;
         this.target = target;
         try {
@@ -54,6 +56,7 @@ public class TestClass {
     public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         for (Method test: testMethods){
             Object instance = createInstance();
+            environment.beforeClass(instance, test);
             System.out.println("running: " + test.getName() + " in " + instance.getClass().getSimpleName());
             executeBefore(instance);
             executeTest(instance, test);
@@ -62,7 +65,17 @@ public class TestClass {
     }
 
     private void executeTest(Object instance, Method test) throws InvocationTargetException, IllegalAccessException {
-        test.invoke(instance);
+        environment.runningTest(instance, test);
+        try {
+            test.invoke(instance);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw e;
+        } catch (AssertionError e) {
+            environment.testIsFail(instance, test);
+        } catch (Exception e) {
+            environment.testThrewException(instance, test, e);
+        }
+        environment.testIsOk(instance, test);
     }
 
     private Object createInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -76,11 +89,13 @@ public class TestClass {
 
     private void executeBefore(Object instance) throws InvocationTargetException, IllegalAccessException {
         if (beforeMethod == null) return;
+        environment.runningBefore(instance, beforeMethod);
         beforeMethod.invoke(instance);
     }
 
     private void executeAfter(Object instance) throws InvocationTargetException, IllegalAccessException {
         if (afterMethod == null) return;
+        environment.runningAfter(instance, afterMethod);
         afterMethod.invoke(instance);
     }
 }
