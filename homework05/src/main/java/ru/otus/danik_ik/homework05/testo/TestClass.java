@@ -44,19 +44,17 @@ public class TestClass {
 
     public String getClassDescription() {
         if (defaultConstructor == null)
-            return "Не тестовый класс: отсутствует конструктор по умолчанию";
+            return target + "\n>>> Не тестовый класс: отсутствует конструктор по умолчанию";
         if (testMethods.isEmpty())
-            return "Не тестовый класс: отсутствуют публичные методы без параметров с аннотацией @Test";
-        return "Это класс с тестами";
+            return target + "\n>>> Не тестовый класс: отсутствуют публичные методы без параметров с аннотацией @Test";
+        return target + "\n>>> Это класс с тестами";
     }
 
 
     public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         for (Method test: testMethods){
-
-            System.out.println("---------------------------------");
-            System.out.println("running: " + test.getName());
             Object instance = createInstance();
+            System.out.println("running: " + test.getName() + " in " + instance.getClass().getSimpleName());
             executeBefore(instance);
             executeTest(instance, test);
             executeAfter(instance);
