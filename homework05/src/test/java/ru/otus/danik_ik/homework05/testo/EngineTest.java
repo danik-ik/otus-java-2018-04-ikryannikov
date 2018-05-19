@@ -52,14 +52,14 @@ public class EngineTest {
 
     @Test
     public void testClass1After() throws Exception {
-        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        environment = new TestingEnvironment(new Class1Supplier());
         Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
         assertEquals(2, environment.getAfterCount());
     }
 
     @Test
     public void testClass1Tests() throws Exception {
-        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        environment = new TestingEnvironment(new Class1Supplier());
         Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
         assertEquals(2, environment.getTestCount());
     }
