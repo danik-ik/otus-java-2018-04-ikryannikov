@@ -68,12 +68,16 @@ public class TestClass {
         environment.runningTest(instance, test);
         try {
             test.invoke(instance);
-        } catch (InvocationTargetException | IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw e;
-        } catch (AssertionError e) {
-            environment.testIsFail(instance, test, e.getMessage());
-        } catch (Exception e) {
+        } catch (InvocationTargetException wrapper) {
+            Throwable e = wrapper.getTargetException();
+            if (e instanceof AssertionError){
+                environment.testIsFail(instance, test, e.getMessage());
+                return;
+            }
             environment.testThrewException(instance, test, e);
+            return;
         }
         environment.testIsOk(instance, test);
     }

@@ -9,5 +9,5 @@ public interface TestHandler {
     void runningAfter (Object instance, Method method);
     void testIsOk (Object instance, Method method);
     void testIsFail (Object instance, Method method, String message);
-    void testThrewException (Object instance, Method method, Exception e);
+    void testThrewException (Object instance, Method method, Throwable e);
 }

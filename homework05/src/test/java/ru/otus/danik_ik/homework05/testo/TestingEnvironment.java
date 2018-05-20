@@ -56,7 +56,7 @@ class TestingEnvironment implements TestEnvironment {
     }
 
     @Override
-    public void testThrewException(Object instance, Method method, Exception e) {
+    public void testThrewException(Object instance, Method method, Throwable e) {
         exceptionsInTestsCount++;
     }
 
