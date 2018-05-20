@@ -34,7 +34,7 @@ public class SimpleTestEnvironment implements TestEnvironment {
 
     @Override
     public void runningBefore(Object instance, Method method) {
-        System.out.println("Before method in " + instance.getClass().getSimpleName());
+        System.out.println("@Before method in " + instance.getClass().getSimpleName());
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SimpleTestEnvironment implements TestEnvironment {
 
     @Override
     public void runningAfter(Object instance, Method method) {
-        System.out.println("After method in " + instance.getClass().getSimpleName());
+        System.out.println("@After method in " + instance.getClass().getSimpleName());
     }
 
     @Override
