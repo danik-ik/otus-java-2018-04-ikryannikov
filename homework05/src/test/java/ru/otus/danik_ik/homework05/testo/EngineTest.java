@@ -44,6 +44,27 @@ public class EngineTest {
     }
 
     @Test
+    public void testPackageTestsOk() throws Exception {
+        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest");
+        assertEquals(3, environment.getOkTestsCount());
+    }
+
+    @Test
+    public void testPackageTestsFailed() throws Exception {
+        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest");
+        assertEquals(1, environment.getFailedTestsCount());
+    }
+
+    @Test
+    public void testPackageTestsExceptions() throws Exception {
+        environment = new TestingEnvironment(new testingtestPackageSupplier());
+        Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest");
+        assertEquals(1, environment.getExceptionsInTestsCount());
+    }
+
+    @Test
     public void testClass1Before() throws Exception {
         environment = new TestingEnvironment(new Class1Supplier());
         Engine.execute(environment, "ru.otus.danik_ik.homework05.testo.testingtest.Class1");
