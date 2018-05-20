@@ -1,5 +1,8 @@
 package ru.otus.danik_ik.homework05.testo;
 
+import ru.otus.danik_ik.homework05.testo.exceptions.TargetNotFoundException;
+import ru.otus.danik_ik.homework05.testo.exceptions.TestExecutionException;
+
 import java.util.Collection;
 
 public class Engine {

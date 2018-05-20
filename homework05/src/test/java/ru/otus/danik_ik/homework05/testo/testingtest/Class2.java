@@ -1,8 +1,8 @@
 package ru.otus.danik_ik.homework05.testo.testingtest;
 
-import ru.otus.danik_ik.homework05.testo.After;
+import ru.otus.danik_ik.homework05.testo.annotations.After;
 import ru.otus.danik_ik.homework05.testo.Assertions;
-import ru.otus.danik_ik.homework05.testo.Test;
+import ru.otus.danik_ik.homework05.testo.annotations.Test;
 
 public class Class2 {
     @After

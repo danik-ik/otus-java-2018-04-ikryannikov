@@ -1,5 +1,7 @@
 package ru.otus.danik_ik.homework05.testo;
 
+import ru.otus.danik_ik.homework05.testo.exceptions.AssertionError;
+
 public class Assertions {
     public static void assertTrue(boolean condition) {
         if (!condition) throw new AssertionError("Condition must be true");

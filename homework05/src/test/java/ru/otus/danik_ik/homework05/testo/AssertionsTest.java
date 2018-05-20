@@ -1,6 +1,7 @@
 package ru.otus.danik_ik.homework05.testo;
 
 import org.junit.Test;
+import ru.otus.danik_ik.homework05.testo.exceptions.AssertionError;
 
 public class AssertionsTest {
     @Test

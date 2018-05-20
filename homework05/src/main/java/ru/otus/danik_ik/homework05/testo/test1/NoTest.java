@@ -1,7 +1,7 @@
 package ru.otus.danik_ik.homework05.testo.test1;
 
-import ru.otus.danik_ik.homework05.testo.After;
-import ru.otus.danik_ik.homework05.testo.Before;
+import ru.otus.danik_ik.homework05.testo.annotations.After;
+import ru.otus.danik_ik.homework05.testo.annotations.Before;
 
 public class NoTest {
     @Before

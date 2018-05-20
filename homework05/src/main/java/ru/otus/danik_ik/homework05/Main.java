@@ -4,7 +4,7 @@ import ru.otus.danik_ik.homework05.environment.KnownClassesSupplier;
 import ru.otus.danik_ik.homework05.environment.SimpleTestEnvironment;
 import ru.otus.danik_ik.homework05.testo.Engine;
 import ru.otus.danik_ik.homework05.testo.TestEnvironment;
-import ru.otus.danik_ik.homework05.testo.TestException;
+import ru.otus.danik_ik.homework05.testo.exceptions.TestException;
 
 public class Main
 {

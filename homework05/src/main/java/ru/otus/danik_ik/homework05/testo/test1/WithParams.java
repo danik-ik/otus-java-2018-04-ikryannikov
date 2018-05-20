@@ -1,6 +1,6 @@
 package ru.otus.danik_ik.homework05.testo.test1;
 
-import ru.otus.danik_ik.homework05.testo.Test;
+import ru.otus.danik_ik.homework05.testo.annotations.Test;
 
 public class WithParams {
     @Test
