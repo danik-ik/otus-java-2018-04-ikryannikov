@@ -12,11 +12,13 @@ public class Class2 {
     }
 
     @Test
-    public void test1() {
+    public void testOk() {
+        Assertions.assertEquals("QWERTY", "QWE" + "RTY");
     }
 
     @Test
-    public void test2() {
+    public void testFail() {
+        Assertions.assertEquals("ЙЦУКЕН", "QWE" + "RTY");
     }
 
     @Test

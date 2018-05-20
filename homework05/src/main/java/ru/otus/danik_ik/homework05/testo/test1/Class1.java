@@ -15,9 +15,16 @@ public class Class1 {
 
     @Test
     public void testOk() {
+        assertTrue(true);
     }
 
     @Test
     public void testFail() {
+        assertTrue(false);
+    }
+
+    @Test
+    public void exceptionInTest() throws Exception {
+        throw new Exception("Поймай меня!");
     }
 }
