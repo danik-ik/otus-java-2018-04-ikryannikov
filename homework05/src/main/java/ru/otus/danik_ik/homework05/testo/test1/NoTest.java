@@ -5,13 +5,13 @@ import ru.otus.danik_ik.homework05.testo.Before;
 
 public class NoTest {
     @Before
-    public void before() {
-        System.out.println("before method in ru.otus.danik_ik.homework05.testo.test1.Class1");
+    public void before() throws Exception {
+        throw new Exception("@Before метод в классе без тестов вызываться не должен");
     }
 
     @After
-    public void after() {
-        System.out.println("after method in ru.otus.danik_ik.homework05.testo.test1.Class1");
+    public void after() throws Exception {
+        throw new Exception("@After метод в классе без тестов вызываться не должен");
     }
 
 }

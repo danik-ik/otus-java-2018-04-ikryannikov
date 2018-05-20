@@ -53,11 +53,11 @@ public class TestClass {
     }
 
 
-    public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException, TestExecutionException {
+        environment.beforeClass(isTest(), getClassDescription());
         for (Method test: testMethods){
             Object instance = createInstance();
             environment.createdInstance(instance, test);
-            System.out.println("running: " + test.getName() + " in " + instance.getClass().getSimpleName());
             executeBefore(instance);
             executeTest(instance, test);
             executeAfter(instance);
@@ -82,13 +82,14 @@ public class TestClass {
         environment.testIsOk(instance, test);
     }
 
-    private Object createInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private Object createInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException, TestExecutionException {
         try {
             Constructor constructor = target.getDeclaredConstructor();
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            throw new TestExecutionException(e);
         }
         return defaultConstructor.newInstance();
+
     }
 
     private void executeBefore(Object instance) throws InvocationTargetException, IllegalAccessException {
