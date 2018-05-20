@@ -12,6 +12,7 @@ public class KnownClassesSupplier implements ClassesSupplier {
             "ru.otus.danik_ik.homework05.testo.test1.NoAfter",
             "ru.otus.danik_ik.homework05.testo.test1.NoBefore",
             "ru.otus.danik_ik.homework05.testo.test1.WithParams",
+            "ru.otus.danik_ik.homework05.testo.test1.NoDefaultConstructor",
             "ru.otus.danik_ik.homework05.testo.test1.NoTest",
             "ru.otus.danik_ik.homework05.testo.test2.Class1",
     });
