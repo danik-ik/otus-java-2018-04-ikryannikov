@@ -29,11 +29,10 @@ public class Engine {
 
     private void runTestsInClass(Class c) throws TestExecutionException {
         TestClass test = new TestClass(c, testEnvironment);
-        if (test.isTest())
-            try {
-                test.executeTests();
-            } catch (Exception e) {
-                throw new TestExecutionException(e);
-            }
+        try {
+            test.executeTests();
+        } catch (Exception e) {
+            throw new TestExecutionException(e);
+        }
     }
 }
