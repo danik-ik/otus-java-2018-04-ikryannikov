@@ -3,7 +3,10 @@ package ru.otus.danik_ik.homework05.testo;
 import java.lang.reflect.Method;
 
 public interface TestHandler {
-    void beforeClass (Object instance, Method method);
+    /** Вызывается один раз на класс, перед всеми тестами  */
+    void beforeClass(boolean isTest, String description);
+    /** Вызывается один раз на инстанс = один раз на тестовый метод */
+    void createdInstance(Object instance, Method method);
     void runningBefore (Object instance, Method method);
     void runningTest (Object instance, Method method);
     void runningAfter (Object instance, Method method);

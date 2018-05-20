@@ -56,7 +56,7 @@ public class TestClass {
     public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         for (Method test: testMethods){
             Object instance = createInstance();
-            environment.beforeClass(instance, test);
+            environment.createdInstance(instance, test);
             System.out.println("running: " + test.getName() + " in " + instance.getClass().getSimpleName());
             executeBefore(instance);
             executeTest(instance, test);

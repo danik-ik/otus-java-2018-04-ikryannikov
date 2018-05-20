@@ -24,7 +24,12 @@ class TestingEnvironment implements TestEnvironment {
     }
 
     @Override
-    public void beforeClass(Object instance, Method method) {
+    public void beforeClass(boolean isTest, String description) {
+
+    }
+
+    @Override
+    public void createdInstance(Object instance, Method method) {
         System.out.println("==============================================");
         System.out.println("Testing: " + instance.getClass().getSimpleName() + "." + method.getName());
         System.out.println("==============================================");
