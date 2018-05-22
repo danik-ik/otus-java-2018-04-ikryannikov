@@ -5,7 +5,19 @@ public class AmountCantBeCollectedException extends ATMException {
         super(e);
     }
 
+    public AmountCantBeCollectedException(String message) {
+        super(message);
+    }
+
     public AmountCantBeCollectedException() {
         super();
+    }
+
+    public AmountCantBeCollectedException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    protected AmountCantBeCollectedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
