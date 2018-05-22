@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface WithdrawCurrencyBox extends CurrencyBox {
     public List<Banknote> withdraw(int count) throws NotEnoughException;
+    public int canToWithdraw(int count);
 }
