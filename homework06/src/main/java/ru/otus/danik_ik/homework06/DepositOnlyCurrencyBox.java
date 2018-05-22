@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static java.lang.Integer.min;
 
@@ -53,6 +52,6 @@ public class DepositOnlyCurrencyBox implements DepositCurrencyBox {
                 .map(e -> BigDecimal.valueOf(e.getValue())
                         .multiply(e.getKey().asBigDecimal()))
                 .reduce(BigDecimal::add)
-                .get();
+                .orElseGet(() -> BigDecimal.valueOf(0));
     }
 }
