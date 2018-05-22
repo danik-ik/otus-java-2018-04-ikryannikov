@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SuperMegaATM2000 implements ATM {
+public class NonRecyclableATM implements ATM {
     WithdrawCurrencyBox[] withdrawBoxes = new WithdrawCurrencyBox[4];
     DepositCurrencyBox depositBox;
 
