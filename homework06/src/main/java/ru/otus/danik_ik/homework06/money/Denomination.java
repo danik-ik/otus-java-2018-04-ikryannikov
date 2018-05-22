@@ -17,7 +17,11 @@ public enum Denomination {
         this.denomination = denomination;
     }
 
-    public BigDecimal asNum() {
+    public BigDecimal asBigDecimal() {
         return new BigDecimal(denomination);
+    }
+
+    public int asInt() {
+        return denomination;
     }
 }
