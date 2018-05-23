@@ -9,7 +9,7 @@ import java.util.List;
 
 import static java.lang.Integer.min;
 
-public class RecyclableCurrencyBox extends NonRecyclableCurrencyBox implements DepositCurrencyBox {
+public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositCurrencyBox {
     public RecyclableCurrencyBox(Denomination denomination, int capacity, int count) {
         super(denomination, capacity, count);
     }

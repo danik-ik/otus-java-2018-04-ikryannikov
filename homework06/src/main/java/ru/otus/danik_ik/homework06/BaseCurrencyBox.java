@@ -12,12 +12,12 @@ import java.util.stream.Stream;
 
 import static java.lang.Integer.min;
 
-public class NonRecyclableCurrencyBox implements WithdrawCurrencyBox {
+public class BaseCurrencyBox implements WithdrawCurrencyBox {
     protected final Denomination denomination;
     protected final int capacity;
     protected int count;
 
-    public NonRecyclableCurrencyBox(Denomination denomination, int capacity, int count) {
+    public BaseCurrencyBox(Denomination denomination, int capacity, int count) {
         this.denomination = denomination;
         this.capacity = capacity;
         this.count = count;
