@@ -1,6 +1,5 @@
 package ru.otus.danik_ik.homework06.atm;
 
-import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
