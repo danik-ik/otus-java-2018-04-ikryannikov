@@ -4,7 +4,6 @@ import ru.otus.danik_ik.homework05.testo.annotations.After;
 import ru.otus.danik_ik.homework05.testo.annotations.Before;
 import ru.otus.danik_ik.homework05.testo.annotations.Test;
 import ru.otus.danik_ik.homework05.testo.exceptions.AssertionError;
-import ru.otus.danik_ik.homework05.testo.exceptions.TestExecutionException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -59,11 +58,11 @@ public class TestClass {
     }
 
 
-    public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException, TestExecutionException {
+    public void executeTests() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         environment.beforeClass(isTest(), getClassDescription());
         if ( !isTest() ) return;
         for (Method test: testMethods){
-            Object instance = createInstance();
+            Object instance = defaultConstructor.newInstance();
             environment.createdInstance(instance, test);
             executeBefore(instance);
             executeTest(instance, test);
@@ -71,7 +70,7 @@ public class TestClass {
         }
     }
 
-    private void executeTest(Object instance, Method test) throws InvocationTargetException, IllegalAccessException {
+    private void executeTest(Object instance, Method test) throws IllegalAccessException {
         environment.runningTest(instance, test);
         try {
             test.invoke(instance);
@@ -87,16 +86,6 @@ public class TestClass {
             return;
         }
         environment.testIsOk(instance, test);
-    }
-
-    private Object createInstance() throws IllegalAccessException, InvocationTargetException, InstantiationException, TestExecutionException {
-        try {
-            Constructor constructor = target.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            throw new TestExecutionException(e);
-        }
-        return defaultConstructor.newInstance();
-
     }
 
     private void executeBefore(Object instance) throws InvocationTargetException, IllegalAccessException {
