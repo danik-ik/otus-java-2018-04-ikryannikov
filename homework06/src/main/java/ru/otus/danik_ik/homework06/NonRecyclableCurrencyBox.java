@@ -25,6 +25,9 @@ public class NonRecyclableCurrencyBox implements WithdrawCurrencyBox {
 
     @Override
     public List<Banknote> withdraw(int count) throws NotEnoughException {
+        if (count > this.count) throw new NotEnoughException("Нет достаточного количества денег");
+        if (count <= 0) throw new IllegalArgumentException();
+        this.count -= count;
         return Stream
                 .generate(() -> new Banknote(denomination))
                 .limit(count)
