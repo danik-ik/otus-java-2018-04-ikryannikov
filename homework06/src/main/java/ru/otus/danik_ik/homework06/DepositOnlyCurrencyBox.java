@@ -54,4 +54,9 @@ public class DepositOnlyCurrencyBox implements DepositCurrencyBox {
                 .reduce(BigDecimal::add)
                 .orElseGet(() -> BigDecimal.valueOf(0));
     }
+
+    @Override
+    public boolean acceptDenomination(Denomination denomination) {
+        return true;
+    }
 }

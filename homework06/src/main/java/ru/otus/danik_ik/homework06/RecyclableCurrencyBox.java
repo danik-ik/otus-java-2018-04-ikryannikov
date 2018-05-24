@@ -27,4 +27,9 @@ public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositCur
         return min(count, capacity - this.count);
 
     }
+
+    @Override
+    public boolean acceptDenomination(Denomination denomination) {
+        return this.denomination.equals(denomination);
+    }
 }
