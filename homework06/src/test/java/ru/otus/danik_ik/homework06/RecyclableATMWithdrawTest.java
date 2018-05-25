@@ -45,7 +45,7 @@ public class RecyclableATMWithdrawTest {
         atm.replaceDepositBox(new DepositOnlyCurrencyBox(300));
     }
 
-    @Parameterized.Parameters(name = "{index}: («{1}»)")
+    @Parameterized.Parameters(name = "{index}: («{0}»)")
     public static Iterable<Object[]> dataForTest() {
         return Arrays.asList(new Object[][]{
                 {7900, new Denomination[]{
