@@ -7,6 +7,7 @@ import ru.otus.danik_ik.homework06.money.Denomination;
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static ru.otus.danik_ik.homework06.money.Denomination.*;
 
 public class RecyclableATMTest {
     @Test
@@ -24,7 +25,7 @@ public class RecyclableATMTest {
     @Test
     public void ATMGetAmountTotal() {
         RecyclableATM atm = new RecyclableATM();
-        atm.replaceDepositBox(new RecyclableCurrencyBox(Denomination.ONE_HUNDRED, 3000, 7));
+        atm.replaceDepositBox(new RecyclableCurrencyBox(ONE_HUNDRED, 3000, 7));
         assertEquals(BigDecimal.valueOf(700), atm.getAmountTotal());
     }
 
@@ -32,7 +33,7 @@ public class RecyclableATMTest {
     public void ATMGetAmountToWithdraw() {
         RecyclableATM atm = new RecyclableATM();
         atm.replaceRecyclableBox(1, new RecyclableCurrencyBox(Denomination.TWO_HUNDRED, 3000, 6));
-        atm.replaceDepositBox(new RecyclableCurrencyBox(Denomination.ONE_HUNDRED, 3000, 7));
+        atm.replaceDepositBox(new RecyclableCurrencyBox(ONE_HUNDRED, 3000, 7));
         assertEquals(BigDecimal.valueOf(1900), atm.getAmountTotal());
     }
 
