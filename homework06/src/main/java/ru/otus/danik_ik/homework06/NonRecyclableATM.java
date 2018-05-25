@@ -23,7 +23,7 @@ public class NonRecyclableATM implements ATM {
         return result;
     }
 
-    public DepositCurrencyBox replaceDepositBox(int slot, DepositCurrencyBox currencyBox){
+    public DepositCurrencyBox replaceDepositBox(DepositCurrencyBox currencyBox){
         DepositCurrencyBox result = depositBox;
         depositBox = currencyBox;
         return result;
