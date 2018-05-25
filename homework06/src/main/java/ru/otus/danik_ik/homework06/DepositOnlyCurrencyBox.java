@@ -56,7 +56,7 @@ public class DepositOnlyCurrencyBox implements DepositCurrencyBox {
     }
 
     @Override
-    public boolean acceptDenomination(Denomination denomination) {
+    public boolean acceptsDenomination(Denomination denomination) {
         return true;
     }
 }

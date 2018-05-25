@@ -29,7 +29,7 @@ public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositCur
     }
 
     @Override
-    public boolean acceptDenomination(Denomination denomination) {
+    public boolean acceptsDenomination(Denomination denomination) {
         return this.denomination.equals(denomination);
     }
 }

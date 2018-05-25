@@ -9,5 +9,5 @@ import java.util.List;
 public interface DepositCurrencyBox extends CurrencyBox {
     public void deposit(List<Banknote> notes) throws CantDepositException;
     public int canToDeposit(int count);
-    public boolean acceptDenomination(Denomination denomination);
+    public boolean acceptsDenomination(Denomination denomination);
 }
