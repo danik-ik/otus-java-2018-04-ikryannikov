@@ -1,11 +1,9 @@
 package ru.otus.danik_ik.homework06;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
-import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException;
 import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Denomination;
@@ -17,8 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static ru.otus.danik_ik.homework06.money.Denomination.*;
 
 @RunWith(Parameterized.class)
@@ -31,6 +28,7 @@ public class RecyclableATMWithdrawTest {
         bundle = Stream.of(notes)
                 .map(Banknote::new)
                 .collect(Collectors.toList());
+        bundle.sort(Comparator.comparing(a -> ((Banknote)a).getDenomination().asInt()).reversed());
         insertBoxes();
     }
 
@@ -67,6 +65,7 @@ public class RecyclableATMWithdrawTest {
     public void withdraw() throws AmountCantBeCollectedException {
         List<Banknote> bundle = atm.withdraw(amount);
         assertNotNull(bundle);
+
         bundle.sort(Comparator.comparing(a -> ((Banknote)a).getDenomination().asInt()).reversed());
         assertEquals(this.bundle.size(), bundle.size());
         for (int i = 0; i < bundle.size(); i++)
