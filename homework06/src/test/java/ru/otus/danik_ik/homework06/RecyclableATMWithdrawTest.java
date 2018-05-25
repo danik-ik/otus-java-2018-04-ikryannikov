@@ -40,7 +40,11 @@ public class RecyclableATMWithdrawTest {
 
     private void insertBoxes() {
         Denomination[] denoms = new Denomination[]{ONE_HUNDRED, FIVE_HUNDRED, ONE_THOUSAND, FIVE_THOUSAND};
-        for (int i = 0; i < 4; i++) rBox[i] = new RecyclableCurrencyBox(denoms[i], 100, 95);
+        for (int i = 0; i < 4; i++) {
+            rBox[i] = new RecyclableCurrencyBox(denoms[i], 100, 95);
+            atm.replaceRecyclableBox(i, rBox[i]);
+        }
+        atm.replaceDepositBox(new DepositOnlyCurrencyBox(300));
     }
 
     @Parameterized.Parameters(name = "{index}: («{1}»)")
