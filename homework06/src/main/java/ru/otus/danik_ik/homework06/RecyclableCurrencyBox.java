@@ -3,6 +3,7 @@ package ru.otus.danik_ik.homework06;
 import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.money.Banknote;
+import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.util.List;
@@ -15,11 +16,11 @@ public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositCur
     }
 
     @Override
-    public void deposit(List<Banknote> notes) throws CantDepositException {
-        if (notes.size() > capacity - count) throw new CantDepositException("Нет места в кассете");
-        for (Banknote note: notes) if (!denomination.equals(note.getDenomination()))
+    public void deposit(Bundle bundle) throws CantDepositException {
+        if (bundle.size() > capacity - count) throw new CantDepositException("Нет места в кассете");
+        for (Banknote note: bundle) if (!denomination.equals(note.getDenomination()))
             throw new CantDepositException("Несответствующий номинал");
-        count += notes.size();
+        count += bundle.size();
     }
 
     @Override

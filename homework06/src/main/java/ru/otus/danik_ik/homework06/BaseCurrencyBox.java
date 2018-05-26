@@ -2,13 +2,10 @@ package ru.otus.danik_ik.homework06;
 
 import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
-import ru.otus.danik_ik.homework06.money.Banknote;
+import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.Integer.min;
 
@@ -24,17 +21,13 @@ public class BaseCurrencyBox implements WithdrawCurrencyBox {
     }
 
     @Override
-    public List<Banknote> withdraw(int count) throws NotEnoughException {
+    public Bundle withdraw(int count) throws NotEnoughException {
         if (count > this.count)
             throw new NotEnoughException("Нет достаточного количества денег");
         if (count <= 0)
             throw new IllegalArgumentException();
         this.count -= count;
-        return Stream
-                .generate(() -> new Banknote(denomination))
-                .limit(count)
-                .collect(Collectors.toList())
-                ;
+        return Bundle.byCount(this.denomination, count);
     }
 
     @Override

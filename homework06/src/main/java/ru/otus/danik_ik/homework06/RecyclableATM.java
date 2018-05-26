@@ -7,6 +7,7 @@ import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
 import ru.otus.danik_ik.homework06.money.Banknote;
+import ru.otus.danik_ik.homework06.money.Bundle;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -30,12 +31,12 @@ public class RecyclableATM implements ATM {
     }
 
     @Override
-    public void deposit(List<Banknote> bundle) throws CantDepositException {
+    public void deposit(Bundle bundle) throws CantDepositException {
 
     }
 
     @Override
-    public List<Banknote> withdraw(BigDecimal amount) throws AmountCantBeCollectedException {
+    public Bundle withdraw(BigDecimal amount) throws AmountCantBeCollectedException {
         List<WithdrawCurrencyBox> boxes = getOrderedWithdrawBoxes();
 
         Map<WithdrawCurrencyBox, Integer> specification = getSpecification(boxes, amount.intValueExact());
@@ -43,8 +44,8 @@ public class RecyclableATM implements ATM {
         return collectNotes(specification);
     }
 
-    private List<Banknote> collectNotes(Map<WithdrawCurrencyBox,Integer> specification) throws AmountCantBeCollectedException {
-        List<Banknote> bundle = new ArrayList<>();
+    private Bundle collectNotes(Map<WithdrawCurrencyBox,Integer> specification) throws AmountCantBeCollectedException {
+        Bundle bundle = Bundle.empty();
         for (WithdrawCurrencyBox box: currencyBoxes)
             if (specification.containsKey(box)) try {
                 bundle.addAll(box.withdraw(specification.get(box)));

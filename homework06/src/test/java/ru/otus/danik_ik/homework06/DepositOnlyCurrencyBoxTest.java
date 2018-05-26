@@ -1,13 +1,9 @@
 package ru.otus.danik_ik.homework06;
 
 import org.junit.Test;
-import ru.otus.danik_ik.homework06.money.Banknote;
-import ru.otus.danik_ik.homework06.money.Denomination;
+import ru.otus.danik_ik.homework06.money.Bundle;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -59,22 +55,15 @@ public class DepositOnlyCurrencyBoxTest {
         assertEquals(100, it.canToDeposit(200));
     }
 
-    private List<Banknote> get5000() throws Exception {
-        return Collections.singletonList(new Banknote(Denomination.FIVE_THOUSAND));
+    private Bundle get5000() throws Exception {
+        return Bundle.byValues(5000);
     }
 
-    private List<Banknote> get400() throws Exception {
-        return Arrays.asList(new Banknote[]{
-                new Banknote(Denomination.TWO_HUNDRED),
-                new Banknote(Denomination.TWO_HUNDRED),
-        });
+    private Bundle get400() throws Exception {
+        return Bundle.byValues(200, 200);
     }
 
-    private List<Banknote> get5400() throws Exception {
-        return Arrays.asList(new Banknote[]{
-                new Banknote(Denomination.FIVE_THOUSAND),
-                new Banknote(Denomination.TWO_HUNDRED),
-                new Banknote(Denomination.TWO_HUNDRED),
-        });
+    private Bundle get5400() throws Exception {
+        return Bundle.byValues(5000, 200, 200);
     }
 }

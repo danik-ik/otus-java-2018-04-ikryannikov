@@ -3,6 +3,7 @@ package ru.otus.danik_ik.homework06;
 import org.junit.Test;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
 import ru.otus.danik_ik.homework06.money.Banknote;
+import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
@@ -54,7 +55,7 @@ public class BaseCurrencyBoxTest {
     @Test
     public void withdrawEnough() throws NotEnoughException {
         BaseCurrencyBox it = new BaseCurrencyBox(Denomination.TWO_HUNDRED, 3000, 21);
-        List<Banknote> bundle = it.withdraw(3);
+        Bundle bundle = it.withdraw(3);
 
         assertEquals(3, bundle.size());
         for (Banknote note: bundle)
