@@ -14,6 +14,13 @@ public class RecyclableATMWithdrawTest extends RecyclableATMTest{
                 Bundle.byValues(5000, 1000, 1000, 500, 100, 100, 100, 100),
                 atm.withdraw(new BigDecimal(7900))
         );
+        checkRemainder(
+                0, // внесено
+                INIT_COUNT - 1, //5000
+                INIT_COUNT - 4, // 100
+                INIT_COUNT - 2, // 1000
+                INIT_COUNT - 1 // 500
+        );
     }
 
     @Test
@@ -22,6 +29,10 @@ public class RecyclableATMWithdrawTest extends RecyclableATMTest{
         checkBundle(
                 Bundle.byValues(100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
                 atm.withdraw(new BigDecimal(1100))
+        );
+        checkRemainder(
+                0, // внесено
+                INIT_COUNT - 11 // 100
         );
     }
 
