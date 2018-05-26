@@ -6,8 +6,6 @@ import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
-import java.util.List;
-
 import static java.lang.Integer.min;
 
 public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositCurrencyBox {

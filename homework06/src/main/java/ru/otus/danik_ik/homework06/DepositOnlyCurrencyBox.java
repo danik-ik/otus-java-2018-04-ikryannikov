@@ -8,7 +8,6 @@ import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.lang.Integer.min;

@@ -6,7 +6,6 @@ import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException;
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
-import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
 
 import java.math.BigDecimal;

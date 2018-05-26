@@ -2,13 +2,8 @@ package ru.otus.danik_ik.homework06;
 
 import org.junit.Test;
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
-import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 
