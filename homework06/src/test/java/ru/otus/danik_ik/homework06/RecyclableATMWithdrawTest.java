@@ -1,20 +1,16 @@
 package ru.otus.danik_ik.homework06;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException;
 import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Comparator;
 
-import static org.junit.Assert.*;
-import static ru.otus.danik_ik.homework06.money.Denomination.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class RecyclableATMWithdrawTest {
 
@@ -42,6 +38,27 @@ public class RecyclableATMWithdrawTest {
                 Bundle.byValues(5000, 1000, 1000, 500, 100, 100, 100, 100),
                 atm.withdraw(new BigDecimal(7900))
         );
+    }
+
+    @Test
+    public void withdraw1100() throws AmountCantBeCollectedException {
+        init(100);
+        checkBundle(
+                Bundle.byValues(100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
+                atm.withdraw(new BigDecimal(1100))
+        );
+    }
+
+    @Test(expected = AmountCantBeCollectedException.class)
+    public void withdrawCannotCollect() throws AmountCantBeCollectedException {
+        init(1000);
+        atm.withdraw(new BigDecimal(1100));
+    }
+
+    @Test(expected = AmountCantBeCollectedException.class)
+    public void withdrawNotEnough() throws AmountCantBeCollectedException {
+        init(1000);
+        atm.withdraw(new BigDecimal(100000));
     }
 
     private void checkBundle(Bundle expected, Bundle actual){
