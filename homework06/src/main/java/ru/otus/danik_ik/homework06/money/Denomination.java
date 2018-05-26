@@ -1,6 +1,8 @@
 package ru.otus.danik_ik.homework06.money;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum Denomination {
     ONE_HUNDRED (100),
@@ -23,5 +25,17 @@ public enum Denomination {
 
     public int asInt() {
         return denomination;
+    }
+
+    private static Map<Integer, Denomination> intMap = new HashMap<>();
+    static {
+        for (Denomination d : Denomination.values()) intMap.put(d.asInt(), d);
+    }
+
+    static Denomination of(int value) {
+        Denomination result = intMap.get(value);
+        if (result == null)
+            throw new IllegalArgumentException( String.format("Недопустимый номинал: %d", value) );
+        return result;
     }
 }
