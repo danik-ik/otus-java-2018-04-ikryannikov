@@ -32,7 +32,7 @@ public enum Denomination {
         for (Denomination d : Denomination.values()) intMap.put(d.asInt(), d);
     }
 
-    static Denomination of(int value) {
+    public static Denomination of(int value) {
         Denomination result = intMap.get(value);
         if (result == null)
             throw new IllegalArgumentException( String.format("Недопустимый номинал: %d", value) );

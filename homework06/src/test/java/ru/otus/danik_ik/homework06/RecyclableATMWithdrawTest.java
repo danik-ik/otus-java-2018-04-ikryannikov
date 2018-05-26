@@ -16,46 +16,40 @@ import java.util.Comparator;
 import static org.junit.Assert.*;
 import static ru.otus.danik_ik.homework06.money.Denomination.*;
 
-@RunWith(Parameterized.class)
 public class RecyclableATMWithdrawTest {
-    BigDecimal amount;
-    Bundle bundle;
 
-    public RecyclableATMWithdrawTest(int amount, int[] notes) {
-        this.amount = BigDecimal.valueOf(amount);
-        bundle = Bundle.byValues(notes);
-        bundle.sort(Comparator.comparing(a -> ((Banknote)a).getDenomination().asInt()).reversed());
-        insertBoxes();
-    }
+    private RecyclableATM atm = new RecyclableATM();
+    private RecyclableCurrencyBox[] rBox = new RecyclableCurrencyBox[atm.getWithdrawBoxCount()];
 
-    RecyclableATM atm = new RecyclableATM();
-    RecyclableCurrencyBox[] rBox = new RecyclableCurrencyBox[4];
-    DepositCurrencyBox dBox;
+    private void init(Integer... values) {
+        if (values.length > rBox.length)
+            throw new IllegalArgumentException(String.format("insertBoxes: не более %d аргументов",
+                    rBox.length));
 
-    private void insertBoxes() {
-        Denomination[] denoms = new Denomination[]{ONE_HUNDRED, FIVE_HUNDRED, ONE_THOUSAND, FIVE_THOUSAND};
-        for (int i = 0; i < 4; i++) {
-            rBox[i] = new RecyclableCurrencyBox(denoms[i], 100, 95);
-            atm.replaceRecyclableBox(i, rBox[i]);
+        for (int i = 0; i < rBox.length; i++) {
+            if (values[i] != null) {
+                rBox[i] = new RecyclableCurrencyBox(Denomination.of(values[i]), 100, 95);
+                atm.replaceRecyclableBox(i, rBox[i]);
+            }
         }
         atm.replaceDepositBox(new DepositOnlyCurrencyBox(300));
     }
 
-    @Parameterized.Parameters(name = "{index}: («{0}»)")
-    public static Iterable<Object[]> dataForTest() {
-        return Arrays.asList(new Object[][]{
-                {7900, new int[]{5000, 1000, 1000, 500, 100, 100, 100, 100}},
-        });
+    @Test
+    public void withdraw7900() throws AmountCantBeCollectedException {
+        init(5000, 100, 1000, 500);
+        checkBundle(
+                Bundle.byValues(5000, 1000, 1000, 500, 100, 100, 100, 100),
+                atm.withdraw(new BigDecimal(7900))
+        );
     }
 
-    @Test
-    public void withdraw() throws AmountCantBeCollectedException {
-        Bundle bundle = atm.withdraw(amount);
-        assertNotNull(bundle);
-        bundle.sort(Comparator.comparing(a -> ((Banknote)a).getDenomination().asInt()).reversed());
-        assertEquals(this.bundle.size(), bundle.size());
-        for (int i = 0; i < bundle.size(); i++)
-            assertEquals(this.bundle.get(i).getDenomination(), bundle.get(i).getDenomination());
+    private void checkBundle(Bundle expected, Bundle actual){
+        assertNotNull(actual);
+        actual.sort(Comparator.comparing(a -> ((Banknote)a).getDenomination().asInt()).reversed());
+        assertEquals(expected.size(), actual.size());
+        for (int i = 0; i < actual.size(); i++)
+            assertEquals(expected.get(i).getDenomination(), actual.get(i).getDenomination());
     }
 
 }
