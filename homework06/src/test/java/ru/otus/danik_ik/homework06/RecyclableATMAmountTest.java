@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import static org.junit.Assert.assertEquals;
 import static ru.otus.danik_ik.homework06.money.Denomination.*;
 
-public class RecyclableATMTest {
+public class RecyclableATMAmountTest {
     @Test
     public void EmptyATMGetAmountToIssue() {
         ATM atm = new RecyclableATM();
