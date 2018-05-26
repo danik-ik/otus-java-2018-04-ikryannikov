@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RecyclableATM implements ATM {
-    RecyclableCurrencyBox[] currencyBoxes = new RecyclableCurrencyBox[4];
+    private final int WITHDRAW_BOX_COUNT = 4;
+
+    RecyclableCurrencyBox[] currencyBoxes = new RecyclableCurrencyBox[WITHDRAW_BOX_COUNT];
     DepositCurrencyBox depositBox;
 
     public DepositCurrencyBox replaceDepositBox(DepositCurrencyBox currencyBox){
@@ -32,6 +34,11 @@ public class RecyclableATM implements ATM {
     @Override
     public void deposit(Bundle bundle) throws CantDepositException {
 
+    }
+
+    @Override
+    public int getWithdrawBoxCount() {
+        return WITHDRAW_BOX_COUNT;
     }
 
     @Override

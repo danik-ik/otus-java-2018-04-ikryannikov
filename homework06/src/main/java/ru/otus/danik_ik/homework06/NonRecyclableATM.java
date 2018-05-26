@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class NonRecyclableATM implements ATM {
-    WithdrawCurrencyBox[] withdrawBoxes = new WithdrawCurrencyBox[4];
+    private final int WITHDRAW_BOX_COUNT = 4;
+
+    WithdrawCurrencyBox[] withdrawBoxes = new WithdrawCurrencyBox[WITHDRAW_BOX_COUNT];
     DepositCurrencyBox depositBox;
 
     public WithdrawCurrencyBox replaceWithdrawBox(int slot, WithdrawCurrencyBox currencyBox){
@@ -32,6 +34,11 @@ public class NonRecyclableATM implements ATM {
     @Override
     public void deposit(Bundle bundle) throws CantDepositException {
         depositBox.deposit(bundle);
+    }
+
+    @Override
+    public int getWithdrawBoxCount() {
+        return WITHDRAW_BOX_COUNT;
     }
 
     @Override
