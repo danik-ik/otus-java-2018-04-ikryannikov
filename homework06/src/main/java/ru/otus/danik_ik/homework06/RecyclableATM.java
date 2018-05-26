@@ -33,7 +33,7 @@ public class RecyclableATM implements ATM {
 
     @Override
     public void deposit(Bundle bundle) throws CantDepositException {
-
+        // TODO: 26.05.2018 составить план, выдать
     }
 
     @Override
