@@ -26,7 +26,7 @@ public class RecyclableATMWithdrawTest {
             throw new IllegalArgumentException(String.format("insertBoxes: не более %d аргументов",
                     rBox.length));
 
-        for (int i = 0; i < rBox.length; i++) {
+        for (int i = 0; i < values.length; i++) {
             if (values[i] != null) {
                 rBox[i] = new RecyclableCurrencyBox(Denomination.of(values[i]), 100, 95);
                 atm.replaceRecyclableBox(i, rBox[i]);
