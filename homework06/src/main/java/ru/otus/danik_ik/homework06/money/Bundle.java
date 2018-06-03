@@ -28,7 +28,7 @@ public interface Bundle extends Iterable<Banknote> {
 
     List<Banknote> asList();
 
-    int size();
+    int getCount();
 
 }
 
@@ -52,7 +52,7 @@ class SimpleBundle implements Bundle {
     }
 
     @Override
-    public int size() {
+    public int getCount() {
         return content.size();
     }
 

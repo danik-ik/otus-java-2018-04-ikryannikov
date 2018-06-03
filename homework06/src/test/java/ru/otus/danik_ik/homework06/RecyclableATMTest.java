@@ -35,7 +35,7 @@ class RecyclableATMTest {
 
     protected void checkBundle(Bundle expected, Bundle actual){
         assertNotNull(actual);
-        assertEquals(expected.size(), actual.size());
+        assertEquals(expected.getCount(), actual.getCount());
 
         List<Banknote> expectedList = asSortedList(expected);
         List<Banknote> actualList = asSortedList(actual);

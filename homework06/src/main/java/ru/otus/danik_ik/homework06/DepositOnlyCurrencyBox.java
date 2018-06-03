@@ -22,7 +22,7 @@ public class DepositOnlyCurrencyBox implements DepositCurrencyBox {
 
     @Override
     public void deposit(Bundle bundle) throws CantDepositException {
-        if (bundle.size() > capacity - getCount()) throw new CantDepositException("Кассета заполнена");
+        if (bundle.getCount() > capacity - getCount()) throw new CantDepositException("Кассета заполнена");
         for (Banknote note: bundle){
             Denomination denomination = note.getDenomination();
             content.put(denomination, content.getOrDefault(denomination, 0) + 1);

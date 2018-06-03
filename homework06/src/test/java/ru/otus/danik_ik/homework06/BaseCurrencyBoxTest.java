@@ -54,7 +54,7 @@ public class BaseCurrencyBoxTest {
         BaseCurrencyBox it = new BaseCurrencyBox(Denomination.TWO_HUNDRED, 3000, 21);
         Bundle bundle = it.withdraw(3);
 
-        assertEquals(3, bundle.size());
+        assertEquals(3, bundle.getCount());
         for (Banknote note: bundle)
             assertEquals(note.getDenomination(), it.getDenomination());
     }

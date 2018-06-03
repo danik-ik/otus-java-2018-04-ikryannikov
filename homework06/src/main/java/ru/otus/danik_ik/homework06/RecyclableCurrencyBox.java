@@ -15,10 +15,10 @@ public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositCur
 
     @Override
     public void deposit(Bundle bundle) throws CantDepositException {
-        if (bundle.size() > capacity - count) throw new CantDepositException("Нет места в кассете");
+        if (bundle.getCount() > capacity - count) throw new CantDepositException("Нет места в кассете");
         for (Banknote note: bundle) if (!denomination.equals(note.getDenomination()))
             throw new CantDepositException("Несответствующий номинал");
-        count += bundle.size();
+        count += bundle.getCount();
     }
 
     @Override
