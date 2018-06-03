@@ -13,7 +13,7 @@ public class Banknote {
         return denomination;
     }
 
-    static Comparator<Banknote> getReversedDenominationComparator() {
+    public static Comparator<Banknote> getReversedDenominationComparator() {
         return (a, b) -> b.denomination.asInt() - a.denomination.asInt();
     }
 
