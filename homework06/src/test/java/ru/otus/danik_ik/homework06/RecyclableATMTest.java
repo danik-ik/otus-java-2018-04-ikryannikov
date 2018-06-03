@@ -1,12 +1,12 @@
 package ru.otus.danik_ik.homework06;
 
-import org.junit.Assert;
 import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
 import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -35,10 +35,20 @@ class RecyclableATMTest {
 
     protected void checkBundle(Bundle expected, Bundle actual){
         assertNotNull(actual);
-        actual.sort(Comparator.comparing(a -> ((Banknote)a).getDenomination().asInt()).reversed());
         assertEquals(expected.size(), actual.size());
-        for (int i = 0; i < actual.size(); i++)
-            assertEquals(expected.get(i).getDenomination(), actual.get(i).getDenomination());
+
+        List<Banknote> expectedList = asSortedList(expected);
+        List<Banknote> actualList = asSortedList(actual);
+
+        for (int i = 0; i < actualList.size(); i++)
+            assertEquals(expectedList.get(i).getDenomination(), actualList.get(i).getDenomination());
+    }
+
+    private List<Banknote> asSortedList(Bundle source) {
+        List<Banknote> result = new ArrayList<>();
+        source.forEach(result::add);
+        result.sort(Banknote.getReversedDenominationComparator());
+        return result;
     }
 
     protected void checkRemainder(int dCount, Integer... rCounts) {
