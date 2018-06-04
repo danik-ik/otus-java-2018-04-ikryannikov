@@ -38,7 +38,7 @@ public class RecyclableATM implements ATM {
         plan.apply();
     }
 
-    private Plan makePlan(Bundle bundle) {
+    private Plan makePlan(Bundle bundle) throws CantDepositException {
         return new Plan(bundle);
     }
 
@@ -117,12 +117,13 @@ public class RecyclableATM implements ATM {
         Map<Denomination, Bundle> denominationBundleMap;
         List<Operation> operations = new LinkedList<>();
         
-        public Plan(Bundle bundle) {
+        public Plan(Bundle bundle) throws CantDepositException {
             denominationBundleMap = bundle.splitByDenominations();
             makeOperations();
         }
 
-        private void makeOperations() {
+        private void makeOperations() throws CantDepositException {
+            Bundle remaining = Bundle.empty();
             for (Map.Entry<Denomination, Bundle> entry: denominationBundleMap.entrySet()) {
                 Denomination denomination = entry.getKey();
                 Bundle bundle = entry.getValue();
@@ -141,11 +142,17 @@ public class RecyclableATM implements ATM {
                         if (bundle.getCount() == 0) break;
                     }
                 }
-                // Что не влезло, или для чего нет ячейки соотв. номинала -- DepositCurrencyBox
-                // TODO: 04.06.2018 слить остатки в одну пачку 
-                // TODO: 04.06.2018 проверить, может ли DepositCurrencyBox принять столько 
-                // TODO: 04.06.2018 поместить в план 
+
+                if (bundle.getCount() > 0) {
+                    if (!depositBox.acceptsDenomination(denomination))
+                        throw new CantDepositException("Универсальная ячейка не может принять данный номинал");
+                    remaining.addAll(bundle);
+                }
             }
+            int count = depositBox.canToDeposit(remaining.getCount());
+            if (count != remaining.getCount())
+                throw new CantDepositException("Банкомат переполнен");
+            operations.add(new Operation(depositBox, remaining));
         }
 
         public void apply() throws CantDepositException {
