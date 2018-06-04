@@ -7,6 +7,7 @@ import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
 import ru.otus.danik_ik.homework06.money.Bundle;
+import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -33,7 +34,12 @@ public class RecyclableATM implements ATM {
 
     @Override
     public void deposit(Bundle bundle) throws CantDepositException {
-        // TODO: 26.05.2018 составить план, выдать
+        Plan plan = makePlan(bundle);
+        plan.apply();
+    }
+
+    private Plan makePlan(Bundle bundle) {
+        return new Plan(bundle);
     }
 
     @Override
@@ -105,5 +111,56 @@ public class RecyclableATM implements ATM {
         return depositBox == null?
                 getAmountToIssue() :
                 getAmountToIssue().add(depositBox.getAmount());
+    }
+
+    private class Plan {
+        Map<Denomination, Bundle> denominationBundleMap;
+        List<Operation> operations = new LinkedList<>();
+        
+        public Plan(Bundle bundle) {
+            denominationBundleMap = bundle.splitByDenominations();
+            makeOperations();
+        }
+
+        private void makeOperations() {
+            for (Map.Entry<Denomination, Bundle> entry: denominationBundleMap.entrySet()) {
+                Denomination denomination = entry.getKey();
+                Bundle bundle = entry.getValue();
+                
+                // Распихиваем по основным ячейкам
+                for (DepositCurrencyBox box: currencyBoxes) {
+                    if (box.acceptsDenomination(denomination)) {
+                        int count = box.canToDeposit(bundle.getCount());
+                        if (count == 0) continue;
+                        try {
+                            operations.add(new Operation(box, bundle.extract(count)));
+                        } catch (NotEnoughException e) {
+                            // Алгоритм должен исключать данную ситуацию -- не запрашивать больше, чем есть
+                            throw new RuntimeException(e);
+                        }
+                        if (bundle.getCount() == 0) break;
+                    }
+                }
+                // Что не влезло, или для чего нет ячейки соотв. номинала -- DepositCurrencyBox
+                // TODO: 04.06.2018 слить остатки в одну пачку 
+                // TODO: 04.06.2018 проверить, может ли DepositCurrencyBox принять столько 
+                // TODO: 04.06.2018 поместить в план 
+            }
+        }
+
+        public void apply() throws CantDepositException {
+            for (Operation op: operations)
+                op.box.deposit(op.bundle);
+        }
+        
+        private class Operation {
+            DepositCurrencyBox box;
+            Bundle bundle;
+
+            public Operation(DepositCurrencyBox box, Bundle bundle) {
+                this.box = box;
+                this.bundle = bundle;
+            }
+        }
     }
 }
