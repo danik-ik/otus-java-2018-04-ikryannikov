@@ -17,8 +17,8 @@ import java.util.stream.Stream;
 public class RecyclableATM implements ATM {
     private final int RECYCLABLE_BOX_COUNT = 4;
 
-    RecyclableCurrencyBox[] currencyBoxes = new RecyclableCurrencyBox[RECYCLABLE_BOX_COUNT];
-    DepositCurrencyBox depositBox;
+    protected RecyclableCurrencyBox[] currencyBoxes = new RecyclableCurrencyBox[RECYCLABLE_BOX_COUNT];
+    protected DepositCurrencyBox depositBox;
 
     public DepositCurrencyBox replaceDepositBox(DepositCurrencyBox currencyBox){
         DepositCurrencyBox result = depositBox;
