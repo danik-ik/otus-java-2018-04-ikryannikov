@@ -19,6 +19,7 @@ public class BoxSet {
     public int getWithdrawBoxCount() { return withdrawBoxes.length; }
     
     public WithdrawCurrencyBox getWithdrawBox(int index) {
+        if (index >= withdrawBoxes.length || index < 0) return null;
         return withdrawBoxes[index];
     }
 }
