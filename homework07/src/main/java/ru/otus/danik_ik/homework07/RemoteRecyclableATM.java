@@ -7,7 +7,7 @@ import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 
 public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
     @Override
-    public BoxSet replace(BoxSet set) {
+    public BoxSet replaceCurrencyBoxes(BoxSet set) {
         int inBoxesCount = this.getWithdrawBoxCount(); 
         WithdrawCurrencyBox[] outBoxes = 
                 new WithdrawCurrencyBox[ Math.max(set.getWithdrawBoxCount(), inBoxesCount) ];
