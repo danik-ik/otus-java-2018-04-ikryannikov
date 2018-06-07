@@ -13,9 +13,9 @@ public enum Denomination {
     FIVE_THOUSAND (5000),
     ;
 
-    int denomination;
+    private int denomination;
 
-    Denomination(int denomination) {
+    private Denomination(int denomination) {
         this.denomination = denomination;
     }
 

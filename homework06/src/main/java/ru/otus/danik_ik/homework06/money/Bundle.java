@@ -43,7 +43,7 @@ public interface Bundle extends Iterable<Banknote> {
 
 class SimpleBundle implements Bundle {
 
-    List<Banknote> content = new LinkedList<>();
+    private List<Banknote> content = new LinkedList<>();
 
     @Override
     public boolean add(Banknote banknote) {
