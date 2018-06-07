@@ -7,6 +7,7 @@ import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
 import ru.otus.danik_ik.homework06.money.Bundle;
+import ru.otus.danik_ik.homework06.money.BundleFactory;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 
 public class RecyclableATM implements ATM {
     private final int RECYCLABLE_BOX_COUNT = 4;
+    private BundleFactory bundleFactory = BundleFactory.getDefault();
 
     protected RecyclableCurrencyBox[] currencyBoxes = new RecyclableCurrencyBox[RECYCLABLE_BOX_COUNT];
     protected DepositCurrencyBox depositBox;
@@ -57,7 +59,7 @@ public class RecyclableATM implements ATM {
     }
 
     private Bundle collectNotes(Map<WithdrawCurrencyBox,Integer> specification) throws AmountCantBeCollectedException {
-        Bundle bundle = Bundle.empty();
+        Bundle bundle = bundleFactory.empty();
         for (WithdrawCurrencyBox box: currencyBoxes)
             if (specification.containsKey(box)) try {
                 bundle.addAll(box.withdraw(specification.get(box)));
@@ -123,7 +125,7 @@ public class RecyclableATM implements ATM {
         }
 
         private void makeOperations() throws CantDepositException {
-            Bundle remaining = Bundle.empty();
+            Bundle remaining = bundleFactory.empty();
             for (Map.Entry<Denomination, Bundle> entry: denominationBundleMap.entrySet()) {
                 Denomination denomination = entry.getKey();
                 Bundle bundle = entry.getValue();

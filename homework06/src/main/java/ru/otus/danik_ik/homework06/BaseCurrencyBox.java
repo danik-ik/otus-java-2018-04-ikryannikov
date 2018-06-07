@@ -3,6 +3,7 @@ package ru.otus.danik_ik.homework06;
 import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
 import ru.otus.danik_ik.homework06.money.Bundle;
+import ru.otus.danik_ik.homework06.money.BundleFactory;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
@@ -13,6 +14,8 @@ public class BaseCurrencyBox implements WithdrawCurrencyBox {
     protected final Denomination denomination;
     protected final int capacity;
     protected int count;
+    
+    private BundleFactory bundleFactory = BundleFactory.getDefault();
 
     public BaseCurrencyBox(Denomination denomination, int capacity, int count) {
         this.denomination = denomination;
@@ -27,7 +30,7 @@ public class BaseCurrencyBox implements WithdrawCurrencyBox {
         if (count <= 0)
             throw new IllegalArgumentException();
         this.count -= count;
-        return Bundle.byCount(this.denomination, count);
+        return bundleFactory.byCount(this.denomination, count);
     }
 
     @Override
