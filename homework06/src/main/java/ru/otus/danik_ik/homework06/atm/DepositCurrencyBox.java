@@ -5,7 +5,7 @@ import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 public interface DepositCurrencyBox extends CurrencyBox {
-    public void deposit(Bundle bundle) throws CantDepositException;
-    public int canToDeposit(int count);
-    public boolean acceptsDenomination(Denomination denomination);
+    void deposit(Bundle bundle) throws CantDepositException;
+    int canToDeposit(int count);
+    boolean acceptsDenomination(Denomination denomination);
 }

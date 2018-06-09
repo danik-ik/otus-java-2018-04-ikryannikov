@@ -7,9 +7,9 @@ import ru.otus.danik_ik.homework06.money.Bundle;
 import java.math.BigDecimal;
 
 public interface ATM {
-    public void deposit(Bundle bundle) throws CantDepositException;
-    public int getWithdrawBoxCount();
-    public Bundle withdraw(BigDecimal amount) throws AmountCantBeCollectedException;
-    public BigDecimal getAmountToIssue();
-    public BigDecimal getAmountTotal();
+    void deposit(Bundle bundle) throws CantDepositException;
+    int getWithdrawBoxCount();
+    Bundle withdraw(BigDecimal amount) throws AmountCantBeCollectedException;
+    BigDecimal getAmountToIssue();
+    BigDecimal getAmountTotal();
 }
