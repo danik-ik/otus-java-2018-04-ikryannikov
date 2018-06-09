@@ -3,6 +3,7 @@ package ru.otus.danik_ik.homework06;
 import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
 import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
+import ru.otus.danik_ik.homework06.money.BundleFactory;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ class RecyclableATMTest {
     protected final int INIT_COUNT = 95;
     protected final int INIT_CAPACITY = 100;
 
-    protected RecyclableATM atm = new RecyclableATM();
+    protected RecyclableATM atm = new RecyclableATM(BundleFactory.getDefault());
     protected RecyclableCurrencyBox[] rBoxes = new RecyclableCurrencyBox[atm.getWithdrawBoxCount()];
     protected DepositCurrencyBox dBox;
 
