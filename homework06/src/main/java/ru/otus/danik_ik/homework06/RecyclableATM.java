@@ -19,6 +19,10 @@ public class RecyclableATM implements ATM {
     private final int RECYCLABLE_BOX_COUNT = 4;
     private BundleFactory bundleFactory = BundleFactory.getDefault();
 
+    public RecyclableATM(BundleFactory bundleFactory) {
+        this.bundleFactory = bundleFactory;
+    }
+
     protected RecyclableCurrencyBox[] currencyBoxes = new RecyclableCurrencyBox[RECYCLABLE_BOX_COUNT];
     protected DepositCurrencyBox depositBox;
 

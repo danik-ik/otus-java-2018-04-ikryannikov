@@ -15,12 +15,17 @@ public class BaseCurrencyBox implements WithdrawCurrencyBox {
     protected final int capacity;
     protected int count;
     
-    private BundleFactory bundleFactory = BundleFactory.getDefault();
+    private final BundleFactory bundleFactory;
 
-    public BaseCurrencyBox(Denomination denomination, int capacity, int count) {
+    public BaseCurrencyBox(Denomination denomination, int capacity, int count, BundleFactory bundleFactory) {
         this.denomination = denomination;
         this.capacity = capacity;
         this.count = count;
+        this.bundleFactory = bundleFactory;
+    }
+
+    public BaseCurrencyBox(Denomination denomination, int capacity, int count) {
+        this(denomination, capacity, count, BundleFactory.getDefault());
     }
 
     @Override
