@@ -33,7 +33,7 @@ public class BaseCurrencyBox implements WithdrawCurrencyBox {
         if (count > this.count)
             throw new NotEnoughException("Нет достаточного количества денег");
         if (count <= 0)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Количество купюр к выдаче должно быть положительным");
         this.count -= count;
         return bundleFactory.byCount(this.denomination, count);
     }

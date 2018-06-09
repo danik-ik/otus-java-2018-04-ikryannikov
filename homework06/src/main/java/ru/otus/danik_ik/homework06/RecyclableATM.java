@@ -92,7 +92,7 @@ public class RecyclableATM implements ATM {
                 specification.put(box, count);
             }
         }
-        if (remainder > 0) throw new AmountCantBeCollectedException();
+        if (remainder > 0) throw new AmountCantBeCollectedException("Запрошенная сумма не может быть набрана");
         return specification;
     }
 
