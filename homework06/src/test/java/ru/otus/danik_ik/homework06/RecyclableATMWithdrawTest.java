@@ -7,11 +7,14 @@ import ru.otus.danik_ik.homework06.money.BundleFactory;
 import java.math.BigDecimal;
 
 public class RecyclableATMWithdrawTest extends RecyclableATMTest{
+
+    private BundleFactory bundleFactory = new DefaultBundleFactory();
+
     @Test
     public void withdraw7900() throws AmountCantBeCollectedException {
         init(5000, 100, 1000, 500);
         checkBundle(
-                BundleFactory.getDefault().byValues(5000, 1000, 1000, 500, 100, 100, 100, 100),
+                bundleFactory.byValues(5000, 1000, 1000, 500, 100, 100, 100, 100),
                 atm.withdraw(new BigDecimal(7900))
         );
         checkRemainder(
@@ -27,7 +30,7 @@ public class RecyclableATMWithdrawTest extends RecyclableATMTest{
     public void withdraw1100() throws AmountCantBeCollectedException {
         init(100);
         checkBundle(
-                BundleFactory.getDefault().byValues(100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
+                bundleFactory.byValues(100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100),
                 atm.withdraw(new BigDecimal(1100))
         );
         checkRemainder(

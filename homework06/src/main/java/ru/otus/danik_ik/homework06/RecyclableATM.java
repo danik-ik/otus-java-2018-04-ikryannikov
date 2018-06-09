@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 public class RecyclableATM implements ATM {
     private final int RECYCLABLE_BOX_COUNT = 4;
-    private BundleFactory bundleFactory = BundleFactory.getDefault();
+    private BundleFactory bundleFactory = new DefaultBundleFactory();
 
     public RecyclableATM(BundleFactory bundleFactory) {
         this.bundleFactory = bundleFactory;

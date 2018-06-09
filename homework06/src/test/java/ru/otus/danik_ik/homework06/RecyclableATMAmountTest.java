@@ -13,7 +13,7 @@ import static ru.otus.danik_ik.homework06.money.Denomination.*;
 
 public class RecyclableATMAmountTest {
 
-    BundleFactory bundleFactory = BundleFactory.getDefault();
+    private BundleFactory bundleFactory = new DefaultBundleFactory();
 
     @Test
     public void EmptyATMGetAmountToIssue() {

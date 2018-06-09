@@ -25,7 +25,7 @@ public class BaseCurrencyBox implements WithdrawCurrencyBox {
     }
 
     public BaseCurrencyBox(Denomination denomination, int capacity, int count) {
-        this(denomination, capacity, count, BundleFactory.getDefault());
+        this(denomination, capacity, count, new DefaultBundleFactory());
     }
 
     @Override

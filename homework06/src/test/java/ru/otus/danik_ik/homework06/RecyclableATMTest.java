@@ -15,7 +15,7 @@ class RecyclableATMTest {
     protected final int INIT_COUNT = 95;
     protected final int INIT_CAPACITY = 100;
 
-    protected RecyclableATM atm = new RecyclableATM(BundleFactory.getDefault());
+    protected RecyclableATM atm = new RecyclableATM(new DefaultBundleFactory());
     protected RecyclableCurrencyBox[] rBoxes = new RecyclableCurrencyBox[atm.getWithdrawBoxCount()];
     protected DepositCurrencyBox dBox;
 

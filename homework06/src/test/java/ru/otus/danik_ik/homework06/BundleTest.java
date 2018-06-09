@@ -12,9 +12,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class BundleTest {
+    BundleFactory bundleFactory = new DefaultBundleFactory();
+
     @Test
     public void splitByDenominations() {
-        Bundle it = BundleFactory.getDefault().byValues(1000, 100, 1000, 5000, 5000, 1000);
+        Bundle it = bundleFactory.byValues(1000, 100, 1000, 5000, 5000, 1000);
         Map<Denomination, Bundle> map = it.splitByDenominations();
         assertEquals(3, map.size());
         assertEquals(1, map.get(Denomination.ONE_HUNDRED).getCount());
@@ -25,7 +27,7 @@ public class BundleTest {
 
     @Test
     public void extract() throws NotEnoughException {
-        Bundle from = BundleFactory.getDefault().byValues(100, 200, 500);
+        Bundle from = bundleFactory.byValues(100, 200, 500);
         Bundle to = from.extract(2);
         assertEquals(1, from.getCount());
         assertEquals(2, to.getCount());

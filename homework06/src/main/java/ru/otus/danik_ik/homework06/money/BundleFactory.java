@@ -6,6 +6,4 @@ public interface BundleFactory {
     Bundle byValues(int... values);
 
     Bundle byCount(Denomination denomination, int value);
-    
-    static BundleFactory getDefault() { return new DefaultBundleFactory(); }
 }

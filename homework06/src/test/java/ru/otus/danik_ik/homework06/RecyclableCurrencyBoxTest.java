@@ -8,13 +8,15 @@ import ru.otus.danik_ik.homework06.money.Denomination;
 import static org.junit.Assert.assertEquals;
 
 public class RecyclableCurrencyBoxTest {
+
     private final Denomination denom = Denomination.TWO_THOUSAND;
+    private BundleFactory bundleFactory = new DefaultBundleFactory();
 
     @Test
     public void DepositToEmpty() throws CantDepositException {
         RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 0);
 
-        it.deposit(BundleFactory.getDefault().byCount(denom, 20));
+        it.deposit(bundleFactory.byCount(denom, 20));
         assertEquals(20, it.getCount());
     }
 
@@ -22,7 +24,7 @@ public class RecyclableCurrencyBoxTest {
     public void DepositToNonEmpty() throws CantDepositException {
         RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 2980);
 
-        it.deposit(BundleFactory.getDefault().byCount(denom, 20));
+        it.deposit(bundleFactory.byCount(denom, 20));
         assertEquals(3000, it.getCount());
     }
 
@@ -30,14 +32,14 @@ public class RecyclableCurrencyBoxTest {
     public void DepositOverflow() throws CantDepositException {
         RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 2980);
 
-        it.deposit(BundleFactory.getDefault().byCount(denom, 21));
+        it.deposit(bundleFactory.byCount(denom, 21));
     }
 
     @Test(expected = CantDepositException.class)
     public void DepositOtherDenomination() throws CantDepositException {
         RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 2980);
 
-        it.deposit(BundleFactory.getDefault().byCount(Denomination.FIVE_THOUSAND, 1));
+        it.deposit(bundleFactory.byCount(Denomination.FIVE_THOUSAND, 1));
     }
 
     @Test
