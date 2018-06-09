@@ -1,7 +1,12 @@
-package ru.otus.danik_ik.homework06.money;
+package ru.otus.danik_ik.homework06;
 
 
- class DefaultBundleFactory implements BundleFactory {
+import ru.otus.danik_ik.homework06.money.Banknote;
+import ru.otus.danik_ik.homework06.money.Bundle;
+import ru.otus.danik_ik.homework06.money.BundleFactory;
+import ru.otus.danik_ik.homework06.money.Denomination;
+
+class DefaultBundleFactory implements BundleFactory {
     @Override
     public Bundle empty() {
         return new SimpleBundle();
