@@ -6,7 +6,7 @@ import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.BundleFactory;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
-class DefaultBundleFactory implements BundleFactory {
+public class DefaultBundleFactory implements BundleFactory {
     @Override
     public Bundle empty() {
         return new SimpleBundle();
