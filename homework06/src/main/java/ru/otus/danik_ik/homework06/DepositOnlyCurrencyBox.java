@@ -35,11 +35,6 @@ public class DepositOnlyCurrencyBox implements DepositAllDenominationsCurrencyBo
     }
 
     @Override
-    public Denomination getDenomination() {
-        throw new UnsupportedOperationException("Кассета принимает банкноты всех номиналов");
-    }
-
-    @Override
     public int getCount() {
         return content.values().stream()
                 .mapToInt(Integer::intValue)
