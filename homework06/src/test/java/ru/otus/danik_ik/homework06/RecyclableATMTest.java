@@ -1,6 +1,7 @@
 package ru.otus.danik_ik.homework06;
 
 import ru.otus.danik_ik.homework06.atm.DepositAllDenominationsCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.RecyclableCurrencyBox;
 import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
 import ru.otus.danik_ik.homework06.money.Denomination;
@@ -25,7 +26,7 @@ class RecyclableATMTest {
 
         for (int i = 0; i < values.length; i++) {
             if (values[i] != null) {
-                rBoxes[i] = new RecyclableCurrencyBox(Denomination.of(values[i]), INIT_CAPACITY, INIT_COUNT);
+                rBoxes[i] = new RecyclableCurrencyBoxImpl(Denomination.of(values[i]), INIT_CAPACITY, INIT_COUNT);
                 atm.replaceRecyclableBox(i, rBoxes[i]);
             }
         }

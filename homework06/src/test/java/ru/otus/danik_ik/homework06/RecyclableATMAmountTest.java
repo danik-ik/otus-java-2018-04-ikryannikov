@@ -32,7 +32,7 @@ public class RecyclableATMAmountTest {
     public void ATMGetAmountTotal() throws CantDepositException {
         RecyclableATM atm = new RecyclableATM(bundleFactory);
 
-        atm.replaceRecyclableBox(1, new RecyclableCurrencyBox(Denomination.TWO_HUNDRED, 3000, 6));
+        atm.replaceRecyclableBox(1, new RecyclableCurrencyBoxImpl(Denomination.TWO_HUNDRED, 3000, 6));
 
         DepositAllDenominationsCurrencyBox dBox = new DepositOnlyCurrencyBox(3000);
         dBox.deposit(bundleFactory.byCount(ONE_HUNDRED, 7));
@@ -45,7 +45,7 @@ public class RecyclableATMAmountTest {
     public void ATMGetAmountToIssue() throws CantDepositException {
         RecyclableATM atm = new RecyclableATM(bundleFactory);
 
-        atm.replaceRecyclableBox(1, new RecyclableCurrencyBox(Denomination.TWO_HUNDRED, 3000, 6));
+        atm.replaceRecyclableBox(1, new RecyclableCurrencyBoxImpl(Denomination.TWO_HUNDRED, 3000, 6));
 
         DepositAllDenominationsCurrencyBox dBox = new DepositOnlyCurrencyBox(3000);
         dBox.deposit(bundleFactory.byCount(ONE_HUNDRED, 7));
