@@ -43,7 +43,8 @@ class SimpleBundle implements Bundle {
     @Override
     public Bundle extract(int count) throws NotEnoughException {
         if (count > this.getCount())
-            throw new NotEnoughException("Попытка взять из кассеты больше денег, чем в ней есть");
+            throw new NotEnoughException( String.format("Попытка отделить от пачки больше денег, чем в ней есть. " +
+                    "Затребовано: %d; в наличии: %d", count > this.getCount()));
         Bundle result = new SimpleBundle();
         for (int i = 0; i < count; i++) result.add(content.remove(0));
         return result;

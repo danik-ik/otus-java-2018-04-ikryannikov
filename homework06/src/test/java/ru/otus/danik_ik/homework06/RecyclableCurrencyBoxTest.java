@@ -14,7 +14,7 @@ public class RecyclableCurrencyBoxTest {
 
     @Test
     public void DepositToEmpty() throws CantDepositException {
-        RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 0);
+        RecyclableCurrencyBoxImpl it = new RecyclableCurrencyBoxImpl(denom, 3000, 0);
 
         it.deposit(bundleFactory.byCount(denom, 20));
         assertEquals(20, it.getCount());
@@ -22,7 +22,7 @@ public class RecyclableCurrencyBoxTest {
 
     @Test
     public void DepositToNonEmpty() throws CantDepositException {
-        RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 2980);
+        RecyclableCurrencyBoxImpl it = new RecyclableCurrencyBoxImpl(denom, 3000, 2980);
 
         it.deposit(bundleFactory.byCount(denom, 20));
         assertEquals(3000, it.getCount());
@@ -30,28 +30,28 @@ public class RecyclableCurrencyBoxTest {
 
     @Test(expected = CantDepositException.class)
     public void DepositOverflow() throws CantDepositException {
-        RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 2980);
+        RecyclableCurrencyBoxImpl it = new RecyclableCurrencyBoxImpl(denom, 3000, 2980);
 
         it.deposit(bundleFactory.byCount(denom, 21));
     }
 
     @Test(expected = CantDepositException.class)
     public void DepositOtherDenomination() throws CantDepositException {
-        RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 2980);
+        RecyclableCurrencyBoxImpl it = new RecyclableCurrencyBoxImpl(denom, 3000, 2980);
 
         it.deposit(bundleFactory.byCount(Denomination.FIVE_THOUSAND, 1));
     }
 
     @Test
     public void CanToDepositEnough() {
-        RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 20);
+        RecyclableCurrencyBoxImpl it = new RecyclableCurrencyBoxImpl(denom, 3000, 20);
 
         assertEquals(100, it.canToDeposit(100));
     }
 
     @Test
     public void CanToDepositNotEnough() {
-        RecyclableCurrencyBox it = new RecyclableCurrencyBox(denom, 3000, 2980);
+        RecyclableCurrencyBoxImpl it = new RecyclableCurrencyBoxImpl(denom, 3000, 2980);
 
         assertEquals(20, it.canToDeposit(100));
     }

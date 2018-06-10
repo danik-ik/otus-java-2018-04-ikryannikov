@@ -1,8 +1,6 @@
 package ru.otus.danik_ik.homework06;
 
-import ru.otus.danik_ik.homework06.atm.ATM;
-import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
-import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.*;
 import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException;
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
@@ -24,10 +22,10 @@ public class RecyclableATM implements ATM {
     }
 
     protected RecyclableCurrencyBox[] currencyBoxes = new RecyclableCurrencyBox[RECYCLABLE_BOX_COUNT];
-    protected DepositCurrencyBox depositBox;
+    protected DepositAllDenominationsCurrencyBox depositBox;
 
-    public DepositCurrencyBox replaceDepositBox(DepositCurrencyBox currencyBox){
-        DepositCurrencyBox result = depositBox;
+    public DepositAllDenominationsCurrencyBox replaceDepositBox(DepositAllDenominationsCurrencyBox currencyBox){
+        DepositAllDenominationsCurrencyBox result = depositBox;
         depositBox = currencyBox;
         return result;
     }
@@ -135,7 +133,7 @@ public class RecyclableATM implements ATM {
                 Bundle bundle = entry.getValue();
                 
                 // Распихиваем по основным ячейкам
-                for (DepositCurrencyBox box: currencyBoxes) {
+                for (DepositOneDenominationCurrencyBox box: currencyBoxes) {
                     if (box.acceptsDenomination(denomination)) {
                         int count = box.canToDeposit(bundle.getCount());
                         if (count == 0) continue;
@@ -150,8 +148,6 @@ public class RecyclableATM implements ATM {
                 }
 
                 if (bundle.getCount() > 0) {
-                    if (!depositBox.acceptsDenomination(denomination))
-                        throw new CantDepositException("Универсальная ячейка не может принять данный номинал");
                     remaining.addAll(bundle);
                 }
             }
