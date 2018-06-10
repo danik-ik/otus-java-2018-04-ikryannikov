@@ -31,7 +31,8 @@ public class BaseCurrencyBox implements WithdrawCurrencyBox {
     @Override
     public Bundle withdraw(int count) throws NotEnoughException {
         if (count > this.count)
-            throw new NotEnoughException("Нет достаточного количества денег");
+            throw new NotEnoughException( String.format("Попытка взять из кассеты больше денег, чем в ней есть. " +
+                    "Затребовано: %d; в наличии: %d", count, this.count));
         if (count <= 0)
             throw new IllegalArgumentException("Количество купюр к выдаче должно быть положительным");
         this.count -= count;

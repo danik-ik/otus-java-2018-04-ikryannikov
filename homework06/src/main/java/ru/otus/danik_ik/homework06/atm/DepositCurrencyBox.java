@@ -4,8 +4,8 @@ import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.money.Bundle;
 
 /**
- * На этом уровне не определяется, принимает ли данная кассета только один номинал,
- * или не имеет ограничений по номиналу
+ * РќР° СЌС‚РѕРј СѓСЂРѕРІРЅРµ РЅРµ РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ, РїСЂРёРЅРёРјР°РµС‚ Р»Рё РґР°РЅРЅР°СЏ РєР°СЃСЃРµС‚Р° С‚РѕР»СЊРєРѕ РѕРґРёРЅ РЅРѕРјРёРЅР°Р»,
+ * РёР»Рё РЅРµ РёРјРµРµС‚ РѕРіСЂР°РЅРёС‡РµРЅРёР№ РїРѕ РЅРѕРјРёРЅР°Р»Сѓ
  */
 public interface DepositCurrencyBox extends CurrencyBox {
     void deposit(Bundle bundle) throws CantDepositException;

@@ -22,7 +22,11 @@ public class DepositOnlyCurrencyBox implements DepositAllDenominationsCurrencyBo
 
     @Override
     public void deposit(Bundle bundle) throws CantDepositException {
-        if (bundle.getCount() > capacity - getCount()) throw new CantDepositException("Кассета заполнена");
+        if (bundle.getCount() > canToDeposit())
+            throw new CantDepositException( String.format("Недостаточно свобобного места в кассете. " +
+                    "Вносится: %d; может быть внесено: %d", bundle.getCount(), canToDeposit()
+            ));
+
         for (Banknote note: bundle){
             Denomination denomination = note.getDenomination();
             content.put(denomination, content.getOrDefault(denomination, 0) + 1);
@@ -31,8 +35,10 @@ public class DepositOnlyCurrencyBox implements DepositAllDenominationsCurrencyBo
 
     @Override
     public int canToDeposit(int count) {
-        return min(count, capacity - getCount());
+        return min(count, canToDeposit());
     }
+
+    private int canToDeposit() { return capacity - getCount(); }
 
     @Override
     public int getCount() {

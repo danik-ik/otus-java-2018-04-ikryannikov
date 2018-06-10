@@ -21,17 +21,23 @@ public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositOne
 
     @Override
     public void deposit(Bundle bundle) throws CantDepositException {
-        if (bundle.getCount() > capacity - count) throw new CantDepositException("Нет места в кассете");
+        if (bundle.getCount() > canToDeposit())
+            throw new CantDepositException( String.format("Недостаточно свобобного места в кассете. " +
+                            "Вносится: %d; может быть внесено: %d", bundle.getCount(), canToDeposit()
+                    ));
         for (Banknote note: bundle) if (!denomination.equals(note.getDenomination()))
-            throw new CantDepositException("Несответствующий номинал");
+            throw new CantDepositException(String.format("Несответствующий номинал: %s",
+                    note.getDenomination().name()));
         count += bundle.getCount();
     }
 
     @Override
     public int canToDeposit(int count) {
-        return min(count, capacity - this.count);
+        return min(count, canToDeposit());
 
     }
+
+    private int canToDeposit() { return capacity - this.count; }
 
     @Override
     public boolean acceptsDenomination(Denomination denomination) {
