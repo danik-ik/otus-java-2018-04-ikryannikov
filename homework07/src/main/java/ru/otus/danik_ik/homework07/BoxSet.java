@@ -1,18 +1,18 @@
 package ru.otus.danik_ik.homework07;
 
-import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.DepositAllDenominationsCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 
 public class BoxSet {
-    private final DepositCurrencyBox depositBox;
+    private final DepositAllDenominationsCurrencyBox depositBox;
     private final WithdrawCurrencyBox[] withdrawBoxes;
 
-    public BoxSet(DepositCurrencyBox inputBox, WithdrawCurrencyBox... withdrawBoxes) {
+    public BoxSet(DepositAllDenominationsCurrencyBox inputBox, WithdrawCurrencyBox... withdrawBoxes) {
         this.depositBox = inputBox;
         this.withdrawBoxes = withdrawBoxes;
     }
 
-    public DepositCurrencyBox getDepositBox() {
+    public DepositAllDenominationsCurrencyBox getDepositBox() {
         return depositBox;
     }
 

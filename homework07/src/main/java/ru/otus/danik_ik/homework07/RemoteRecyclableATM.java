@@ -1,11 +1,16 @@
 package ru.otus.danik_ik.homework07;
 
 import ru.otus.danik_ik.homework06.RecyclableATM;
-import ru.otus.danik_ik.homework06.RecyclableCurrencyBox;
-import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.DepositAllDenominationsCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.RecyclableCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
+import ru.otus.danik_ik.homework06.money.BundleFactory;
 
 public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
+    public RemoteRecyclableATM(BundleFactory bundleFactory) {
+        super(bundleFactory);
+    }
+
     @Override
     public BoxSet replaceCurrencyBoxes(BoxSet set) {
         int inBoxesCount = this.getWithdrawBoxCount(); 
@@ -15,10 +20,10 @@ public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
         // Что не влезает или не подходит по типу остаётся снаружи
         for (int i = 0; i < outBoxes.length; i++) {
             outBoxes[i] = set.getWithdrawBox(i);
-            if (i < inBoxesCount && outBoxes[i] instanceof RecyclableCurrencyBox) 
+            if (i < inBoxesCount && outBoxes[i] instanceof RecyclableCurrencyBox)
                 outBoxes[i] = this.replaceRecyclableBox(i, (RecyclableCurrencyBox)outBoxes[i]);
         }
-        DepositCurrencyBox dBox = replaceDepositBox(set.getDepositBox());
+        DepositAllDenominationsCurrencyBox dBox = replaceDepositBox(set.getDepositBox());
                 
         return new BoxSet(dBox, outBoxes);
     }

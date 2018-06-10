@@ -1,9 +1,11 @@
 package ru.otus.danik_ik.homework07;
 
+import ru.otus.danik_ik.homework06.DefaultBundleFactory;
+
 public class Main
 {
     private static final Factories factories = new Factories(
-            () -> new RemoteRecyclableATM(),
+            () -> new RemoteRecyclableATM(new DefaultBundleFactory()),
             () -> new SimpleDepartment()
     );
     
