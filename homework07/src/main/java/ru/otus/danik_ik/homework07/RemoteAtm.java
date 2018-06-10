@@ -6,4 +6,5 @@ public interface RemoteAtm {
     BoxSet replaceCurrencyBoxes(BoxSet set);
     BigDecimal getAmountToIssue();
     BigDecimal getAmountTotal();
+    String getName();
 }
