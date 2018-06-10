@@ -1,6 +1,6 @@
 package ru.otus.danik_ik.homework06;
 
-import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.DepositOneDenominationCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
@@ -9,7 +9,7 @@ import ru.otus.danik_ik.homework06.money.Denomination;
 
 import static java.lang.Integer.min;
 
-public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositCurrencyBox {
+public class RecyclableCurrencyBox extends BaseCurrencyBox implements DepositOneDenominationCurrencyBox {
 
     public RecyclableCurrencyBox(Denomination denomination, int capacity, int count, BundleFactory bundleFactory) {
         super(denomination, capacity, count, bundleFactory);

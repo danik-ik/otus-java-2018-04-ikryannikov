@@ -1,6 +1,6 @@
 package ru.otus.danik_ik.homework06;
 
-import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.DepositAllDenominationsCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.money.Banknote;
 import ru.otus.danik_ik.homework06.money.Bundle;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static java.lang.Integer.min;
 
-public class DepositOnlyCurrencyBox implements DepositCurrencyBox {
+public class DepositOnlyCurrencyBox implements DepositAllDenominationsCurrencyBox {
     private final int capacity;
     private Map<Denomination, Integer> content = new HashMap<>();
 
@@ -55,8 +55,4 @@ public class DepositOnlyCurrencyBox implements DepositCurrencyBox {
                 .orElseGet(() -> BigDecimal.valueOf(0));
     }
 
-    @Override
-    public boolean acceptsDenomination(Denomination denomination) {
-        return true;
-    }
 }
