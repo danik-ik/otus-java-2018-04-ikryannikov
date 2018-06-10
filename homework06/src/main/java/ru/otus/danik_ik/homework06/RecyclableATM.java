@@ -1,12 +1,11 @@
 package ru.otus.danik_ik.homework06;
 
-import ru.otus.danik_ik.homework06.atm.ATM;
-import ru.otus.danik_ik.homework06.atm.DepositCurrencyBox;
-import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.*;
 import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException;
 import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.atm.exceptions.NotEnoughException;
 import ru.otus.danik_ik.homework06.money.Bundle;
+import ru.otus.danik_ik.homework06.money.BundleFactory;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
 import java.math.BigDecimal;
@@ -16,12 +15,17 @@ import java.util.stream.Stream;
 
 public class RecyclableATM implements ATM {
     private final int RECYCLABLE_BOX_COUNT = 4;
+    private BundleFactory bundleFactory = new DefaultBundleFactory();
+
+    public RecyclableATM(BundleFactory bundleFactory) {
+        this.bundleFactory = bundleFactory;
+    }
 
     protected RecyclableCurrencyBox[] currencyBoxes = new RecyclableCurrencyBox[RECYCLABLE_BOX_COUNT];
-    protected DepositCurrencyBox depositBox;
+    protected DepositAllDenominationsCurrencyBox depositBox;
 
-    public DepositCurrencyBox replaceDepositBox(DepositCurrencyBox currencyBox){
-        DepositCurrencyBox result = depositBox;
+    public DepositAllDenominationsCurrencyBox replaceDepositBox(DepositAllDenominationsCurrencyBox currencyBox){
+        DepositAllDenominationsCurrencyBox result = depositBox;
         depositBox = currencyBox;
         return result;
     }
@@ -57,7 +61,7 @@ public class RecyclableATM implements ATM {
     }
 
     private Bundle collectNotes(Map<WithdrawCurrencyBox,Integer> specification) throws AmountCantBeCollectedException {
-        Bundle bundle = Bundle.empty();
+        Bundle bundle = bundleFactory.empty();
         for (WithdrawCurrencyBox box: currencyBoxes)
             if (specification.containsKey(box)) try {
                 bundle.addAll(box.withdraw(specification.get(box)));
@@ -86,7 +90,7 @@ public class RecyclableATM implements ATM {
                 specification.put(box, count);
             }
         }
-        if (remainder > 0) throw new AmountCantBeCollectedException();
+        if (remainder > 0) throw new AmountCantBeCollectedException("Запрошенная сумма не может быть набрана");
         return specification;
     }
 
@@ -123,13 +127,13 @@ public class RecyclableATM implements ATM {
         }
 
         private void makeOperations() throws CantDepositException {
-            Bundle remaining = Bundle.empty();
+            Bundle remaining = bundleFactory.empty();
             for (Map.Entry<Denomination, Bundle> entry: denominationBundleMap.entrySet()) {
                 Denomination denomination = entry.getKey();
                 Bundle bundle = entry.getValue();
                 
                 // Распихиваем по основным ячейкам
-                for (DepositCurrencyBox box: currencyBoxes) {
+                for (DepositOneDenominationCurrencyBox box: currencyBoxes) {
                     if (box.acceptsDenomination(denomination)) {
                         int count = box.canToDeposit(bundle.getCount());
                         if (count == 0) continue;
@@ -144,8 +148,6 @@ public class RecyclableATM implements ATM {
                 }
 
                 if (bundle.getCount() > 0) {
-                    if (!depositBox.acceptsDenomination(denomination))
-                        throw new CantDepositException("Универсальная ячейка не может принять данный номинал");
                     remaining.addAll(bundle);
                 }
             }

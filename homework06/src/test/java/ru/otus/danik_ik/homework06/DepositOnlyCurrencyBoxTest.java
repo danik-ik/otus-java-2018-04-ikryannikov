@@ -2,6 +2,7 @@ package ru.otus.danik_ik.homework06;
 
 import org.junit.Test;
 import ru.otus.danik_ik.homework06.money.Bundle;
+import ru.otus.danik_ik.homework06.money.BundleFactory;
 
 import java.math.BigDecimal;
 
@@ -9,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class DepositOnlyCurrencyBoxTest {
     private DepositOnlyCurrencyBox it = new DepositOnlyCurrencyBox(100);
+    private BundleFactory bundleFactory = new DefaultBundleFactory();
 
     @Test
     public void getAmountEmpty() {
@@ -56,14 +58,14 @@ public class DepositOnlyCurrencyBoxTest {
     }
 
     private Bundle get5000() throws Exception {
-        return Bundle.byValues(5000);
+        return bundleFactory.byValues(5000);
     }
 
     private Bundle get400() throws Exception {
-        return Bundle.byValues(200, 200);
+        return bundleFactory.byValues(200, 200);
     }
 
     private Bundle get5400() throws Exception {
-        return Bundle.byValues(5000, 200, 200);
+        return bundleFactory.byValues(5000, 200, 200);
     }
 }
