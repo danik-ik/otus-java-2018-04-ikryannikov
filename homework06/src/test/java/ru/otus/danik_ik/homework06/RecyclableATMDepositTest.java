@@ -84,12 +84,4 @@ public class RecyclableATMDepositTest extends RecyclableATMTest{
         );
     }
 
-    @Test (expected = CantDepositException.class)
-    public void nonUniversalBox() throws Exception {
-        init(5000, 1000, 500, 100);
-        atm.replaceDepositBox(new RecyclableCurrencyBox(Denomination.ONE_HUNDRED, INIT_CAPACITY, 0));
-        Bundle bundle = bundleFactory.empty();
-        bundle.addAll(bundleFactory.byCount(Denomination.TWO_THOUSAND, INIT_COUNT));
-        atm.deposit(bundle);
-    }
 }
