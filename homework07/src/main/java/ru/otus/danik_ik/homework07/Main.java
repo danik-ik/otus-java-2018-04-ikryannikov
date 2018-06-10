@@ -14,14 +14,19 @@ public class Main
 
     private final BundleFactory bundleFactory = new DefaultBundleFactory();
 
-    private static final Factories factories = new Factories(
-            () -> new RemoteRecyclableATM(new DefaultBundleFactory()),
+    private final Factories factories = new Factories(
+            (name) ->
+                    new RemoteRecyclableATM(bundleFactory, name, callbackHandler),
             () -> new SimpleDepartment()
     );
-    
+
+    private void run() {
+        RemoteAtm atm1 = factories.newRemoteAtm("First");
+        RemoteAtm atm2 = factories.newRemoteAtm("Second");
+        RemoteAtm atm3 = factories.newRemoteAtm("Third");
+    }
+
     public static void main( String[] args ) {
-        RemoteAtm atm1 = factories.newRemoteAtm();
-        RemoteAtm atm2 = factories.newRemoteAtm();
-        RemoteAtm atm3 = factories.newRemoteAtm();
+        new Main().run();
     }
 }
