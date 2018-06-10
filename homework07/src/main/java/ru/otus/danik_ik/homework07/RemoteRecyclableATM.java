@@ -6,9 +6,16 @@ import ru.otus.danik_ik.homework06.atm.RecyclableCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 import ru.otus.danik_ik.homework06.money.BundleFactory;
 
+import java.util.function.BiConsumer;
+
 public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
-    public RemoteRecyclableATM(BundleFactory bundleFactory) {
+    private final String name;
+    private final BiConsumer<RemoteAtm, String> callbackHandler;
+
+    public RemoteRecyclableATM(BundleFactory bundleFactory, String name, BiConsumer<RemoteAtm, String> callbackHandler) {
         super(bundleFactory);
+        this.name = name;
+        this.callbackHandler = callbackHandler;
     }
 
     @Override
@@ -27,4 +34,11 @@ public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
                 
         return new BoxSet(dBox, outBoxes);
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    // TODO: 10.06.2018 обернуть унаследованные методы. Вызывать коллбеки с комментариями, что таки происходит. 
 }
