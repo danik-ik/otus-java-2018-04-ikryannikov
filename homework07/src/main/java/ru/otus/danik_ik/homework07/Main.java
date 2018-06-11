@@ -3,8 +3,12 @@ package ru.otus.danik_ik.homework07;
 import ru.otus.danik_ik.homework06.DefaultBundleFactory;
 import ru.otus.danik_ik.homework06.DepositOnlyCurrencyBox;
 import ru.otus.danik_ik.homework06.RecyclableCurrencyBoxImpl;
+import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 import ru.otus.danik_ik.homework06.money.BundleFactory;
+import ru.otus.danik_ik.homework06.money.Denomination;
 
+import java.math.BigDecimal;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 public class Main
@@ -40,8 +44,50 @@ public class Main
         RemoteAtm atm2 = factories.newRemoteAtm("Second");
         RemoteAtm atm3 = factories.newRemoteAtm("Third");
 
-        BoxSet boxSet1 = ...
-        dept.subcsribe(atm1, boxSet1);
-        ....
+        dept.subcsribe(atm1, createBoxSet(1000, 1000, 1000, 1000));
+        dept.subcsribe(atm2, createBoxSet(1000, 1000, 1000, 2000));
+        dept.subcsribe(atm3, createBoxSet(1000, 1000, 1000, 3000));
+
+        System.out.println("* Department запрашивает полную сумму");
+        printAmounts(dept.getAmountsTotal());
+        System.out.println("* Department запрашивает сумму к выдаче");
+        printAmounts(dept.getAmountsToIssue());
+
+        System.out.println("* Department инициирует замену кассет");
+        dept.replaceBoxes();
+
+        System.out.println("* Department запрашивает полную сумму (после замены кассет)");
+        printAmounts(dept.getAmountsTotal());
+        System.out.println("* Department запрашивает сумму к выдаче (после замены кассет)");
+        printAmounts(dept.getAmountsToIssue());
+
+    }
+
+    private void printAmounts(Map<RemoteAtm,BigDecimal> amounts) {
+        amounts.forEach(
+                (atm, amount) -> {
+                    System.out.println(atm.getName() + ": " + amount);
+                }
+        );
+    }
+
+    private final Denomination[] denominations = new Denomination[]{
+            Denomination.ONE_HUNDRED,
+            Denomination.FIVE_HUNDRED,
+            Denomination.ONE_THOUSAND,
+            Denomination.FIVE_THOUSAND,
+    };
+
+    private BoxSet createBoxSet(int... counts) {
+        if (counts.length > denominations.length)
+            throw new IllegalArgumentException( String.format("Максимальное количество аргументов для " +
+                    "createBoxSet %d", denominations.length));
+
+        WithdrawCurrencyBox[] wBoxes = new WithdrawCurrencyBox[counts.length];
+        for (int i = 0; i < counts.length; i++) {
+            wBoxes[i] = factories.newWithdrawCurrencyBox(denominations[i], counts[i]);
+        }
+
+        return new BoxSet(factories.newDepositCurrencyBox(), wBoxes);
     }
 }
