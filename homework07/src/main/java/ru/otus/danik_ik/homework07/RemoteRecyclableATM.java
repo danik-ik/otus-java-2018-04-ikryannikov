@@ -54,4 +54,8 @@ public class RemoteRecyclableATM implements RemoteAtm {
         callbackHandler.accept(this, "Запрашивается полная сумма");
         return atm.getAmountTotal();
     }
+
+    RecyclableATM getATM() {
+        return atm;
+    }
 }

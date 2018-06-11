@@ -2,8 +2,11 @@ package ru.otus.danik_ik.homework07;
 
 import ru.otus.danik_ik.homework06.DefaultBundleFactory;
 import ru.otus.danik_ik.homework06.DepositOnlyCurrencyBox;
+import ru.otus.danik_ik.homework06.RecyclableATM;
 import ru.otus.danik_ik.homework06.RecyclableCurrencyBoxImpl;
 import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
+import ru.otus.danik_ik.homework06.atm.exceptions.AmountCantBeCollectedException;
+import ru.otus.danik_ik.homework06.atm.exceptions.CantDepositException;
 import ru.otus.danik_ik.homework06.money.BundleFactory;
 import ru.otus.danik_ik.homework06.money.Denomination;
 
@@ -13,6 +16,7 @@ import java.util.function.BiConsumer;
 
 public class Main
 {
+    private final BundleFactory bundleFactory = new DefaultBundleFactory();
     private final Factories factories = new Factories(){{
         final int DEFAULT_CAPACITY = 3000;
         final BiConsumer <RemoteAtm, String> callbackHandler = (atm, message) -> {
@@ -20,7 +24,6 @@ public class Main
             System.out.println(message);
         };
 
-        final BundleFactory bundleFactory = new DefaultBundleFactory();
 
         setNewRemoteAtmFn(
                 (name) -> new RemoteRecyclableATM(bundleFactory, name, callbackHandler) );
@@ -34,10 +37,16 @@ public class Main
     }};
 
     public static void main( String[] args ) {
-        new Main().run();
+        try {
+            new Main().run();
+        } catch (AmountCantBeCollectedException e) {
+            e.printStackTrace();
+        } catch (CantDepositException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void run() {
+    private void run() throws AmountCantBeCollectedException, CantDepositException {
         Department dept = factories.newDepartment();
 
         RemoteAtm atm1 = factories.newRemoteAtm("First");
@@ -59,6 +68,24 @@ public class Main
         System.out.println("* Department запрашивает полную сумму (после замены кассет)");
         printAmounts(dept.getAmountsTotal());
         System.out.println("* Department запрашивает сумму к выдаче (после замены кассет)");
+        printAmounts(dept.getAmountsToIssue());
+
+        ((RemoteRecyclableATM)atm1).getATM().withdraw(new BigDecimal(173500));
+        ((RemoteRecyclableATM)atm2).getATM().withdraw(new BigDecimal(222000));
+        ((RemoteRecyclableATM)atm3).getATM().withdraw(new BigDecimal(3333300));
+        ((RemoteRecyclableATM)atm3).getATM().deposit(bundleFactory.byValues(1000, 2000, 2000, 200, 5000, 100, 100));
+
+        System.out.println("* Department запрашивает полную сумму (после расхода средств)");
+        printAmounts(dept.getAmountsTotal());
+        System.out.println("* Department запрашивает сумму к выдаче (после расхода средств)");
+        printAmounts(dept.getAmountsToIssue());
+
+        System.out.println("* Department инициирует замену кассет");
+        dept.replaceBoxes();
+
+        System.out.println("* Department запрашивает полную сумму (после повторной замены кассет)");
+        printAmounts(dept.getAmountsTotal());
+        System.out.println("* Department запрашивает сумму к выдаче (после повторной замены кассет)");
         printAmounts(dept.getAmountsToIssue());
 
     }
