@@ -9,12 +9,13 @@ import ru.otus.danik_ik.homework06.money.BundleFactory;
 import java.math.BigDecimal;
 import java.util.function.BiConsumer;
 
-public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
+public class RemoteRecyclableATM implements RemoteAtm {
+    private final RecyclableATM atm;
     private final String name;
     private final BiConsumer<RemoteAtm, String> callbackHandler;
 
     public RemoteRecyclableATM(BundleFactory bundleFactory, String name, BiConsumer<RemoteAtm, String> callbackHandler) {
-        super(bundleFactory);
+        atm = new RecyclableATM(bundleFactory);
         this.name = name;
         this.callbackHandler = callbackHandler;
     }
@@ -22,7 +23,7 @@ public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
     @Override
     public BoxSet replaceCurrencyBoxes(BoxSet boxSet) {
         callbackHandler.accept(this, "замена кассет");
-        int inBoxesCount = this.getWithdrawBoxCount();
+        int inBoxesCount = atm.getWithdrawBoxCount();
         WithdrawCurrencyBox[] outBoxes = 
                 new WithdrawCurrencyBox[ Math.max(boxSet.getWithdrawBoxCount(), inBoxesCount) ];
         
@@ -30,9 +31,9 @@ public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
         for (int i = 0; i < outBoxes.length; i++) {
             outBoxes[i] = boxSet.getWithdrawBox(i);
             if (i < inBoxesCount && outBoxes[i] instanceof RecyclableCurrencyBox)
-                outBoxes[i] = this.replaceRecyclableBox(i, (RecyclableCurrencyBox)outBoxes[i]);
+                outBoxes[i] = atm.replaceRecyclableBox(i, (RecyclableCurrencyBox)outBoxes[i]);
         }
-        DepositAllDenominationsCurrencyBox dBox = replaceDepositBox(boxSet.getDepositBox());
+        DepositAllDenominationsCurrencyBox dBox = atm.replaceDepositBox(boxSet.getDepositBox());
                 
         return new BoxSet(dBox, outBoxes);
     }
@@ -45,12 +46,12 @@ public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
     @Override
     public BigDecimal getAmountToIssue() {
         callbackHandler.accept(this, "Запрашивается сумма к выдаче");
-        return super.getAmountToIssue();
+        return atm.getAmountToIssue();
     }
 
     @Override
     public BigDecimal getAmountTotal() {
         callbackHandler.accept(this, "Запрашивается полная сумма");
-        return super.getAmountTotal();
+        return atm.getAmountTotal();
     }
 }
