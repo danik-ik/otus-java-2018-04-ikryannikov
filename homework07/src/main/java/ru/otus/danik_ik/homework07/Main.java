@@ -7,18 +7,22 @@ import java.util.function.BiConsumer;
 
 public class Main
 {
-    private final BiConsumer <RemoteAtm, String> callbackHandler = (atm, message) -> {
-        System.out.printf("===[ %s ]=====================================\n", atm.getName());
-        System.out.println(message);
-    };
+    private final Factories factories;
 
-    private final BundleFactory bundleFactory = new DefaultBundleFactory();
+    {
+        final BiConsumer <RemoteAtm, String> callbackHandler = (atm, message) -> {
+            System.out.printf("===[ %s ]=====================================\n", atm.getName());
+            System.out.println(message);
+        };
 
-    private final Factories factories = new Factories(
-            (name) ->
-                    new RemoteRecyclableATM(bundleFactory, name, callbackHandler),
-            () -> new SimpleDepartment()
-    );
+        final BundleFactory bundleFactory = new DefaultBundleFactory();
+
+        factories = new Factories(
+                (name) ->
+                        new RemoteRecyclableATM(bundleFactory, name, callbackHandler),
+                () -> new SimpleDepartment()
+        );
+    }
 
     private void run() {
         RemoteAtm atm1 = factories.newRemoteAtm("First");
