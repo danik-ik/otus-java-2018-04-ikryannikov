@@ -1,6 +1,7 @@
 package ru.otus.danik_ik.homework07;
 
 import ru.otus.danik_ik.homework06.DefaultBundleFactory;
+import ru.otus.danik_ik.homework06.DepositOnlyCurrencyBox;
 import ru.otus.danik_ik.homework06.RecyclableCurrencyBoxImpl;
 import ru.otus.danik_ik.homework06.money.BundleFactory;
 
@@ -21,6 +22,8 @@ public class Main
                 (name) -> new RemoteRecyclableATM(bundleFactory, name, callbackHandler) );
         setNewDepartmentFn(
                 () -> new SimpleDepartment() );
+        setNewDepositCurrencyBoxFn(
+                () -> new DepositOnlyCurrencyBox(DEFAULT_CAPACITY));
         setNewWithdrawBoxFn(
                 (denomination, count) -> new RecyclableCurrencyBoxImpl(
                         denomination, DEFAULT_CAPACITY, count, bundleFactory));
