@@ -6,6 +6,7 @@ import ru.otus.danik_ik.homework06.atm.RecyclableCurrencyBox;
 import ru.otus.danik_ik.homework06.atm.WithdrawCurrencyBox;
 import ru.otus.danik_ik.homework06.money.BundleFactory;
 
+import java.math.BigDecimal;
 import java.util.function.BiConsumer;
 
 public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
@@ -20,7 +21,8 @@ public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
 
     @Override
     public BoxSet replaceCurrencyBoxes(BoxSet boxSet) {
-        int inBoxesCount = this.getWithdrawBoxCount(); 
+        callbackHandler.accept(this, "замена кассет");
+        int inBoxesCount = this.getWithdrawBoxCount();
         WithdrawCurrencyBox[] outBoxes = 
                 new WithdrawCurrencyBox[ Math.max(boxSet.getWithdrawBoxCount(), inBoxesCount) ];
         
@@ -40,5 +42,15 @@ public class RemoteRecyclableATM extends RecyclableATM implements RemoteAtm {
         return name;
     }
 
-    // TODO: 10.06.2018 обернуть унаследованные методы. Вызывать коллбеки с комментариями, что таки происходит.
+    @Override
+    public BigDecimal getAmountToIssue() {
+        callbackHandler.accept(this, "Запрашивается сумма к выдаче");
+        return super.getAmountToIssue();
+    }
+
+    @Override
+    public BigDecimal getAmountTotal() {
+        callbackHandler.accept(this, "Запрашивается полная сумма");
+        return super.getAmountTotal();
+    }
 }
