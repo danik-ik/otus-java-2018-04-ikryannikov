@@ -4,18 +4,19 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class SimpleDepartment implements Department {
-    private Map<RemoteAtm, BoxSet> atms = new HashMap<>();
+    private Map<RemoteAtm, Supplier<BoxSet>> atms = new HashMap<>();
     
     @Override
-    public Department subcsribe(RemoteAtm atm, BoxSet boxes) {
-        atms.put(atm, boxes);
+    public Department register(RemoteAtm atm, Supplier<BoxSet> boxSetSupplier) {
+        atms.put(atm, boxSetSupplier);
         return this;
     }
 
     @Override
-    public Department unsubcsribe(RemoteAtm atm) {
+    public Department unregister(RemoteAtm atm) {
         atms.remove(atm);
         return this;
     }
@@ -23,7 +24,7 @@ public class SimpleDepartment implements Department {
     @Override
     public Map<RemoteAtm, BoxSet> replaceBoxes() {
         Map<RemoteAtm, BoxSet> result = new HashMap<>();
-        forEachRemoteAtm( atm -> atm.replaceCurrencyBoxes(atms.get(atm)), result);
+        forEachRemoteAtm( atm -> atm.replaceCurrencyBoxes(atms.get(atm).get()), result);
         return result;
     }
 

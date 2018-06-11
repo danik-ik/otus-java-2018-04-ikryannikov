@@ -44,9 +44,9 @@ public class Main
         RemoteAtm atm2 = factories.newRemoteAtm("Second");
         RemoteAtm atm3 = factories.newRemoteAtm("Third");
 
-        dept.subcsribe(atm1, createBoxSet(1000, 2000, 1000, 1000));
-        dept.subcsribe(atm2, createBoxSet(2800, 1000, 1000, 2000));
-        dept.subcsribe(atm3, createBoxSet(1000, 1000, 1000, 3000));
+        dept.register(atm1, () -> createBoxSet(1000, 2000, 1000, 1000));
+        dept.register(atm2, () -> createBoxSet(2800, 1000, 1000, 2000));
+        dept.register(atm3, () -> createBoxSet(1000, 1000, 1000, 3000));
 
         System.out.println("* Department запрашивает полную сумму");
         printAmounts(dept.getAmountsTotal());
