@@ -39,8 +39,10 @@ public class Main
         map.put("Second", 2);
         map.put("Third", 3);
         System.out.println(new Jzon().serialize(map));
+        System.out.println(new Jzon().serialize(12345));
         System.out.println(new Jzon().serialize("1234\"5"));
         System.out.println(new Jzon().serialize(new String[]{"123", "456", "789"}));
         System.out.println(new Jzon().serialize(new Integer[]{123, 456, 789}));
+        System.out.println(new Jzon().serialize(new Map[]{map, map}));
     }
 }
