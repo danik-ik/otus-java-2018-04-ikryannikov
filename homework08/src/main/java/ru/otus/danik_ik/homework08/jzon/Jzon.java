@@ -1,6 +1,7 @@
 package ru.otus.danik_ik.homework08.jzon;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -25,33 +26,43 @@ public class Jzon {
     }
 
     public String serialize(Object src) {
-        // TODO: 13.06.2018 вынести. Не возвращатьString до последнего. 
+        return explore(src).toJSONString();
+    }
+
+    public JSONAware explore(Object src) {
         switch (getJzonType(src)) {
-            case VALUE: return JSONValue.toJSONString(src);
+            case VALUE: return new JSONAware() {
+                @Override
+                public String toJSONString() {
+                    return JSONValue.toJSONString(src);
+                }
+            };
             case ARRAY: return exploreArray(src);
             case MAP: return exploreMap(src);
-            default: return explore(src);
+            default: return exploreObject(src);
         }
     }
 
-    private String exploreMap(Object src) {
+    private JSONAware exploreMap(Object src) {
         JSONObject jo = new JSONObject();
         jo.putAll((Map)src);
-        return jo.toJSONString();
+        return jo;
     }
 
-    private String exploreArray(Object src) {
+    private JSONAware exploreArray(Object src) {
         JSONArray ja = new JSONArray();
         if (src instanceof Object) {
             for (Object o: (Object[])src)
-                ja.add(serialize(o));
+                ja.add(explore(o));
         }
-        return ja.toJSONString();
+        return ja;
 
     }
 
-    private String explore(Object src) {
-        return null;
+    private JSONAware exploreObject(Object src) {
+        JSONObject jo = new JSONObject();
+        // TODO: 13.06.2018 Протись по полям 
+        return jo;
     }
 
     public JzonType getJzonType(Object src) {
