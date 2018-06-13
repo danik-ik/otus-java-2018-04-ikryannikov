@@ -25,7 +25,7 @@ public class Jzon {
         types.put(Map.class, JzonType.MAP);
     }
 
-    public String serialize(Object src) {
+    public String toJson(Object src) {
         return explore(src).toJSONString();
     }
 
