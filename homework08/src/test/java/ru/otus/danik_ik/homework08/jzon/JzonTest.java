@@ -20,6 +20,7 @@ public class JzonTest {
         src.intArray = new int[]{9,8,7,6,5};
         src.transientString = "transientString";
         json = new Jzon().toJson(src);
+        System.out.println(json);
     }
     
     @Test
