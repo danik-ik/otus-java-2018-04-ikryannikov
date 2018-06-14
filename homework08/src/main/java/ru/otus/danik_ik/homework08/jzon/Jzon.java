@@ -5,6 +5,7 @@ import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -51,9 +52,30 @@ public class Jzon {
 
     private JSONAware exploreArray(Object src) {
         JSONArray ja = new JSONArray();
-        if (src instanceof Object) {
+        if (src instanceof Object[]) {
             for (Object o: (Object[])src)
                 ja.add(explore(o));
+        } else if (src instanceof int[]) {
+            for (int it: (int[])src)
+                ja.add(it);
+        } else if (src instanceof short[]) {
+            for (short it: (short[])src)
+                ja.add(it);
+        } else if (src instanceof long[]) {
+            for (long it: (long[])src)
+                ja.add(it);
+        } else if (src instanceof float[]) {
+            for (float it: (float[])src)
+                ja.add(it);
+        } else if (src instanceof double[]) {
+            for (double it: (double[])src)
+                ja.add(it);
+        } else if (src instanceof char[]) {
+            for (char it: (char[])src)
+                ja.add(it);
+        } else if (src instanceof byte[]) {
+            for (byte it: (byte[])src)
+                ja.add(it);
         }
         return ja;
 
@@ -61,6 +83,29 @@ public class Jzon {
 
     private JSONAware exploreObject(Object src) {
         JSONObject jo = new JSONObject();
+
+        Class<?> it = src.getClass();
+        
+        Map<String, Object> fieldValues = new LinkedHashMap<>();
+
+        for (Field f: it.getFields()) {
+            try {
+                fieldValues.put(f.getName(), f.get(src));
+            } catch (IllegalAccessException e) {
+                throw new JzonException("Как я сюда попал?!", e);
+            }
+        }
+        
+        for (Map.Entry<String, Object> e: fieldValues.entrySet()) {
+            if (e.getValue() == null) continue;
+            
+            if (getJzonType(e.getValue()) == JzonType.VALUE) {
+                jo.put(e.getKey(), e.getValue());
+            } else {
+                jo.put(e.getKey(), explore(e.getValue()));
+            };
+        }
+
         // TODO: 13.06.2018 Протись по полям 
         return jo;
     }
