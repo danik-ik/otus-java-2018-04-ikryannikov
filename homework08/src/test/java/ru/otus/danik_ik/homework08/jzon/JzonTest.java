@@ -6,6 +6,7 @@ import org.junit.Test;
 import ru.otus.danik_ik.homework08.TestObj1;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 public class JzonTest {
@@ -24,34 +25,48 @@ public class JzonTest {
     }
     
     @Test
-    public void testNoErrorsInFormat() {
+    public void NoErrorsInFormat() {
         new Gson().fromJson(json, TestObj1.class);
     }
 
     @Test
-    public void testPublicString() {
+    public void PublicString() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertEquals(src.publicString, dst.publicString);
     }
 
     @Test
-    public void testPrivateStringGetter() {
+    public void PrivateStringGetter() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertEquals(src.getPrivateString(), dst.getPrivateString());
     }
 
     @Test
-    public void testInt() {
+    public void Int() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertEquals(src.intValue, dst.intValue);
     }
 
     @Test
-    public void testIntArray() {
+    public void IntArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertNotNull(dst.intArray);
         assertEquals(src.intArray.length, dst.intArray.length);
         for (int i = 0; i < src.intArray.length; i++) 
             assertEquals(src.intArray[i], dst.intArray[i]);
+    }
+
+    @Test
+    public void Transient() {
+        assertFalse(json.contains("transient"));
+    }
+
+    @Test(expected = JzonException.class)
+    public void cycling() {
+        new Jzon().toJson(new Cycled());
+    }
+
+    private class Cycled {
+        public Object infinity = this;
     }
 }
