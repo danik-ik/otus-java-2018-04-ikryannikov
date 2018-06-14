@@ -35,6 +35,8 @@ public class TestObj1 {
     public byte byteValue;
 
     transient public String transientString;
+
+    public Object[] objectsArray;
     
     public final Object nullReverence = null; 
 }

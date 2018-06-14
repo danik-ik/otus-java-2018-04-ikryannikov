@@ -1,13 +1,12 @@
 package ru.otus.danik_ik.homework08.jzon;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.danik_ik.homework08.TestObj1;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class JzonTest {
     private TestObj1 src;
@@ -33,6 +32,7 @@ public class JzonTest {
         src.booleanArray = new boolean[]{false, false, false, true, true, true, false, false, false};
         src.charArray = new char[]{'ф','ы','в','А','п','р','О','л','д','ж','э',};
         src.byteArray = new byte[]{1,2,3,4,5};
+        src.objectsArray = new Object[]{new O1(), new O2()};
 
         src.transientString = "transientString";
         json = new Jzon().toJson(src);
@@ -181,6 +181,14 @@ public class JzonTest {
     }
 
     @Test
+    public void objectsArray() {
+        assertTrue(json.contains("\"objectsArray\":["));
+        assertTrue(json.contains("\"name\":\"O1\""));
+        assertTrue(json.contains("\"name\":\"O2\""));
+        assertTrue(json.contains("\"longName\":\"Ooooooooooo2\""));
+    }
+
+    @Test
     public void transientValue() {
         assertFalse(json.contains("transientString"));
     }
@@ -198,4 +206,14 @@ public class JzonTest {
     private class Cycled {
         public Object infinity = this;
     }
+
+    private class O1 {
+        public String name = "O1";
+    }
+
+    private class O2 {
+        public String name = "O2";
+        public String longName = "Ooooooooooo2";
+    }
+
 }
