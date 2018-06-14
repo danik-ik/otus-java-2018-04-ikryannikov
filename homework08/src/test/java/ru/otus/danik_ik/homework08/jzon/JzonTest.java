@@ -34,7 +34,7 @@ public class JzonTest {
     }
 
     @Test
-    public void testPrivateString() {
+    public void testPrivateStringGetter() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertEquals(src.getPrivateString(), dst.getPrivateString());
     }

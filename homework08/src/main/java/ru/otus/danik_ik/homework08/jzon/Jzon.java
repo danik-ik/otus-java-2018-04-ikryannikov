@@ -6,6 +6,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -89,13 +91,31 @@ public class Jzon {
         Map<String, Object> fieldValues = new LinkedHashMap<>();
 
         for (Field f: it.getFields()) {
+            // TODO: 14.06.2018 transient 
             try {
                 fieldValues.put(f.getName(), f.get(src));
             } catch (IllegalAccessException e) {
                 throw new JzonException("Как я сюда попал?!", e);
             }
         }
-        
+
+//        Method[] methods = it.getMethods();
+//        for (Method m: methods) {
+//            // только для геттеров без параметров
+//            if ( m.getParameterCount() == 0
+//            && m.getName().startsWith("get") ) {
+//                Object returned = null;
+//                System.out.println(m.getName());
+//                try {
+//                    returned = m.invoke(src);
+//                } catch (InvocationTargetException | IllegalAccessException e) {
+//                    //throw new JzonException("Как я сюда попал?!", e);
+//                }
+//                fieldValues.put(m.getName().substring(3), returned);
+//            }    
+//        }
+        // TODO: 14.06.2018 Зацикливается, собака. Разобраться и устранить. Не вызывать геттеры из Object? 
+
         for (Map.Entry<String, Object> e: fieldValues.entrySet()) {
             if (e.getValue() == null) continue;
             
@@ -106,7 +126,6 @@ public class Jzon {
             };
         }
 
-        // TODO: 13.06.2018 Протись по полям 
         return jo;
     }
 
