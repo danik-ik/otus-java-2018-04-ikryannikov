@@ -99,22 +99,24 @@ public class Jzon {
             }
         }
 
-//        Method[] methods = it.getMethods();
-//        for (Method m: methods) {
-//            // только для геттеров без параметров
-//            if ( m.getParameterCount() == 0
-//            && m.getName().startsWith("get") ) {
-//                Object returned = null;
-//                System.out.println(m.getName());
-//                try {
-//                    returned = m.invoke(src);
-//                } catch (InvocationTargetException | IllegalAccessException e) {
-//                    //throw new JzonException("Как я сюда попал?!", e);
-//                }
-//                fieldValues.put(m.getName().substring(3), returned);
-//            }    
-//        }
-        // TODO: 14.06.2018 Зацикливается, собака. Разобраться и устранить. Не вызывать геттеры из Object? 
+
+        Method[] methods = it.getMethods();
+        for (Method m: methods) {
+            // только для геттеров без параметров, не входящих в Object
+            if (m.getParameterCount() > 0) continue;
+            if ( !m.getName().startsWith("get")) continue;
+            if (m.getDeclaringClass().equals(Object.class)) continue;
+
+            Object returned = null;
+            System.out.println(m.getName());
+            try {
+                returned = m.invoke(src);
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                throw new JzonException("Как я сюда попал?!", e);
+            }
+            fieldValues.put(m.getName().substring(3,4).toLowerCase()
+                    + m.getName().substring(4), returned);
+        }
 
         for (Map.Entry<String, Object> e: fieldValues.entrySet()) {
             if (e.getValue() == null) continue;
