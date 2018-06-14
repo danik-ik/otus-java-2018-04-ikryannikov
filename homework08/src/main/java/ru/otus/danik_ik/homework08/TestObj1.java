@@ -17,7 +17,22 @@ public class TestObj1 {
     }
     
     public int[] intArray;
+    public short[] shortArray;
+    public long[] longArray;
+    public float[] floatArray;
+    public double[] doubleArray;
+    public boolean[] booleanArray;
+    public char[] charArray;
+    public byte[] byteArray;
+
     public int intValue;
+    public short shortValue;
+    public long longValue;
+    public float floatValue;
+    public double doubleValue;
+    public boolean booleanValue;
+    public char charValue;
+    public byte byteValue;
     
     transient public String transientString; 
     
