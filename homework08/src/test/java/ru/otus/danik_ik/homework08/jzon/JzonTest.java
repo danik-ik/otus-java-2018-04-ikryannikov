@@ -46,8 +46,9 @@ public class JzonTest {
 
     @Test
     public void publicString() {
+        // Геттер имеет приоритет при чтении значения
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertEquals(src.publicString, dst.publicString);
+        assertEquals(src.getPublicString(), dst.publicString);
     }
 
     @Test

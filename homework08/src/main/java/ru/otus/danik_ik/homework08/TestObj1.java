@@ -13,7 +13,7 @@ public class TestObj1 {
     }
 
     public String getPublicString() {
-        return publicString;
+        return publicString.toUpperCase();
     }
     
     public int[] intArray;
@@ -33,8 +33,8 @@ public class TestObj1 {
     public boolean booleanValue;
     public char charValue;
     public byte byteValue;
-    
-    transient public String transientString; 
+
+    transient public String transientString;
     
     public final Object nullReverence = null; 
 }
