@@ -8,8 +8,8 @@ import org.json.simple.JSONValue;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Jzon {
     private Map<Class, JzonType> types = new LinkedHashMap<>();
@@ -28,21 +28,32 @@ public class Jzon {
         types.put(Map.class, JzonType.MAP);
     }
 
+    // для исключения зацикливания
+    private Set branch = new HashSet();
+
     public String toJson(Object src) {
         return explore(src).toJSONString();
     }
 
     public JSONAware explore(Object src) {
-        switch (getJzonType(src)) {
-            case VALUE: return new JSONAware() {
-                @Override
-                public String toJSONString() {
-                    return JSONValue.toJSONString(src);
-                }
-            };
-            case ARRAY: return exploreArray(src);
-            case MAP: return exploreMap(src);
-            default: return exploreObject(src);
+        if (branch.contains(src))
+            throw new JzonException( String.format("Зацикливание: %s", src));
+        branch.add(src);
+
+        try {
+            switch (getJzonType(src)) {
+                case VALUE: return new JSONAware() {
+                    @Override
+                    public String toJSONString() {
+                        return JSONValue.toJSONString(src);
+                    }
+                };
+                case ARRAY: return exploreArray(src);
+                case MAP: return exploreMap(src);
+                default: return exploreObject(src);
+            }
+        } finally {
+            branch.remove(src);
         }
     }
 
@@ -91,7 +102,8 @@ public class Jzon {
         Map<String, Object> fieldValues = new LinkedHashMap<>();
 
         for (Field f: it.getFields()) {
-            // TODO: 14.06.2018 transient 
+            if (( f.getModifiers() & Modifier.TRANSIENT) > 0) continue;
+
             try {
                 fieldValues.put(f.getName(), f.get(src));
             } catch (IllegalAccessException e) {
