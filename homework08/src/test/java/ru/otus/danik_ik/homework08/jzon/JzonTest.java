@@ -36,7 +36,10 @@ public class JzonTest {
 
         src.transientString = "transientString";
         json = new Jzon().toJson(src);
+        System.out.println("=== Jzon ====");
         System.out.println(json);
+        System.out.println("=== Gson ====");
+        System.out.println(new Gson().toJson(src));
     }
     
     @Test

@@ -1,6 +1,5 @@
 package ru.otus.danik_ik.homework08;
 
-import com.google.gson.Gson;
 import ru.otus.danik_ik.homework08.jzon.Jzon;
 
 import java.util.HashMap;
@@ -34,8 +33,6 @@ public class Main
         to.transientString = "transientString";
         System.out.println("=== Jzon ====");
         System.out.println(new Jzon().toJson(to));
-        System.out.println("=== Gson ====");
-        System.out.println(new Gson().toJson(to));
 
         System.out.println();
         System.out.println("=============================");
