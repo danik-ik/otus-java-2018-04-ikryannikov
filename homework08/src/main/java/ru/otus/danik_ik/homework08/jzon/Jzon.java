@@ -127,7 +127,6 @@ public class Jzon {
             if (m.getDeclaringClass().equals(Object.class)) continue;
 
             Object returned = null;
-            System.out.println(m.getName());
             try {
                 returned = m.invoke(src);
             } catch (InvocationTargetException | IllegalAccessException e) {
