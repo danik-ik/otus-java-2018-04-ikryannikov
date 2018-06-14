@@ -16,6 +16,9 @@ public class Jzon {
     {
         types.put(String.class, JzonType.VALUE);
         types.put(Number.class, JzonType.VALUE);
+        types.put(Boolean.class, JzonType.VALUE);
+        types.put(Character.class, JzonType.VALUE);
+        types.put(Byte.class, JzonType.VALUE);
         types.put(Object[].class, JzonType.ARRAY);
         types.put(short[].class, JzonType.ARRAY);
         types.put(int[].class, JzonType.ARRAY);
@@ -24,6 +27,7 @@ public class Jzon {
         types.put(double[].class, JzonType.ARRAY);
         types.put(char[].class, JzonType.ARRAY);
         types.put(byte[].class, JzonType.ARRAY);
+        types.put(boolean[].class, JzonType.ARRAY);
         types.put(Collection.class, JzonType.ARRAY);
         types.put(Map.class, JzonType.MAP);
     }
@@ -88,6 +92,9 @@ public class Jzon {
                 ja.add(it);
         } else if (src instanceof byte[]) {
             for (byte it: (byte[])src)
+                ja.add(it);
+        } else if (src instanceof boolean[]) {
+            for (boolean it: (boolean[])src)
                 ja.add(it);
         }
         return ja;
