@@ -25,30 +25,30 @@ public class JzonTest {
     }
     
     @Test
-    public void NoErrorsInFormat() {
+    public void noErrorsInFormat() {
         new Gson().fromJson(json, TestObj1.class);
     }
 
     @Test
-    public void PublicString() {
+    public void publicString() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertEquals(src.publicString, dst.publicString);
     }
 
     @Test
-    public void PrivateStringGetter() {
+    public void privateStringGetter() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertEquals(src.getPrivateString(), dst.getPrivateString());
     }
 
     @Test
-    public void Int() {
+    public void intValue() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertEquals(src.intValue, dst.intValue);
     }
 
     @Test
-    public void IntArray() {
+    public void intArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertNotNull(dst.intArray);
         assertEquals(src.intArray.length, dst.intArray.length);
@@ -57,8 +57,13 @@ public class JzonTest {
     }
 
     @Test
-    public void Transient() {
-        assertFalse(json.contains("transient"));
+    public void transientValue() {
+        assertFalse(json.contains("transientString"));
+    }
+
+    @Test
+    public void nullReference() {
+        assertFalse(json.contains("nullReverence"));
     }
 
     @Test(expected = JzonException.class)
