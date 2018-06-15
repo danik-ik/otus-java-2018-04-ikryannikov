@@ -33,6 +33,7 @@ public class JzonTest {
         src.charArray = new char[]{'ф','ы','в','А','п','р','О','л','д','ж','э',};
         src.byteArray = new byte[]{1,2,3,4,5};
         src.objectsArray = new Object[]{new O1(), new O2()};
+        src.characterArray = new Character[]{'a','b','c','x','y','Z'};
 
         src.transientString = "transientString";
         json = new Jzon().toJson(src);
@@ -186,6 +187,15 @@ public class JzonTest {
         assertTrue(json.contains("\"name\":\"O1\""));
         assertTrue(json.contains("\"name\":\"O2\""));
         assertTrue(json.contains("\"longName\":\"Ooooooooooo2\""));
+    }
+
+    @Test
+    public void characterArray() {
+        TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
+        assertNotNull(dst.characterArray);
+        assertEquals(src.characterArray.length, dst.characterArray.length);
+        for (int i = 0; i < src.characterArray.length; i++)
+            assertEquals(src.characterArray[i], dst.characterArray[i]);
     }
 
     @Test
