@@ -102,12 +102,7 @@ public class Jzon {
 
         for (Map.Entry<String, Object> e: fieldValues.entrySet()) {
             if (e.getValue() == null) continue;
-            
-            if (getJzonType(e.getValue()) == JzonType.VALUE) {
-                jo.put(e.getKey(), e.getValue());
-            } else {
-                jo.put(e.getKey(), explore(e.getValue()));
-            };
+            jo.put(e.getKey(), explore(e.getValue()));
         }
 
         return jo;
