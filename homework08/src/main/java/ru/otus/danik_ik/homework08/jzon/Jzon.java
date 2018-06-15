@@ -70,10 +70,50 @@ public class Jzon {
         JSONObject jo = new JSONObject();
 
         Class<?> it = src.getClass();
-        
         Map<String, Object> fieldValues = new LinkedHashMap<>();
 
-        for (Field f: it.getFields()) {
+        collectFieldValues(src, it, fieldValues);
+        collectValuesOfGetters(src, it, fieldValues);
+
+        for (Map.Entry<String, Object> e: fieldValues.entrySet()) {
+            if (e.getValue() == null) continue;
+            jo.put(e.getKey(), explore(e.getValue()));
+        }
+
+        return jo;
+    }
+
+    private void collectValuesOfGetters(Object src, Class<?> aClass, Map<String, Object> fieldValues) {
+        Method[] methods = aClass.getMethods();
+        for (Method m: methods) {
+            // только для геттеров без параметров, не входящих в Object
+            if ( !isApplicableGetter(m) ) continue;
+            fieldValues.put( getFieldNameByGetter(m), getValueByGetter(src, m) );
+        }
+    }
+
+    private boolean isApplicableGetter(Method m) {
+        if (m.getParameterCount() > 0) return false;
+        if ( !m.getName().startsWith("get") ) return false;
+        if (m.getDeclaringClass().equals(Object.class)) return false;
+        return true;
+    }
+
+    private Object getValueByGetter(Object src, Method m) {
+        try {
+            return m.invoke(src);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new JzonException("Как я сюда попал?!", e);
+        }
+    }
+
+    private String getFieldNameByGetter(Method m) {
+        return m.getName().substring(3,4).toLowerCase()
+                + m.getName().substring(4);
+    }
+
+    private void collectFieldValues(Object src, Class<?> aClass, Map<String, Object> fieldValues) {
+        for (Field f: aClass.getFields()) {
             if (( f.getModifiers() & Modifier.TRANSIENT) > 0) continue;
 
             try {
@@ -82,30 +122,6 @@ public class Jzon {
                 throw new JzonException("Как я сюда попал?!", e);
             }
         }
-
-        Method[] methods = it.getMethods();
-        for (Method m: methods) {
-            // только для геттеров без параметров, не входящих в Object
-            if (m.getParameterCount() > 0) continue;
-            if ( !m.getName().startsWith("get")) continue;
-            if (m.getDeclaringClass().equals(Object.class)) continue;
-
-            Object returned = null;
-            try {
-                returned = m.invoke(src);
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                throw new JzonException("Как я сюда попал?!", e);
-            }
-            fieldValues.put(m.getName().substring(3,4).toLowerCase()
-                    + m.getName().substring(4), returned);
-        }
-
-        for (Map.Entry<String, Object> e: fieldValues.entrySet()) {
-            if (e.getValue() == null) continue;
-            jo.put(e.getKey(), explore(e.getValue()));
-        }
-
-        return jo;
     }
 
     public JzonType getJzonType(Object src) {
