@@ -9,8 +9,8 @@ import java.lang.reflect.*;
 import java.util.*;
 
 public class Jzon {
-    private Map<Class, JzonType> types = new LinkedHashMap<>();
-    {
+    private final static Map<Class, JzonType> types = new HashMap<>();
+    static {
         types.put(String.class, JzonType.VALUE);
         types.put(Number.class, JzonType.VALUE);
         types.put(Boolean.class, JzonType.VALUE);
