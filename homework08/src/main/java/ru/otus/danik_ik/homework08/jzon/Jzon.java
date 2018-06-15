@@ -61,9 +61,8 @@ public class Jzon {
 
     private JSONAware exploreArray(Object src) {
         JSONArray ja = new JSONArray();
-        for(int i = 0, length = Array.getLength(src); i < length; ++i) {
+        for(int i = 0, length = Array.getLength(src); i < length; ++i) 
             ja.add(explore(Array.get(src, i)));
-        }
         return ja;
     }
 
