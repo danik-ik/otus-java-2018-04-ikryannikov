@@ -5,10 +5,7 @@ import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 
 public class Jzon {
@@ -72,30 +69,10 @@ public class Jzon {
         if (src instanceof Object[]) {
             for (Object o: (Object[])src)
                 ja.add(explore(o));
-        } else if (src instanceof int[]) {
-            for (int it: (int[])src)
-                ja.add(it);
-        } else if (src instanceof short[]) {
-            for (short it: (short[])src)
-                ja.add(it);
-        } else if (src instanceof long[]) {
-            for (long it: (long[])src)
-                ja.add(it);
-        } else if (src instanceof float[]) {
-            for (float it: (float[])src)
-                ja.add(it);
-        } else if (src instanceof double[]) {
-            for (double it: (double[])src)
-                ja.add(it);
-        } else if (src instanceof char[]) {
-            for (char it: (char[])src)
-                ja.add(it);
-        } else if (src instanceof byte[]) {
-            for (byte it: (byte[])src)
-                ja.add(it);
-        } else if (src instanceof boolean[]) {
-            for (boolean it: (boolean[])src)
-                ja.add(it);
+        } else {
+            for(int i = 0, length = Array.getLength(src); i < length; ++i) {
+                ja.add(Array.get(src, i));
+            }
         }
         return ja;
 
@@ -117,7 +94,6 @@ public class Jzon {
                 throw new JzonException("Как я сюда попал?!", e);
             }
         }
-
 
         Method[] methods = it.getMethods();
         for (Method m: methods) {
