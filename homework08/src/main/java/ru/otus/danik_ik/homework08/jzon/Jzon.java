@@ -66,16 +66,10 @@ public class Jzon {
 
     private JSONAware exploreArray(Object src) {
         JSONArray ja = new JSONArray();
-        if (src instanceof Object[]) {
-            for (Object o: (Object[])src)
-                ja.add(explore(o));
-        } else {
-            for(int i = 0, length = Array.getLength(src); i < length; ++i) {
-                ja.add(Array.get(src, i));
-            }
+        for(int i = 0, length = Array.getLength(src); i < length; ++i) {
+            ja.add(explore(Array.get(src, i)));
         }
         return ja;
-
     }
 
     private JSONAware exploreObject(Object src) {
