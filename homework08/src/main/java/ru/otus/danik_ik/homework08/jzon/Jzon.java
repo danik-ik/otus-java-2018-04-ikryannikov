@@ -43,7 +43,7 @@ public class Jzon {
 
         try {
             switch (getJzonType(src)) {
-                case VALUE: return () -> JSONValue.toJSONString(src);
+                case VALUE: return () -> valueAsJsonString(src);
                 case ARRAY: return exploreArray(src);
                 case MAP: return exploreMap(src);
                 default: return exploreObject(src);
@@ -51,6 +51,12 @@ public class Jzon {
         } finally {
             branch.remove(src);
         }
+    }
+
+    public static String valueAsJsonString(Object src) {
+        if (src instanceof Character)
+            return JSONValue.toJSONString(src.toString());
+        return JSONValue.toJSONString(src);
     }
 
     private JSONAware exploreMap(Object src) {

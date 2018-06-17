@@ -167,6 +167,16 @@ public class JzonTest {
     }
 
     @Test
+    public void charsAreQuoted() {
+        assertTrue(json.contains("\"charValue\":\"Ё\""));
+    }
+
+    @Test
+    public void charsAreQuotedInArray() {
+        assertTrue(json.contains("\"characterArray\":[\"a\","));
+    }
+
+    @Test
     public void characterArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
         assertEqualsArrays(src.characterArray, dst.characterArray);

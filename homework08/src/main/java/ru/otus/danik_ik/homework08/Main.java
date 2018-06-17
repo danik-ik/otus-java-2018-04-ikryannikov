@@ -1,5 +1,6 @@
 package ru.otus.danik_ik.homework08;
 
+import org.json.simple.JSONValue;
 import ru.otus.danik_ik.homework08.jzon.Jzon;
 
 import java.util.HashMap;
@@ -33,6 +34,10 @@ public class Main
         to.transientString = "transientString";
         System.out.println("=== Jzon ====");
         System.out.println(new Jzon().toJson(to));
+        System.out.println(new Jzon().toJson(new Character[]{'a','b','c'}));
+
+        System.out.println(JSONValue.toJSONString("afdgsdfg"));
+        System.out.println(JSONValue.toJSONString('d'));
 
         System.out.println();
         System.out.println("=============================");
