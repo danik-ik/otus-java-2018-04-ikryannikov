@@ -5,15 +5,12 @@ import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 
 public class Jzon {
-    private Map<Class, JzonType> types = new LinkedHashMap<>();
-    {
+    private final static Map<Class, JzonType> types = new HashMap<>();
+    static {
         types.put(String.class, JzonType.VALUE);
         types.put(Number.class, JzonType.VALUE);
         types.put(Boolean.class, JzonType.VALUE);
@@ -46,12 +43,7 @@ public class Jzon {
 
         try {
             switch (getJzonType(src)) {
-                case VALUE: return new JSONAware() {
-                    @Override
-                    public String toJSONString() {
-                        return JSONValue.toJSONString(src);
-                    }
-                };
+                case VALUE: return () -> valueAsJsonString(src);
                 case ARRAY: return exploreArray(src);
                 case MAP: return exploreMap(src);
                 default: return exploreObject(src);
@@ -59,6 +51,12 @@ public class Jzon {
         } finally {
             branch.remove(src);
         }
+    }
+
+    public static String valueAsJsonString(Object src) {
+        if (src instanceof Character)
+            return JSONValue.toJSONString(src.toString());
+        return JSONValue.toJSONString(src);
     }
 
     private JSONAware exploreMap(Object src) {
@@ -69,46 +67,59 @@ public class Jzon {
 
     private JSONAware exploreArray(Object src) {
         JSONArray ja = new JSONArray();
-        if (src instanceof Object[]) {
-            for (Object o: (Object[])src)
-                ja.add(explore(o));
-        } else if (src instanceof int[]) {
-            for (int it: (int[])src)
-                ja.add(it);
-        } else if (src instanceof short[]) {
-            for (short it: (short[])src)
-                ja.add(it);
-        } else if (src instanceof long[]) {
-            for (long it: (long[])src)
-                ja.add(it);
-        } else if (src instanceof float[]) {
-            for (float it: (float[])src)
-                ja.add(it);
-        } else if (src instanceof double[]) {
-            for (double it: (double[])src)
-                ja.add(it);
-        } else if (src instanceof char[]) {
-            for (char it: (char[])src)
-                ja.add(it);
-        } else if (src instanceof byte[]) {
-            for (byte it: (byte[])src)
-                ja.add(it);
-        } else if (src instanceof boolean[]) {
-            for (boolean it: (boolean[])src)
-                ja.add(it);
-        }
+        for(int i = 0, length = Array.getLength(src); i < length; ++i) 
+            ja.add(explore(Array.get(src, i)));
         return ja;
-
     }
 
     private JSONAware exploreObject(Object src) {
         JSONObject jo = new JSONObject();
 
         Class<?> it = src.getClass();
-        
         Map<String, Object> fieldValues = new LinkedHashMap<>();
 
-        for (Field f: it.getFields()) {
+        collectFieldValues(src, it, fieldValues);
+        collectValuesOfGetters(src, it, fieldValues);
+
+        for (Map.Entry<String, Object> e: fieldValues.entrySet()) {
+            if (e.getValue() == null) continue;
+            jo.put(e.getKey(), explore(e.getValue()));
+        }
+
+        return jo;
+    }
+
+    private void collectValuesOfGetters(Object src, Class<?> aClass, Map<String, Object> fieldValues) {
+        Method[] methods = aClass.getMethods();
+        for (Method m: methods) {
+            // только для геттеров без параметров, не входящих в Object
+            if ( !isApplicableGetter(m) ) continue;
+            fieldValues.put( getFieldNameByGetter(m), getValueByGetter(src, m) );
+        }
+    }
+
+    private boolean isApplicableGetter(Method m) {
+        if (m.getParameterCount() > 0) return false;
+        if ( !m.getName().startsWith("get") ) return false;
+        if (m.getDeclaringClass().equals(Object.class)) return false;
+        return true;
+    }
+
+    private Object getValueByGetter(Object src, Method m) {
+        try {
+            return m.invoke(src);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new JzonException("Как я сюда попал?!", e);
+        }
+    }
+
+    private String getFieldNameByGetter(Method m) {
+        return m.getName().substring(3,4).toLowerCase()
+                + m.getName().substring(4);
+    }
+
+    private void collectFieldValues(Object src, Class<?> aClass, Map<String, Object> fieldValues) {
+        for (Field f: aClass.getFields()) {
             if (( f.getModifiers() & Modifier.TRANSIENT) > 0) continue;
 
             try {
@@ -117,36 +128,6 @@ public class Jzon {
                 throw new JzonException("Как я сюда попал?!", e);
             }
         }
-
-
-        Method[] methods = it.getMethods();
-        for (Method m: methods) {
-            // только для геттеров без параметров, не входящих в Object
-            if (m.getParameterCount() > 0) continue;
-            if ( !m.getName().startsWith("get")) continue;
-            if (m.getDeclaringClass().equals(Object.class)) continue;
-
-            Object returned = null;
-            try {
-                returned = m.invoke(src);
-            } catch (InvocationTargetException | IllegalAccessException e) {
-                throw new JzonException("Как я сюда попал?!", e);
-            }
-            fieldValues.put(m.getName().substring(3,4).toLowerCase()
-                    + m.getName().substring(4), returned);
-        }
-
-        for (Map.Entry<String, Object> e: fieldValues.entrySet()) {
-            if (e.getValue() == null) continue;
-            
-            if (getJzonType(e.getValue()) == JzonType.VALUE) {
-                jo.put(e.getKey(), e.getValue());
-            } else {
-                jo.put(e.getKey(), explore(e.getValue()));
-            };
-        }
-
-        return jo;
     }
 
     public JzonType getJzonType(Object src) {

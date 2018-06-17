@@ -1,10 +1,11 @@
 package ru.otus.danik_ik.homework08.jzon;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.danik_ik.homework08.TestObj1;
+
+import java.lang.reflect.Array;
 
 import static org.junit.Assert.*;
 
@@ -33,6 +34,7 @@ public class JzonTest {
         src.charArray = new char[]{'ф','ы','в','А','п','р','О','л','д','ж','э',};
         src.byteArray = new byte[]{1,2,3,4,5};
         src.objectsArray = new Object[]{new O1(), new O2()};
+        src.characterArray = new Character[]{'a','b','c','x','y','Z'};
 
         src.transientString = "transientString";
         json = new Jzon().toJson(src);
@@ -111,73 +113,49 @@ public class JzonTest {
     @Test
     public void intArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertNotNull(dst.intArray);
-        assertEquals(src.intArray.length, dst.intArray.length);
-        for (int i = 0; i < src.intArray.length; i++) 
-            assertEquals(src.intArray[i], dst.intArray[i]);
+        assertEqualsArrays(src.intArray, dst.intArray);
     }
 
     @Test
     public void shortArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertNotNull(dst.shortArray);
-        assertEquals(src.shortArray.length, dst.shortArray.length);
-        for (int i = 0; i < src.shortArray.length; i++)
-            assertEquals(src.shortArray[i], dst.shortArray[i]);
+        assertEqualsArrays(src.shortArray, dst.shortArray);
     }
 
     @Test
     public void longArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertNotNull(dst.longArray);
-        assertEquals(src.longArray.length, dst.longArray.length);
-        for (int i = 0; i < src.longArray.length; i++)
-            assertEquals(src.longArray[i], dst.longArray[i]);
+        assertEqualsArrays(src.longArray, dst.longArray);
     }
 
     @Test
     public void floatArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertNotNull(dst.floatArray);
-        assertEquals(src.floatArray.length, dst.floatArray.length);
-        for (int i = 0; i < src.floatArray.length; i++)
-            assertEquals(src.floatArray[i], dst.floatArray[i], .0001F);
+        assertEqualsArrays(src.floatArray, dst.floatArray);
     }
 
     @Test
     public void doubleArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertNotNull(dst.doubleArray);
-        assertEquals(src.doubleArray.length, dst.doubleArray.length);
-        for (int i = 0; i < src.doubleArray.length; i++)
-            assertEquals(src.doubleArray[i], dst.doubleArray[i], .0001F);
+        assertEqualsArrays(src.doubleArray, dst.doubleArray);
     }
 
     @Test
     public void booleanArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertNotNull(dst.booleanArray);
-        assertEquals(src.booleanArray.length, dst.booleanArray.length);
-        for (int i = 0; i < src.booleanArray.length; i++)
-            assertEquals(src.booleanArray[i], dst.booleanArray[i]);
+        assertEqualsArrays(src.booleanArray, dst.booleanArray);
     }
 
     @Test
     public void charArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertNotNull(dst.charArray);
-        assertEquals(src.charArray.length, dst.charArray.length);
-        for (int i = 0; i < src.charArray.length; i++)
-            assertEquals(src.charArray[i], dst.charArray[i]);
+        assertEqualsArrays(src.byteArray, dst.byteArray);
     }
 
     @Test
     public void byteArray() {
         TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
-        assertNotNull(dst.byteArray);
-        assertEquals(src.byteArray.length, dst.byteArray.length);
-        for (int i = 0; i < src.byteArray.length; i++)
-            assertEquals(src.byteArray[i], dst.byteArray[i]);
+        assertEqualsArrays(src.charArray, dst.charArray);
     }
 
     @Test
@@ -186,6 +164,22 @@ public class JzonTest {
         assertTrue(json.contains("\"name\":\"O1\""));
         assertTrue(json.contains("\"name\":\"O2\""));
         assertTrue(json.contains("\"longName\":\"Ooooooooooo2\""));
+    }
+
+    @Test
+    public void charsAreQuoted() {
+        assertTrue(json.contains("\"charValue\":\"Ё\""));
+    }
+
+    @Test
+    public void charsAreQuotedInArray() {
+        assertTrue(json.contains("\"characterArray\":[\"a\","));
+    }
+
+    @Test
+    public void characterArray() {
+        TestObj1 dst = new Gson().fromJson(json, TestObj1.class);
+        assertEqualsArrays(src.characterArray, dst.characterArray);
     }
 
     @Test
@@ -205,6 +199,20 @@ public class JzonTest {
 
     private class Cycled {
         public Object infinity = this;
+    }
+
+    private void assertEqualsArrays(Object expected, Object actual) {
+        if ( !(  isArray(expected) &&  isArray(actual) ) )
+            throw new IllegalArgumentException("Аргументы метода assertEqualsArrays " +
+                    "должны быть массивами");
+
+        assertEquals(Array.getLength(expected), Array.getLength(actual));
+        for(int i = 0, length = Array.getLength(expected); i < length; ++i)
+            assertEquals(Array.get(expected, i), Array.get(actual, i));
+    }
+
+    private boolean isArray(Object it) {
+        return it.getClass().getComponentType() != null;
     }
 
     private class O1 {

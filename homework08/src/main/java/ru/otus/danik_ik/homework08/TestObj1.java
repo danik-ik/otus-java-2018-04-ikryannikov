@@ -37,6 +37,7 @@ public class TestObj1 {
     transient public String transientString;
 
     public Object[] objectsArray;
-    
+    public Character[] characterArray;
+
     public final Object nullReverence = null; 
 }
