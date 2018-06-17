@@ -38,6 +38,8 @@ public class Main
 
         System.out.println(JSONValue.toJSONString("afdgsdfg"));
         System.out.println(JSONValue.toJSONString('d'));
+        System.out.println(Jzon.valueAsJsonString('d'));
+        System.out.println(Jzon.valueAsJsonString('\u0001'));
 
         System.out.println();
         System.out.println("=============================");
