@@ -1,4 +1,4 @@
-package ru.otus.danik_ik.homework09;
+package ru.otus.danik_ik.homework09.storage;
 
 import ru.otus.danik_ik.homework09.DataSet;
 
