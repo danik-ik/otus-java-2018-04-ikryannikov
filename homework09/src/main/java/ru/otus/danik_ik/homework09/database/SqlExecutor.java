@@ -12,7 +12,7 @@ public class SqlExecutor implements Executor {
     private final Connection connection;
 
     public SqlExecutor() {
-        this.connection = ConnectionHelper.getConnection();
+        this( ConnectionHelper.getConnection() );
     }
 
     public SqlExecutor(Connection connection) {
@@ -46,5 +46,10 @@ public class SqlExecutor implements Executor {
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) {
         return null;
+    }
+
+    @Override
+    public void close() throws Exception {
+        connection.close();
     }
 }
