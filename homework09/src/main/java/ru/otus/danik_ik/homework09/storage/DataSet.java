@@ -1,4 +1,4 @@
-package ru.otus.danik_ik.homework09;
+package ru.otus.danik_ik.homework09.storage;
 
 import java.sql.SQLException;
 
@@ -7,5 +7,9 @@ public abstract class DataSet {
 
     public long getID() {
         return ID;
+    }
+
+    /* package */ void setID(long ID) {
+        this.ID = ID;
     }
 }
