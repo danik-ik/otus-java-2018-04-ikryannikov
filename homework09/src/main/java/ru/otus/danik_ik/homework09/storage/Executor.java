@@ -2,12 +2,7 @@ package ru.otus.danik_ik.homework09.storage;
 
 import ru.otus.danik_ik.homework09.DataSet;
 
-import java.sql.SQLException;
-
-public class Executor {
-    <T extends DataSet> void save(T entry) throws SQLException {
-    }
-    <T extends DataSet> T load(long id, Class<T> clazz) throws SQLException {
-        return null;
-    }
+public interface Executor {
+    <T extends DataSet> void save(T entry);
+    <T extends DataSet> T load(long id, Class<T> clazz);
 }
