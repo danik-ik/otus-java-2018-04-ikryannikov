@@ -1,15 +1,19 @@
 package ru.otus.danik_ik.homework09.database;
 
+import ru.otus.danik_ik.homework09.database.annotations.DbField;
+import ru.otus.danik_ik.homework09.database.annotations.DbTable;
 import ru.otus.danik_ik.homework09.storage.DataSet;
 import ru.otus.danik_ik.homework09.storage.Executor;
+import ru.otus.danik_ik.homework09.storage.StorageException;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.sql.*;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static ru.otus.danik_ik.homework09.storage.DataSet.UNDEFINED_ID;
 
 public class SqlExecutor implements Executor {
     private final Connection connection;
@@ -43,8 +47,12 @@ public class SqlExecutor implements Executor {
 
     @Override
     public <T extends DataSet> void save(T entry) {
-        new DataSetSaver<T>(connection, entry)
-                .save();
+        try {
+            new DataSetSaver<T>(connection, entry)
+                    .save();
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 
     @Override
@@ -60,13 +68,27 @@ public class SqlExecutor implements Executor {
     private class DataSetSaver<T extends DataSet> {
         private final Connection connection;
         private final T source;
+        private final String tableName;
 
         public DataSetSaver(Connection connection, T source) {
             this.connection = connection;
             this.source = source;
+            tableName = getTableName(source.getClass());
         }
 
-        public void save() {
+        private String getTableName(Class<? extends DataSet> aClass) {
+            DbTable[] annotations = aClass.getAnnotationsByType(DbTable.class);
+            String tableName;
+            if (annotations.length == 0)
+                throw new StorageException(String.format("Класс %s не имеет аннотации DbTable", aClass.getName()));
+            tableName = annotations[0].name();
+            if (tableName == null)
+                throw new StorageException(String.format("в аннотации DbTable к классу %s не указано имя таблицы",
+                        aClass.getName()));
+            return tableName;
+        }
+
+        public void save() throws SQLException {
             buildQuery();
             applyParameters();
             executePrepared();
@@ -75,9 +97,83 @@ public class SqlExecutor implements Executor {
         private Collection<Method> rowGetters = new LinkedList<>();
         private Collection<Method> keyGetters = new LinkedList<>();
 
-        private void buildQuery() {
-            // найти геттеры с аннотацией DbField
-            // Построить запрос, набрать коллекцию лямбд для установки значений
+        private Map<String, PreparedStatementObjSetter> rowMappers = new HashMap<>();
+        private Map<String, PreparedStatementObjSetter> keyMappers = new HashMap<>();
+
+        private void buildQuery() throws SQLException {
+            collectGetters();
+            buildMappers();
+            String query = source.getID() == UNDEFINED_ID ?
+                    getInsertQuery() : getUpdateQuery();
+
+            PreparedStatement statement = connection.prepareStatement(query);
+
+            int i = 1;
+            for(PreparedStatementObjSetter setter: rowMappers.values()) {
+                setter.set(statement, source, i);
+                i++;
+            }
+
+            statement.execute();
+        }
+
+        private String getInsertQuery() {
+            final String template = "INSERT INTO %s (%s) VALUES(%s)";
+
+            String fieldNames = String.join(",", rowMappers.keySet());
+            String placeholders = String.join(",", getNPlaceholders(rowMappers.size()));
+            return String.format(template, tableName, fieldNames, placeholders);
+        }
+
+        private List<String> getNPlaceholders(int size) {
+            return Stream.generate(()->"?").limit(size).collect(Collectors.toList());
+        }
+
+        private String getUpdateQuery() {
+            return null;
+        }
+
+        private void collectGetters() {
+            for (Method m: source.getClass().getMethods()) {
+                if (!isApplicableGetter(m)) continue;
+                DbField anno = m.getAnnotationsByType(DbField.class)[0];
+                if (anno.isKey())
+                    keyGetters.add(m);
+                else
+                    rowGetters.add(m);
+            }
+        }
+
+        private void buildMappers() {
+            buildMapper(rowGetters, rowMappers);
+            buildMapper(keyGetters, keyMappers);
+        }
+
+        private void buildMapper(Collection<Method> source, Map<String, PreparedStatementObjSetter> target) {
+            for (Method m: source) {
+                DbField anno = m.getAnnotationsByType(DbField.class)[0];
+
+                String name = anno.name();
+                if (name == null) name = m.getName().substring(3);
+
+                PreparedStatementObjSetter action = (stmt, obj, index) -> {
+                    try {
+                         Object value = m.invoke(obj);
+                         anno.type().getPreparedStatementValSetter().set(stmt, value, index);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
+                };
+                target.put(name, action);
+            }
+        }
+
+        private boolean isApplicableGetter(Method m) {
+            if (m.getParameterCount() > 0) return false;
+            if ( !m.getName().startsWith("get") ) return false;
+            if (m.getDeclaringClass().equals(Object.class)) return false;
+            if (m.getAnnotationsByType(DbField.class).length == 0) return false;
+            return true;
         }
 
         private void applyParameters() {
@@ -86,6 +182,11 @@ public class SqlExecutor implements Executor {
         private void executePrepared() {
         }
 
-        ;
+     }
+
+    @FunctionalInterface
+    private interface PreparedStatementObjSetter {
+        void set(PreparedStatement stmt, Object source, int index);
     }
+
 }
