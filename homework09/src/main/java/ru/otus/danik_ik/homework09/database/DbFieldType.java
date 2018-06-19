@@ -30,7 +30,7 @@ public enum DbFieldType {
         }
     ),
     DATE( (stmt, value, index) -> {
-            try {
+            try { // TODO: 19.06.2018  преобразовать к java.sql.Date корректно 
                 stmt.setDate(index, (Date) value);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
