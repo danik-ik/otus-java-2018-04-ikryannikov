@@ -1,5 +1,5 @@
-create table if not exists user (
+create table if not exists users (
     id bigint auto_increment
     ,name varchar(256)
-    ,bornDateme varchar(256)
+    ,bornDate datetime
     ,primary key (id))
