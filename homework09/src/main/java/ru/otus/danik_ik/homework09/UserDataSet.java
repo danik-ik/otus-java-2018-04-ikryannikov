@@ -1,9 +1,11 @@
 package ru.otus.danik_ik.homework09;
 
+import ru.otus.danik_ik.homework09.database.annotations.DbTable;
 import ru.otus.danik_ik.homework09.storage.DataSet;
 
 import java.util.Date;
 
+@DbTable(name = "Users")
 public class UserDataSet extends DataSet {
     private String name;
     private Date bornDate;
