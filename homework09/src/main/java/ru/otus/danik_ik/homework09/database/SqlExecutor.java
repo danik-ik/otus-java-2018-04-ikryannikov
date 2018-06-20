@@ -106,8 +106,15 @@ public class SqlExecutor implements Executor {
         private void buildQuery() throws SQLException {
             collectGetters();
             buildMappers();
-            String query = source.getID() == UNDEFINED_ID ?
-                    prepareInsertQuery() : prepareUpdateQuery();
+
+            if (isInsertion())
+                doInsert();
+            else
+                doUpdate();
+        }
+
+        private void doInsert() throws SQLException {
+            String query = prepareInsertQuery();
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             setParamsFor.accept(statement);
@@ -121,6 +128,18 @@ public class SqlExecutor implements Executor {
                     throw new SQLException("Creating DataSet failed, no ID obtained.");
                 }
             }
+        }
+
+        private void doUpdate() throws SQLException {
+            String query = prepareUpdateQuery();
+
+            PreparedStatement statement = connection.prepareStatement(query);
+            setParamsFor.accept(statement);
+            statement.execute();
+        }
+
+        private boolean isInsertion() {
+            return source.getID() == UNDEFINED_ID;
         }
 
         private String prepareInsertQuery() {
@@ -145,7 +164,28 @@ public class SqlExecutor implements Executor {
         }
 
         private String prepareUpdateQuery() {
-            return null;
+            final String template = "UPDATE %s SET %S WHERE %s";
+            String fieldsAssignments = String.join(",", 
+                    rowMappers.keySet().stream()
+                        .map(name -> name + "=?")
+                        .collect(Collectors.toList()));
+            String keyCondition = String.join(" AND ",
+                    keyMappers.keySet().stream()
+                            .map(name -> name + "=?")
+                            .collect(Collectors.toList()));
+            setParamsFor = statement -> {
+                int i = 1;
+                for(PreparedStatementObjSetter setter: rowMappers.values()) {
+                    setter.set(statement, source, i);
+                    i++;
+                }
+                for(PreparedStatementObjSetter setter: keyMappers.values()) {
+                    setter.set(statement, source, i);
+                    i++;
+                }
+            };
+
+            return String.format(template, tableName, fieldsAssignments, keyCondition);
         }
 
         private void collectGetters() {
