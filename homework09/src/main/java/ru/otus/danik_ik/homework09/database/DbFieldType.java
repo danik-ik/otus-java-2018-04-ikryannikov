@@ -1,8 +1,8 @@
 package ru.otus.danik_ik.homework09.database;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public enum DbFieldType {
     LONG( (stmt, value, index) -> {
@@ -30,8 +30,9 @@ public enum DbFieldType {
         }
     ),
     DATE( (stmt, value, index) -> {
-            try { // TODO: 19.06.2018  преобразовать к java.sql.Date корректно 
-                stmt.setDate(index, (Date) value);
+            try {
+                java.sql.Date sqlDate = java.sql.Date.valueOf((LocalDate)value);
+                stmt.setDate(index, sqlDate);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

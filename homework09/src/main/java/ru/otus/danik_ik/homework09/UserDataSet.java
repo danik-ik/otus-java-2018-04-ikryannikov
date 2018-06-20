@@ -5,13 +5,13 @@ import ru.otus.danik_ik.homework09.database.annotations.DbField;
 import ru.otus.danik_ik.homework09.database.annotations.DbTable;
 import ru.otus.danik_ik.homework09.storage.DataSet;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @DbTable(name = "Users")
 public class UserDataSet extends DataSet {
     @DbField(name="name", type = DbFieldType.STRING)
     private String name;
-    private Date bornDate;
+    private LocalDate bornDate;
 
     @DbField(name="name", type = DbFieldType.STRING)
     public String getName() {
@@ -24,12 +24,12 @@ public class UserDataSet extends DataSet {
     }
 
     @DbField(name="bornDate", type = DbFieldType.DATE)
-    public Date getBornDate() {
+    public LocalDate getBornDate() {
         return bornDate;
     }
 
     @DbField(name="bornDate", type = DbFieldType.DATE)
-    public void setBornDate(Date bornDate) {
+    public void setBornDate(LocalDate bornDate) {
         this.bornDate = bornDate;
     }
 }

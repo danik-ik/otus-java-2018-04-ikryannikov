@@ -3,7 +3,7 @@ package ru.otus.danik_ik.homework09;
 import ru.otus.danik_ik.homework09.database.SqlExecutor;
 
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Main
 {
@@ -23,12 +23,12 @@ public class Main
             UserDataSet user = new UserDataSet();
             
             user.setName("Этот, как его...");
-            user.setBornDate(new Date(1900, 01, 01));
+            user.setBornDate(LocalDate.of(1900, 01, 01));
             executor.save(user);
             printUsers(executor);
             
             user.setName("Так это же я!");
-            user.setBornDate(new Date(1978, 10, 30));
+            user.setBornDate(LocalDate.of(1978, 10, 30));
             executor.save(user);
 //            executor.execUpdate("insert into users (name) values ('fsdfsdf')");
 
