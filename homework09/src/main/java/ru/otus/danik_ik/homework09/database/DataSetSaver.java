@@ -39,20 +39,6 @@ class DataSetSaver<T extends DataSet> {
     }
 
     public void save() throws SQLException {
-        buildQuery();
-        applyParameters();
-        executePrepared();
-    }
-
-    private Collection<Method> rowGetters = new LinkedList<>();
-    private Collection<Method> keyGetters = new LinkedList<>();
-
-    private Map<String, SqlExecutor.PreparedStatementObjSetter> rowMappers = new HashMap<>();
-    private Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = new HashMap<>();
-    
-    private Consumer<PreparedStatement> setParamsFor;
-
-    private void buildQuery() throws SQLException {
         collectGetters();
         buildMappers();
 
@@ -61,6 +47,14 @@ class DataSetSaver<T extends DataSet> {
         else
             doUpdate();
     }
+
+    private Collection<Method> rowGetters = new LinkedList<>();
+    private Collection<Method> keyGetters = new LinkedList<>();
+
+    private Map<String, SqlExecutor.PreparedStatementObjSetter> rowMappers = new HashMap<>();
+    private Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = new HashMap<>();
+
+    private Consumer<PreparedStatement> setParamsFor;
 
     private void doInsert() throws SQLException {
         String query = prepareInsertQuery();
@@ -72,8 +66,7 @@ class DataSetSaver<T extends DataSet> {
         try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 source.setID(generatedKeys.getLong(1));
-            }
-            else {
+            } else {
                 throw new SQLException("Creating DataSet failed, no ID obtained.");
             }
         }
@@ -96,39 +89,39 @@ class DataSetSaver<T extends DataSet> {
 
         String fieldNames = String.join(",", rowMappers.keySet());
         String placeholders = String.join(",", getNPlaceholders(rowMappers.size()));
-        
+
         setParamsFor = statement -> {
             int i = 1;
-            for(SqlExecutor.PreparedStatementObjSetter setter: rowMappers.values()) {
+            for (SqlExecutor.PreparedStatementObjSetter setter : rowMappers.values()) {
                 setter.set(statement, source, i);
                 i++;
             }
         };
-        
+
         return String.format(template, tableName, fieldNames, placeholders);
     }
 
     private List<String> getNPlaceholders(int size) {
-        return Stream.generate(()->"?").limit(size).collect(Collectors.toList());
+        return Stream.generate(() -> "?").limit(size).collect(Collectors.toList());
     }
 
     private String prepareUpdateQuery() {
         final String template = "UPDATE %s SET %S WHERE %s";
-        String fieldsAssignments = String.join(",", 
+        String fieldsAssignments = String.join(",",
                 rowMappers.keySet().stream()
-                    .map(name -> name + "=?")
-                    .collect(Collectors.toList()));
+                        .map(name -> name + "=?")
+                        .collect(Collectors.toList()));
         String keyCondition = String.join(" AND ",
                 keyMappers.keySet().stream()
                         .map(name -> name + "=?")
                         .collect(Collectors.toList()));
         setParamsFor = statement -> {
             int i = 1;
-            for(SqlExecutor.PreparedStatementObjSetter setter: rowMappers.values()) {
+            for (SqlExecutor.PreparedStatementObjSetter setter : rowMappers.values()) {
                 setter.set(statement, source, i);
                 i++;
             }
-            for(SqlExecutor.PreparedStatementObjSetter setter: keyMappers.values()) {
+            for (SqlExecutor.PreparedStatementObjSetter setter : keyMappers.values()) {
                 setter.set(statement, source, i);
                 i++;
             }
@@ -138,7 +131,7 @@ class DataSetSaver<T extends DataSet> {
     }
 
     private void collectGetters() {
-        for (Method m: source.getClass().getMethods()) {
+        for (Method m : source.getClass().getMethods()) {
             if (!isApplicableGetter(m)) continue;
             DbField anno = m.getAnnotationsByType(DbField.class)[0];
             if (anno.isKey())
@@ -154,7 +147,7 @@ class DataSetSaver<T extends DataSet> {
     }
 
     private void buildMapper(Collection<Method> source, Map<String, SqlExecutor.PreparedStatementObjSetter> target) {
-        for (Method m: source) {
+        for (Method m : source) {
             DbField anno = m.getAnnotationsByType(DbField.class)[0];
 
             String name = anno.name();
@@ -162,8 +155,8 @@ class DataSetSaver<T extends DataSet> {
 
             SqlExecutor.PreparedStatementObjSetter action = (stmt, obj, index) -> {
                 try {
-                     Object value = m.invoke(obj);
-                     anno.type().getPreparedStatementValSetter().set(stmt, value, index);
+                    Object value = m.invoke(obj);
+                    anno.type().getPreparedStatementValSetter().set(stmt, value, index);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
@@ -174,16 +167,9 @@ class DataSetSaver<T extends DataSet> {
 
     private boolean isApplicableGetter(Method m) {
         if (m.getParameterCount() > 0) return false;
-        if ( !m.getName().startsWith("get") ) return false;
+        if (!m.getName().startsWith("get")) return false;
         if (m.getDeclaringClass().equals(Object.class)) return false;
         if (m.getAnnotationsByType(DbField.class).length == 0) return false;
         return true;
     }
-
-    private void applyParameters() {
-    }
-
-    private void executePrepared() {
-    }
-
- }
+}
