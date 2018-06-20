@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -99,21 +100,17 @@ public class SqlExecutor implements Executor {
 
         private Map<String, PreparedStatementObjSetter> rowMappers = new HashMap<>();
         private Map<String, PreparedStatementObjSetter> keyMappers = new HashMap<>();
+        
+        private Consumer<PreparedStatement> setParamsFor;
 
         private void buildQuery() throws SQLException {
             collectGetters();
             buildMappers();
             String query = source.getID() == UNDEFINED_ID ?
-                    getInsertQuery() : getUpdateQuery();
+                    prepareInsertQuery() : prepareUpdateQuery();
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-
-            int i = 1;
-            for(PreparedStatementObjSetter setter: rowMappers.values()) {
-                setter.set(statement, source, i);
-                i++;
-            }
-
+            setParamsFor.accept(statement);
             statement.execute();
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
@@ -126,11 +123,20 @@ public class SqlExecutor implements Executor {
             }
         }
 
-        private String getInsertQuery() {
+        private String prepareInsertQuery() {
             final String template = "INSERT INTO %s (%s) VALUES(%s)";
 
             String fieldNames = String.join(",", rowMappers.keySet());
             String placeholders = String.join(",", getNPlaceholders(rowMappers.size()));
+            
+            setParamsFor = statement -> {
+                int i = 1;
+                for(PreparedStatementObjSetter setter: rowMappers.values()) {
+                    setter.set(statement, source, i);
+                    i++;
+                }
+            };
+            
             return String.format(template, tableName, fieldNames, placeholders);
         }
 
@@ -138,7 +144,7 @@ public class SqlExecutor implements Executor {
             return Stream.generate(()->"?").limit(size).collect(Collectors.toList());
         }
 
-        private String getUpdateQuery() {
+        private String prepareUpdateQuery() {
             return null;
         }
 
