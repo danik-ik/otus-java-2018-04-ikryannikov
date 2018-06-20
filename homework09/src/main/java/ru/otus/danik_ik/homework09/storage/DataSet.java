@@ -15,7 +15,7 @@ public abstract class DataSet {
     }
 
     @DbField(name="ID", type = DbFieldType.LONG, isKey = true)
-    /* package */ void setID(long ID) {
+    public void setID(long ID) {
         this.ID = ID;
     }
 }

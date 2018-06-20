@@ -106,7 +106,7 @@ public class SqlExecutor implements Executor {
             String query = source.getID() == UNDEFINED_ID ?
                     getInsertQuery() : getUpdateQuery();
 
-            PreparedStatement statement = connection.prepareStatement(query);
+            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             int i = 1;
             for(PreparedStatementObjSetter setter: rowMappers.values()) {
@@ -115,6 +115,15 @@ public class SqlExecutor implements Executor {
             }
 
             statement.execute();
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    source.setID(generatedKeys.getLong(1));
+                }
+                else {
+                    throw new SQLException("Creating DataSet failed, no ID obtained.");
+                }
+            }
         }
 
         private String getInsertQuery() {
