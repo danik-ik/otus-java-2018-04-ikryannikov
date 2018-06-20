@@ -4,6 +4,7 @@ import ru.otus.danik_ik.homework09.storage.DataSet;
 import ru.otus.danik_ik.homework09.storage.Executor;
 import ru.otus.danik_ik.homework09.storage.StorageException;
 
+import java.lang.reflect.Method;
 import java.sql.*;
 
 public class SqlExecutor implements Executor {
@@ -48,7 +49,7 @@ public class SqlExecutor implements Executor {
 
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) {
-        return null;
+        return new DataSetLoader<T>(connection, clazz, id).load();
     }
 
     @Override
@@ -61,4 +62,8 @@ public class SqlExecutor implements Executor {
         void set(PreparedStatement stmt, Object source, int index);
     }
 
+    @FunctionalInterface
+    public interface ResultSetReader<T> {
+        T get(ResultSet resultSet, Object target, Method setter);
+    }
 }
