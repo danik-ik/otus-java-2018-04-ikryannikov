@@ -48,10 +48,10 @@ class DataSetSaver<T extends DataSet> {
             doUpdate();
     }
 
-    private Collection<Method> rowGetters = new LinkedList<>();
+    private Collection<Method> nonKeyGetters = new LinkedList<>();
     private Collection<Method> keyGetters = new LinkedList<>();
 
-    private Map<String, SqlExecutor.PreparedStatementObjSetter> rowMappers = new HashMap<>();
+    private Map<String, SqlExecutor.PreparedStatementObjSetter> nonKeyMappers = new HashMap<>();
     private Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = new HashMap<>();
 
     private Consumer<PreparedStatement> setParamsFor;
@@ -87,12 +87,12 @@ class DataSetSaver<T extends DataSet> {
     private String prepareInsertQuery() {
         final String template = "INSERT INTO %s (%s) VALUES(%s)";
 
-        String fieldNames = String.join(",", rowMappers.keySet());
-        String placeholders = String.join(",", getNPlaceholders(rowMappers.size()));
+        String fieldNames = String.join(",", nonKeyMappers.keySet());
+        String placeholders = String.join(",", getNPlaceholders(nonKeyMappers.size()));
 
         setParamsFor = statement -> {
             int i = 1;
-            for (SqlExecutor.PreparedStatementObjSetter setter : rowMappers.values()) {
+            for (SqlExecutor.PreparedStatementObjSetter setter : nonKeyMappers.values()) {
                 setter.set(statement, source, i);
                 i++;
             }
@@ -108,7 +108,7 @@ class DataSetSaver<T extends DataSet> {
     private String prepareUpdateQuery() {
         final String template = "UPDATE %s SET %S WHERE %s";
         String fieldsAssignments = String.join(",",
-                rowMappers.keySet().stream()
+                nonKeyMappers.keySet().stream()
                         .map(name -> name + "=?")
                         .collect(Collectors.toList()));
         String keyCondition = String.join(" AND ",
@@ -117,7 +117,7 @@ class DataSetSaver<T extends DataSet> {
                         .collect(Collectors.toList()));
         setParamsFor = statement -> {
             int i = 1;
-            for (SqlExecutor.PreparedStatementObjSetter setter : rowMappers.values()) {
+            for (SqlExecutor.PreparedStatementObjSetter setter : nonKeyMappers.values()) {
                 setter.set(statement, source, i);
                 i++;
             }
@@ -137,12 +137,12 @@ class DataSetSaver<T extends DataSet> {
             if (anno.isKey())
                 keyGetters.add(m);
             else
-                rowGetters.add(m);
+                nonKeyGetters.add(m);
         }
     }
 
     private void buildMappers() {
-        buildMapper(rowGetters, rowMappers);
+        buildMapper(nonKeyGetters, nonKeyMappers);
         buildMapper(keyGetters, keyMappers);
     }
 

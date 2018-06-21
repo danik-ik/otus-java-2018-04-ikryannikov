@@ -22,10 +22,10 @@ class DataSetLoader<T extends DataSet> {
         this.id = id;
     }
 
-    private Collection<Method> rowSetters = new LinkedList<>();
+    private Collection<Method> nonKeySetters = new LinkedList<>();
     private Collection<Method> keySetters = new LinkedList<>();
 
-    private Map<String, SqlExecutor.ResultSetReader> rowMappers = new HashMap<>();
+    private Map<String, SqlExecutor.ResultSetReader> NonKeyMappers = new HashMap<>();
     private Map<String, SqlExecutor.ResultSetReader> keyMappers = new HashMap<>();
 
     private Consumer<PreparedStatement> setParamsFor;
