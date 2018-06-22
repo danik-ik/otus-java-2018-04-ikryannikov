@@ -69,7 +69,7 @@ public enum DbFieldType {
             },
             (resultSet, fieldName) -> {
                 try {
-                    return resultSet.getDate(fieldName);
+                    return resultSet.getDate(fieldName).toLocalDate();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
