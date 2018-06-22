@@ -52,7 +52,6 @@ class DataSetLoader<T extends DataSet> {
     }
 
     private ResultSet getData() throws SQLException {
-        // TODO: 22.06.2018 прочитать запись из БД. Убедиться, что она есть, причём одна 
         PreparedStatement statement = connection.prepareStatement(prepareLoadQuery());
         statement.setLong(1, id);
         ResultSet result = statement.executeQuery();
