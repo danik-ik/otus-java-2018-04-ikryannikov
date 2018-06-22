@@ -63,7 +63,12 @@ public class SqlExecutor implements Executor {
     }
 
     @FunctionalInterface
-    public interface ResultSetReader<T> {
-        T get(ResultSet resultSet, Object target, Method setter);
+    public interface TargetObjSetter {
+        void set(Method m, Object tsrget, int index);
+    }
+
+    @FunctionalInterface
+    public interface ResultSetValueToObjCopier {
+        void execute(ResultSet resultSet, Object target);
     }
 }
