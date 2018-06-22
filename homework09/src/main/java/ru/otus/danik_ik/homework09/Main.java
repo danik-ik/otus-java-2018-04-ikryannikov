@@ -30,9 +30,14 @@ public class Main
             user.setName("Так это же я!");
             user.setBornDate(LocalDate.of(1978, 10, 30));
             executor.save(user);
-//            executor.execUpdate("insert into users (name) values ('fsdfsdf')");
-
             printUsers(executor);
+
+            UserDataSet loadedUser = executor.load(1, UserDataSet.class);
+
+            System.out.println("загружено из БД по id=1");
+            System.out.println(loadedUser.getID());
+            System.out.println(loadedUser.getName());
+            System.out.println(loadedUser.getBornDate());
         }
     }
 
