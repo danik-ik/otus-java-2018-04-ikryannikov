@@ -1,0 +1,88 @@
+package ru.otus.danik_ik.homework09;
+
+import org.junit.Test;
+import ru.otus.danik_ik.homework09.database.SqlExecutor;
+import ru.otus.danik_ik.homework09.storage.DataSet;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.time.LocalDate;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+public class ExecutorTest {
+    {
+        try (SqlExecutor executor = new SqlExecutor()) {
+            ResourceHelper rh = new ResourceHelper(Main.class);
+
+            String query = rh.getString("sql/Create_table_users.sql");
+            System.out.println(query);
+            executor.execUpdate(query);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void save() throws Exception {
+        UserDataSet user = new UserDataSet();
+        user.setName("Этот, как его...");
+        user.setBornDate(LocalDate.of(1900, 01, 01));
+
+        SaveUser(user);
+        CompareDbWithObject(user);
+    }
+
+    @Test
+    public void update() throws Exception {
+        final long USER_UD = 100500;
+
+        UserDataSet user = new UserDataSet();
+        user.setID(USER_UD);
+        user.setName("Этот, как его...");
+        user.setBornDate(LocalDate.of(1900, 01, 01));
+
+        InsertEmptyUserIntoDB(USER_UD);
+        SaveUser(user);
+        CompareDbWithObject(user);
+    }
+
+    public void CompareDbWithObject(UserDataSet user) throws Exception {
+        try (SqlExecutor executor = new SqlExecutor()) {
+            executor.execQuery("select count(*) from users", resultSet -> {
+                resultSet.first();
+                assertEquals(1, resultSet.getLong(1));
+            });
+            executor.execQuery("select * from users", resultSet -> {
+                resultSet.first();
+                assertNotEquals(user.getID(), DataSet.UNDEFINED_ID);
+                assertEquals(resultSet.getLong("id"), user.getID());
+                assertEquals(user.getName(), resultSet.getString("name"));
+                assertEquals(user.getBornDate(), resultSet.getDate("borndate").toLocalDate());
+            });
+        }
+    }
+
+    public void SaveUser(UserDataSet user) throws Exception {
+        try (SqlExecutor executor = new SqlExecutor()) {
+            executor.save(user);
+        }
+    }
+
+    public void InsertEmptyUserIntoDB(long USER_UD) throws Exception {
+        try (SqlExecutor executor = new SqlExecutor()) {
+            executor.execUpdate("insert into users (id) values (?)",
+                    stmt -> LongParamSet(stmt, 1, USER_UD));
+        }
+    }
+
+    private void LongParamSet(PreparedStatement stmt, int parameterIndex, long USER_UD) {
+        try {
+            stmt.setLong(1, USER_UD);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}
