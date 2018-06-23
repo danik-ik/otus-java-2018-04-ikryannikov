@@ -1,7 +1,6 @@
 package ru.otus.danik_ik.homework09.storm;
 
 import ru.otus.danik_ik.homework09.database.SqlExecutor;
-import ru.otus.danik_ik.homework09.storage.DataSet;
 import ru.otus.danik_ik.homework09.storage.StorageException;
 import ru.otus.danik_ik.homework09.storm.annotations.DbField;
 import ru.otus.danik_ik.homework09.storm.annotations.DbTable;
@@ -22,10 +21,12 @@ class ClassExtract {
     private final String tableName;
 
     private final Collection<Method> nonKeyGetters = new LinkedList<>();
-    private final  Collection<Method> keyGetters = new LinkedList<>();
+    private final Collection<Method> keyGetters = new LinkedList<>();
+    private final Collection<Method> Setters = new LinkedList<>();
 
-    private final  Map<String, SqlExecutor.PreparedStatementObjSetter> nonKeyMappers = new HashMap<>();
-    private final  Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = new HashMap<>();
+    private final Map<String, SqlExecutor.PreparedStatementObjSetter> nonKeyMappers = new HashMap<>();
+    private final Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = new HashMap<>();
+    private final Map<String, SqlExecutor.ResultSetValueToObjCopier> dbToObjMappers = new HashMap<>();
 
     private ClassExtract(Class<?> clazz) {
         this.clazz = clazz;
@@ -35,7 +36,7 @@ class ClassExtract {
             throw new RuntimeException(e);
         }
 
-        collectGetters();
+        collectMethods();
         buildMappers();
     }
 
@@ -59,14 +60,25 @@ class ClassExtract {
         return tableName;
     }
 
-    private void collectGetters() {
-        for (Method m : clazz.getMethods()) {
-            if (!isApplicableGetter(m)) continue;
+    public Collection<Method> getSetters() {
+        return Collections.unmodifiableCollection(Setters);
+    }
 
-            if (isIdMethod(m))
-                keyGetters.add(m);
-            else
-                nonKeyGetters.add(m);
+    public Map<String, SqlExecutor.ResultSetValueToObjCopier> getDbToObjMappers() {
+        return Collections.unmodifiableMap(dbToObjMappers);
+    }
+
+    private void collectMethods() {
+        for (Method m : clazz.getMethods()) {
+            if (isApplicableGetter(m)) {
+
+                if (isIdMethod(m))
+                    keyGetters.add(m);
+                else
+                    nonKeyGetters.add(m);
+            } else if (isApplicableSetter(m)) {
+                rememberSetter(m);
+            }
         }
     }
 
@@ -77,6 +89,7 @@ class ClassExtract {
     private void buildMappers() {
         buildMapper(nonKeyGetters, nonKeyMappers);
         buildMapper(keyGetters, keyMappers);
+        buildLoaderMappers();
     }
 
     private void buildMapper(Collection<Method> source, Map<String, SqlExecutor.PreparedStatementObjSetter> target) {
@@ -98,6 +111,25 @@ class ClassExtract {
         }
     }
 
+    private void buildLoaderMappers() {
+        for (Method m : Setters) {
+            DbField anno = m.getAnnotationsByType(DbField.class)[0];
+
+            String name = anno.name();
+            if (name == null) name = m.getName().substring(3);
+
+            SqlExecutor.ResultSetValueToObjCopier action = (resultSet, target) -> {
+                try {
+                    Object value = anno.type().getFieldGetter().get(resultSet, anno.name());
+                    m.invoke(target, value);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            };
+            dbToObjMappers.put(name, action);
+        }
+    }
+
     private boolean isApplicableGetter(Method m) {
         if (m.getParameterCount() > 0) return false;
         if (!m.getName().startsWith("get")) return false;
@@ -106,7 +138,7 @@ class ClassExtract {
         return true;
     }
 
-    private String getTableName(Class<?> aClass) throws StorageException {
+    public String getTableName(Class<?> aClass) throws StorageException {
         DbTable[] annotations = aClass.getAnnotationsByType(DbTable.class);
         String tableName;
         if (annotations.length == 0)
@@ -118,4 +150,18 @@ class ClassExtract {
         return tableName;
     }
 
-}
+        private void rememberSetter(Method m) {
+            Setters.add(m);
+        }
+
+        private boolean isApplicableSetter(Method m) {
+            if (m.getParameterCount() != 1) return false;
+            if (!m.getName().startsWith("set")) return false;
+            if (m.getDeclaringClass().equals(Object.class)) return false;
+            if (m.getAnnotationsByType(DbField.class).length == 0) return false;
+            DbField anno = m.getAnnotationsByType(DbField.class)[0];
+            if (!anno.type().isCompatibleFor(m.getParameters()[0].getType())) return false;
+            return true;
+        }
+
+    }
