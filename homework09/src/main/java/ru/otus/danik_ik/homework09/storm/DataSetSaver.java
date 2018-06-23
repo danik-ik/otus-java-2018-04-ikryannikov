@@ -31,7 +31,6 @@ public class DataSetSaver<T extends DataSet> {
             doUpdate();
     }
 
-
     private Consumer<PreparedStatement> setParamsFor;
 
     private void doInsert() throws SQLException {
