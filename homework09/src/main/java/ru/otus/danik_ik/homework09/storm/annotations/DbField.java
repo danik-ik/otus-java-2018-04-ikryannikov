@@ -5,9 +5,8 @@ import ru.otus.danik_ik.homework09.storm.DbFieldType;
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.METHOD})
 public @interface DbField {
     String name();
     DbFieldType type();
-    boolean isKey() default false;
 }

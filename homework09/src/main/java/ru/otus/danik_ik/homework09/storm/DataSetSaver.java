@@ -5,6 +5,7 @@ import ru.otus.danik_ik.homework09.storm.annotations.DbField;
 import ru.otus.danik_ik.homework09.storm.annotations.DbTable;
 import ru.otus.danik_ik.homework09.storage.DataSet;
 import ru.otus.danik_ik.homework09.storage.StorageException;
+import ru.otus.danik_ik.homework09.storm.annotations.ID;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -134,12 +135,16 @@ public class DataSetSaver<T extends DataSet> {
     private void collectGetters() {
         for (Method m : source.getClass().getMethods()) {
             if (!isApplicableGetter(m)) continue;
-            DbField anno = m.getAnnotationsByType(DbField.class)[0];
-            if (anno.isKey())
+
+            if (isIdMethod(m))
                 keyGetters.add(m);
             else
                 nonKeyGetters.add(m);
         }
+    }
+
+    private boolean isIdMethod(Method m) {
+        return m.getAnnotationsByType(ID.class).length > 0;
     }
 
     private void buildMappers() {

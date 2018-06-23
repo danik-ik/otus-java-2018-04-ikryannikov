@@ -9,7 +9,6 @@ import java.time.LocalDate;
 
 @DbTable(name = "Users")
 public class UserDataSet extends DataSet {
-    @DbField(name="name", type = DbFieldType.STRING)
     private String name;
     private LocalDate bornDate;
 
