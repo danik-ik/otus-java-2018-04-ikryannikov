@@ -62,7 +62,7 @@ public class DataSetLoader<T extends DataSet> {
     }
 
     private void copyToTarget(ResultSet resultSet, T target) throws StorageException {
-        for (SqlExecutor.ResultSetValueToObjCopier copier: extract.getDbToObjMappers().values()) {
+        for (ResultSetValueToObjCopier copier: extract.getDbToObjMappers().values()) {
             copier.execute(resultSet, target);
         }
     }

@@ -71,8 +71,4 @@ public class SqlExecutor implements Executor {
         void set(PreparedStatement stmt, Object source, int index) throws SQLException, StorageException;
     }
 
-    @FunctionalInterface
-    public interface ResultSetValueToObjCopier {
-        void execute(ResultSet resultSet, Object target) throws StorageException;
-    }
 }

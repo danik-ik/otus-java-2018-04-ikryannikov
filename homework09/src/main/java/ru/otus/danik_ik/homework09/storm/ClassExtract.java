@@ -32,7 +32,7 @@ class ClassExtract {
 
     private final Map<String, SqlExecutor.PreparedStatementObjSetter> nonKeyMappers = new HashMap<>();
     private final Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = new HashMap<>();
-    private final Map<String, SqlExecutor.ResultSetValueToObjCopier> dbToObjMappers = new HashMap<>();
+    private final Map<String, ResultSetValueToObjCopier> dbToObjMappers = new HashMap<>();
 
     private ClassExtract(Class<?> clazz) throws StorageException {
         this.clazz = clazz;
@@ -66,7 +66,7 @@ class ClassExtract {
         return Collections.unmodifiableCollection(Setters);
     }
 
-    public Map<String, SqlExecutor.ResultSetValueToObjCopier> getDbToObjMappers() {
+    public Map<String, ResultSetValueToObjCopier> getDbToObjMappers() {
         return Collections.unmodifiableMap(dbToObjMappers);
     }
 
@@ -121,7 +121,7 @@ class ClassExtract {
             String name = anno.name();
             if (name == null) name = m.getName().substring(3);
 
-            SqlExecutor.ResultSetValueToObjCopier action = (resultSet, target) -> {
+            ResultSetValueToObjCopier action = (resultSet, target) -> {
                 try {
                     Object value = anno.type().getFieldGetter().get(resultSet, anno.name());
                     m.invoke(target, value);
