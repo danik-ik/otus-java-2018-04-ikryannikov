@@ -41,7 +41,7 @@ public class SqlExecutor implements Executor {
     }
 
     @Override
-    public <T extends DataSet> void save(T entry) {
+    public <T extends DataSet> void save(T entry) throws StorageException {
         try {
             new DataSetSaver<T>(connection, entry)
                     .save();
@@ -51,7 +51,7 @@ public class SqlExecutor implements Executor {
     }
 
     @Override
-    public <T extends DataSet> T load(long id, Class<T> clazz) {
+    public <T extends DataSet> T load(long id, Class<T> clazz) throws StorageException {
         return new DataSetLoader<T>(connection, clazz, id).load();
     }
 
@@ -67,7 +67,7 @@ public class SqlExecutor implements Executor {
 
     @FunctionalInterface
     public interface TargetObjSetter {
-        void set(Method m, Object tsrget, int index);
+        void set(Method m, Object target, int index);
     }
 
     @FunctionalInterface

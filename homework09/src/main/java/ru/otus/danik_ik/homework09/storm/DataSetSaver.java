@@ -22,13 +22,13 @@ public class DataSetSaver<T extends DataSet> {
     private final T source;
     private final String tableName;
 
-    public DataSetSaver(Connection connection, T source) {
+    public DataSetSaver(Connection connection, T source) throws StorageException {
         this.connection = connection;
         this.source = source;
         tableName = getTableName(source.getClass());
     }
 
-    private String getTableName(Class<? extends DataSet> aClass) {
+    private String getTableName(Class<? extends DataSet> aClass) throws StorageException {
         DbTable[] annotations = aClass.getAnnotationsByType(DbTable.class);
         String tableName;
         if (annotations.length == 0)

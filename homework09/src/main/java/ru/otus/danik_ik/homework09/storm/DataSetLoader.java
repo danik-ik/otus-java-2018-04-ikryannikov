@@ -35,7 +35,7 @@ public class DataSetLoader<T extends DataSet> {
 
     private Consumer<PreparedStatement> setParamsFor;
 
-    public T load() {
+    public T load() throws StorageException {
         collectMethods();
         buildMappers();
 
@@ -52,7 +52,7 @@ public class DataSetLoader<T extends DataSet> {
         return result;
     }
 
-    private ResultSet getData() throws SQLException {
+    private ResultSet getData() throws SQLException, StorageException {
         PreparedStatement statement = connection.prepareStatement(prepareLoadQuery());
         statement.setLong(1, id);
         ResultSet result = statement.executeQuery();
@@ -65,7 +65,7 @@ public class DataSetLoader<T extends DataSet> {
         return result;
     }
 
-    private String prepareLoadQuery() {
+    private String prepareLoadQuery() throws StorageException {
         final String template = "SELECT %s FROM %S WHERE ID=?";
         final String fieldsList = getFieldsList();
         return String.format(template, fieldsList, getTableName(clazz));
@@ -75,7 +75,7 @@ public class DataSetLoader<T extends DataSet> {
         return String.join(",", mappers.keySet());
     }
 
-    private String getTableName(Class<? extends DataSet> aClass) {
+    private String getTableName(Class<? extends DataSet> aClass) throws StorageException {
         DbTable[] annotations = aClass.getAnnotationsByType(DbTable.class);
         String tableName;
         if (annotations.length == 0)
@@ -94,7 +94,7 @@ public class DataSetLoader<T extends DataSet> {
         }
     }
 
-    private T createTargetClassInstance() {
+    private T createTargetClassInstance() throws StorageException {
         T result;
         try {
             result = clazz.getConstructor().newInstance();

@@ -1,6 +1,6 @@
 package ru.otus.danik_ik.homework09.storage;
 
-public class StorageException extends RuntimeException {
+public class StorageException extends Exception {
     public StorageException() {
     }
 
