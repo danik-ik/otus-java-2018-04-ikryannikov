@@ -7,7 +7,6 @@ import ru.otus.danik_ik.homework09.storage.StorageException;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,16 +23,16 @@ public class DataSetSaver<T extends DataSet> {
         extract = ClassExtract.get(source.getClass());
     }
 
-    public void save() throws SQLException {
+    public void save() throws SQLException, StorageException {
         if (isInsertion())
             doInsert();
         else
             doUpdate();
     }
 
-    private Consumer<PreparedStatement> setParamsFor;
+    private PreparedStatementConsumer setParamsFor;
 
-    private void doInsert() throws SQLException {
+    private void doInsert() throws SQLException, StorageException {
         String query = prepareInsertQuery();
 
         PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -49,7 +48,7 @@ public class DataSetSaver<T extends DataSet> {
         }
     }
 
-    private void doUpdate() throws SQLException {
+    private void doUpdate() throws SQLException, StorageException {
         String query = prepareUpdateQuery();
 
         PreparedStatement statement = connection.prepareStatement(query);
@@ -111,6 +110,11 @@ public class DataSetSaver<T extends DataSet> {
         };
 
         return String.format(template, extract.getTableName(), fieldsAssignments, keyCondition);
+    }
+
+    @FunctionalInterface
+    public interface PreparedStatementConsumer {
+        public void accept(PreparedStatement stmt) throws SQLException, StorageException;
     }
 
 }

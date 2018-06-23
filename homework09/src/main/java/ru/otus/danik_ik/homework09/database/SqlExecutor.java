@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 public class SqlExecutor implements Executor {
     private final Connection connection;
 
-    public SqlExecutor() {
+    public SqlExecutor() throws StorageException {
         this( ConnectionHelper.getConnection() );
     }
 
@@ -68,16 +68,11 @@ public class SqlExecutor implements Executor {
 
     @FunctionalInterface
     public interface PreparedStatementObjSetter {
-        void set(PreparedStatement stmt, Object source, int index);
-    }
-
-    @FunctionalInterface
-    public interface TargetObjSetter {
-        void set(Method m, Object target, int index);
+        void set(PreparedStatement stmt, Object source, int index) throws SQLException, StorageException;
     }
 
     @FunctionalInterface
     public interface ResultSetValueToObjCopier {
-        void execute(ResultSet resultSet, Object target);
+        void execute(ResultSet resultSet, Object target) throws StorageException;
     }
 }

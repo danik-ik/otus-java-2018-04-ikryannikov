@@ -8,13 +8,19 @@ import ru.otus.danik_ik.homework09.storm.annotations.ID;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.*;
 
 class ClassExtract {
     private static Map<Class<?>, ClassExtract> registry = new HashMap<>();
 
-    public static ClassExtract get(Class<?> clazz) {
-        return registry.computeIfAbsent(clazz, ClassExtract::new);
+    public static ClassExtract get(Class<?> clazz) throws StorageException {
+        ClassExtract extract = registry.get(clazz);
+        if (extract != null)
+            return extract;
+        extract = new ClassExtract(clazz);
+        registry.put(clazz, extract);
+        return extract;
     };
 
     private final Class<?> clazz;
@@ -28,13 +34,9 @@ class ClassExtract {
     private final Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = new HashMap<>();
     private final Map<String, SqlExecutor.ResultSetValueToObjCopier> dbToObjMappers = new HashMap<>();
 
-    private ClassExtract(Class<?> clazz) {
+    private ClassExtract(Class<?> clazz) throws StorageException {
         this.clazz = clazz;
-        try {
-            tableName = getTableName(clazz);
-        } catch (StorageException e) {
-            throw new RuntimeException(e);
-        }
+        tableName = getTableName(clazz);
 
         collectMethods();
         buildMappers();
@@ -103,8 +105,9 @@ class ClassExtract {
                 try {
                     Object value = m.invoke(obj);
                     anno.type().getPreparedStatementValSetter().set(stmt, value, index);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
+                } catch (IllegalAccessException | InvocationTargetException
+                        | SQLException e) {
+                    throw new StorageException(e);
                 }
             };
             target.put(name, action);
@@ -122,8 +125,9 @@ class ClassExtract {
                 try {
                     Object value = anno.type().getFieldGetter().get(resultSet, anno.name());
                     m.invoke(target, value);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
+                } catch (IllegalAccessException | InvocationTargetException
+                        | SQLException e) {
+                    throw new StorageException(e);
                 }
             };
             dbToObjMappers.put(name, action);

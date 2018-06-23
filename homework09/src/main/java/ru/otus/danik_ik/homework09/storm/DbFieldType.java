@@ -1,5 +1,7 @@
 package ru.otus.danik_ik.homework09.storm;
 
+import ru.otus.danik_ik.homework09.storage.StorageException;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,67 +13,35 @@ import java.util.Set;
 public enum DbFieldType {
     LONG( classArray(Long.class, long.class), 
             (stmt, value, index) -> {
-                try {
                     stmt.setLong(index, (Long)value);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             },
             (resultSet, fieldName) -> {
-                try {
                     return resultSet.getLong(fieldName);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            } 
+            }
     ),
     FLOAT( classArray(Float.class, float.class),
             (stmt, value, index) -> {
-                try {
                     stmt.setFloat(index, (Float) value);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             },
             (resultSet, fieldName) -> {
-                try {
                     return resultSet.getFloat(fieldName);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             }
     ),
     STRING( classArray(String.class),
             (stmt, value, index) -> {
-                try {
                     stmt.setString(index, (String)value);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             },
             (resultSet, fieldName) -> {
-                try {
                     return resultSet.getString(fieldName);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             }
     ),
     DATE( classArray(LocalDate.class),
             (stmt, value, index) -> {
-                try {
                     java.sql.Date sqlDate = java.sql.Date.valueOf((LocalDate)value);
                     stmt.setDate(index, sqlDate);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             },
             (resultSet, fieldName) -> {
-                try {
                     return resultSet.getDate(fieldName).toLocalDate();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
             }
     );
 
@@ -101,12 +71,12 @@ public enum DbFieldType {
 
     @FunctionalInterface
     public interface PreparedStatementValSetter {
-        void set(PreparedStatement stmt, Object value, int index);
+        void set(PreparedStatement stmt, Object value, int index) throws SQLException;
     }
 
     @FunctionalInterface
     public interface FieldGetter {
-        Object get(ResultSet resultSet, String fieldName);
+        Object get(ResultSet resultSet, String fieldName) throws SQLException;
     }
 
     private static Set<Class<?>> classArray(Class<?>... classes) {

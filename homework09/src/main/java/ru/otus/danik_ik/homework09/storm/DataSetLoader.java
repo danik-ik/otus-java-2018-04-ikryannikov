@@ -16,7 +16,7 @@ public class DataSetLoader<T extends DataSet> {
     private final long id;
     private final ClassExtract extract;
 
-    public DataSetLoader(Connection connection, Class<T> clazz, long id) {
+    public DataSetLoader(Connection connection, Class<T> clazz, long id) throws StorageException {
         this.connection = connection;
         this.clazz = clazz;
         this.id = id;
@@ -61,7 +61,7 @@ public class DataSetLoader<T extends DataSet> {
         return String.join(",", extract.getDbToObjMappers().keySet());
     }
 
-    private void copyToTarget(ResultSet resultSet, T target) {
+    private void copyToTarget(ResultSet resultSet, T target) throws StorageException {
         for (SqlExecutor.ResultSetValueToObjCopier copier: extract.getDbToObjMappers().values()) {
             copier.execute(resultSet, target);
         }
