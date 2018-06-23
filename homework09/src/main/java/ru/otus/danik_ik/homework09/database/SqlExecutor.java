@@ -21,8 +21,9 @@ public class SqlExecutor implements Executor {
     public void execQuery(String query, ResultHandler handler) throws SQLException {
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(query);
-            ResultSet result = stmt.getResultSet();
-            handler.handle(result);
+            try( ResultSet result = stmt.getResultSet() ) {
+                handler.handle(result);
+            }
         }
     }
 

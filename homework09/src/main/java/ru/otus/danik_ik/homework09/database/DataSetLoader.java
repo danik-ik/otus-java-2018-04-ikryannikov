@@ -40,13 +40,13 @@ class DataSetLoader<T extends DataSet> {
 
         T result = createTargetClassInstance();
 
-        ResultSet resultSet = null;
         try {
-            resultSet = getData();
+            try (ResultSet resultSet = getData()) {
+                copyToTarget(resultSet, result);
+            }
         } catch (SQLException e) {
             throw new StorageException(String.format("Ошибка при загрузке данных для id = %s", id), e);
         }
-        copyToTarget(resultSet, result);
 
         return result;
     }
