@@ -1,6 +1,6 @@
-package ru.otus.danik_ik.homework09.database.annotations;
+package ru.otus.danik_ik.homework09.storm.annotations;
 
-import ru.otus.danik_ik.homework09.database.DbFieldType;
+import ru.otus.danik_ik.homework09.storm.DbFieldType;
 
 import java.lang.annotation.*;
 

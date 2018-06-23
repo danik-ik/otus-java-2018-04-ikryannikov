@@ -1,7 +1,8 @@
-package ru.otus.danik_ik.homework09.database;
+package ru.otus.danik_ik.homework09.storm;
 
-import ru.otus.danik_ik.homework09.database.annotations.DbField;
-import ru.otus.danik_ik.homework09.database.annotations.DbTable;
+import ru.otus.danik_ik.homework09.database.SqlExecutor;
+import ru.otus.danik_ik.homework09.storm.annotations.DbField;
+import ru.otus.danik_ik.homework09.storm.annotations.DbTable;
 import ru.otus.danik_ik.homework09.storage.DataSet;
 import ru.otus.danik_ik.homework09.storage.StorageException;
 
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 
 import static ru.otus.danik_ik.homework09.storage.DataSet.UNDEFINED_ID;
 
-class DataSetSaver<T extends DataSet> {
+public class DataSetSaver<T extends DataSet> {
     private final Connection connection;
     private final T source;
     private final String tableName;

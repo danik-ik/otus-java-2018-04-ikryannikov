@@ -1,4 +1,4 @@
-package ru.otus.danik_ik.homework09.database;
+package ru.otus.danik_ik.homework09.storm;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

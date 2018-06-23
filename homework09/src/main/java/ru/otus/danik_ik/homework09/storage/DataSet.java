@@ -1,9 +1,7 @@
 package ru.otus.danik_ik.homework09.storage;
 
-import ru.otus.danik_ik.homework09.database.DbFieldType;
-import ru.otus.danik_ik.homework09.database.annotations.DbField;
-
-import java.sql.SQLException;
+import ru.otus.danik_ik.homework09.storm.DbFieldType;
+import ru.otus.danik_ik.homework09.storm.annotations.DbField;
 
 public abstract class DataSet {
     public static final long UNDEFINED_ID = -1L;

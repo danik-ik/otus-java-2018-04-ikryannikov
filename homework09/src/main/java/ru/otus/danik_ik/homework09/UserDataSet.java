@@ -1,8 +1,8 @@
 package ru.otus.danik_ik.homework09;
 
-import ru.otus.danik_ik.homework09.database.DbFieldType;
-import ru.otus.danik_ik.homework09.database.annotations.DbField;
-import ru.otus.danik_ik.homework09.database.annotations.DbTable;
+import ru.otus.danik_ik.homework09.storm.DbFieldType;
+import ru.otus.danik_ik.homework09.storm.annotations.DbField;
+import ru.otus.danik_ik.homework09.storm.annotations.DbTable;
 import ru.otus.danik_ik.homework09.storage.DataSet;
 
 import java.time.LocalDate;

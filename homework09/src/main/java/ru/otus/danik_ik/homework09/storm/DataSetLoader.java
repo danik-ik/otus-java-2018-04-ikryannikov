@@ -1,7 +1,8 @@
-package ru.otus.danik_ik.homework09.database;
+package ru.otus.danik_ik.homework09.storm;
 
-import ru.otus.danik_ik.homework09.database.annotations.DbField;
-import ru.otus.danik_ik.homework09.database.annotations.DbTable;
+import ru.otus.danik_ik.homework09.database.SqlExecutor;
+import ru.otus.danik_ik.homework09.storm.annotations.DbField;
+import ru.otus.danik_ik.homework09.storm.annotations.DbTable;
 import ru.otus.danik_ik.homework09.storage.DataSet;
 import ru.otus.danik_ik.homework09.storage.StorageException;
 
@@ -17,7 +18,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Consumer;
 
-class DataSetLoader<T extends DataSet> {
+public class DataSetLoader<T extends DataSet> {
     private final Connection connection;
     private final Class<T> clazz;
     private final long id;
