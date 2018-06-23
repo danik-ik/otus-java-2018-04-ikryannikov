@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ExecutorTest {
     {
@@ -46,6 +47,43 @@ public class ExecutorTest {
         InsertEmptyUserIntoDB(USER_UD);
         SaveUser(user);
         CompareDbWithObject(user);
+    }
+
+    @Test
+    public void load() throws Exception {
+        final long USER_UD = 100500;
+
+        UserDataSet user = new UserDataSet();
+        user.setID(USER_UD);
+        user.setName("Этот, как его...");
+        user.setBornDate(LocalDate.of(1900, 01, 01));
+
+        SaveUserDirectly(user);
+
+        try (SqlExecutor executor = new SqlExecutor()) {
+
+            UserDataSet anotherUser = executor.load(USER_UD, UserDataSet.class);
+
+            assertTrue(user != anotherUser);
+            assertEquals(user.getID(), anotherUser.getID());
+            assertEquals(user.getName(), anotherUser.getName());
+            assertEquals(user.getBornDate(), anotherUser.getBornDate());
+        }
+    }
+
+    public void SaveUserDirectly(UserDataSet user) throws Exception {
+        try (SqlExecutor executor = new SqlExecutor()) {
+            executor.execUpdate("insert into users (id, name, bornDate) values (?, ?, ?)",
+                    stmt -> {
+                        try {
+                            stmt.setLong(1, user.getID());
+                            stmt.setString(2, user.getName());
+                            stmt.setDate(3, java.sql.Date.valueOf(user.getBornDate()));
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
     }
 
     public void CompareDbWithObject(UserDataSet user) throws Exception {
