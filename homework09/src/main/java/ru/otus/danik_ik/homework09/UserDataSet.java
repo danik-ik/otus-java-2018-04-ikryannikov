@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class UserDataSet extends DataSet {
     private String name;
     private LocalDate bornDate;
+    private float rating;
 
     @DbField(name="name", type = DbFieldType.STRING)
     public String getName() {
@@ -30,5 +31,15 @@ public class UserDataSet extends DataSet {
     @DbField(name="bornDate", type = DbFieldType.DATE)
     public void setBornDate(LocalDate bornDate) {
         this.bornDate = bornDate;
+    }
+
+    @DbField(name="rating", type = DbFieldType.FLOAT)
+    public float getRating() {
+        return rating;
+    }
+
+    @DbField(name="rating", type = DbFieldType.FLOAT)
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

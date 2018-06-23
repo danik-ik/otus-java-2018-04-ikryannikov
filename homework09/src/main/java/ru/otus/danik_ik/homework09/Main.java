@@ -24,11 +24,13 @@ public class Main
             
             user.setName("Этот, как его...");
             user.setBornDate(LocalDate.of(1900, 01, 01));
+            user.setRating(.001F);
             executor.save(user);
             printUsers(executor);
-            
+
             user.setName("Так это же я!");
             user.setBornDate(LocalDate.of(1978, 10, 30));
+            user.setRating(100.5F);
             executor.save(user);
             printUsers(executor);
 
@@ -38,6 +40,7 @@ public class Main
             System.out.println(loadedUser.getID());
             System.out.println(loadedUser.getName());
             System.out.println(loadedUser.getBornDate());
+            System.out.println(loadedUser.getRating());
         }
     }
 
@@ -45,10 +48,11 @@ public class Main
         executor.execQuery("select * from users", resultSet -> {
             System.out.println("==============================");
             while (resultSet.next()) {
-                System.out.printf("ID: %d; Name: %s; date of born: %s\n",
+                System.out.printf("ID: %d; Name: %s; date of born: %s, rating: %f\n",
                         resultSet.getLong("Id"),
                         resultSet.getString("Name"),
-                        resultSet.getDate("bornDate"));
+                        resultSet.getDate("bornDate"),
+                        resultSet.getFloat("rating"));
             }
             System.out.println("------------------------------");
         });

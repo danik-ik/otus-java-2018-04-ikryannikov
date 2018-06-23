@@ -1,5 +1,7 @@
 package ru.otus.danik_ik.homework09;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import ru.otus.danik_ik.homework09.database.SqlExecutor;
 import ru.otus.danik_ik.homework09.storage.DataSet;
@@ -30,6 +32,7 @@ public class ExecutorTest {
         UserDataSet user = new UserDataSet();
         user.setName("Этот, как его...");
         user.setBornDate(LocalDate.of(1900, 01, 01));
+        user.setRating(7.1F);
 
         SaveUser(user);
         CompareDbWithObject(user);
@@ -43,6 +46,7 @@ public class ExecutorTest {
         user.setID(USER_UD);
         user.setName("Этот, как его...");
         user.setBornDate(LocalDate.of(1900, 01, 01));
+        user.setRating(7.1F);
 
         InsertEmptyUserIntoDB(USER_UD);
         SaveUser(user);
@@ -57,6 +61,7 @@ public class ExecutorTest {
         user.setID(USER_UD);
         user.setName("Этот, как его...");
         user.setBornDate(LocalDate.of(1900, 01, 01));
+        user.setRating(7.1F);
 
         SaveUserDirectly(user);
 
@@ -73,12 +78,13 @@ public class ExecutorTest {
 
     public void SaveUserDirectly(UserDataSet user) throws Exception {
         try (SqlExecutor executor = new SqlExecutor()) {
-            executor.execUpdate("insert into users (id, name, bornDate) values (?, ?, ?)",
+            executor.execUpdate("insert into users (id, name, bornDate, rating) values (?, ?, ?, ?)",
                     stmt -> {
                         try {
                             stmt.setLong(1, user.getID());
                             stmt.setString(2, user.getName());
                             stmt.setDate(3, java.sql.Date.valueOf(user.getBornDate()));
+                            stmt.setFloat(4, user.getRating());
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
