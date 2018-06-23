@@ -15,13 +15,22 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ExecutorTest {
-    {
+    @Before
+    public void before () {
         try (SqlExecutor executor = new SqlExecutor()) {
             ResourceHelper rh = new ResourceHelper(Main.class);
 
             String query = rh.getString("sql/Create_table_users.sql");
-            System.out.println(query);
             executor.execUpdate(query);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @After
+    public void after () {
+        try (SqlExecutor executor = new SqlExecutor()) {
+            executor.execUpdate("drop table users");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
