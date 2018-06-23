@@ -1,16 +1,12 @@
 package ru.otus.danik_ik.homework09.storm;
 
 import ru.otus.danik_ik.homework09.database.SqlExecutor;
-import ru.otus.danik_ik.homework09.storm.annotations.DbField;
-import ru.otus.danik_ik.homework09.storm.annotations.DbTable;
 import ru.otus.danik_ik.homework09.storage.DataSet;
 import ru.otus.danik_ik.homework09.storage.StorageException;
-import ru.otus.danik_ik.homework09.storm.annotations.ID;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.*;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,41 +16,21 @@ import static ru.otus.danik_ik.homework09.storage.DataSet.UNDEFINED_ID;
 public class DataSetSaver<T extends DataSet> {
     private final Connection connection;
     private final T source;
-    private final String tableName;
+    private final ClassExtract extract;
 
     public DataSetSaver(Connection connection, T source) throws StorageException {
         this.connection = connection;
         this.source = source;
-        tableName = getTableName(source.getClass());
-    }
-
-    private String getTableName(Class<? extends DataSet> aClass) throws StorageException {
-        DbTable[] annotations = aClass.getAnnotationsByType(DbTable.class);
-        String tableName;
-        if (annotations.length == 0)
-            throw new StorageException(String.format("Класс %s не имеет аннотации DbTable", aClass.getName()));
-        tableName = annotations[0].name();
-        if (tableName == null)
-            throw new StorageException(String.format("в аннотации DbTable к классу %s не указано имя таблицы",
-                    aClass.getName()));
-        return tableName;
+        extract = ClassExtract.get(source.getClass());
     }
 
     public void save() throws SQLException {
-        collectGetters();
-        buildMappers();
-
         if (isInsertion())
             doInsert();
         else
             doUpdate();
     }
 
-    private Collection<Method> nonKeyGetters = new LinkedList<>();
-    private Collection<Method> keyGetters = new LinkedList<>();
-
-    private Map<String, SqlExecutor.PreparedStatementObjSetter> nonKeyMappers = new HashMap<>();
-    private Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = new HashMap<>();
 
     private Consumer<PreparedStatement> setParamsFor;
 
@@ -89,6 +65,8 @@ public class DataSetSaver<T extends DataSet> {
     private String prepareInsertQuery() {
         final String template = "INSERT INTO %s (%s) VALUES(%s)";
 
+        Map<String, SqlExecutor.PreparedStatementObjSetter> nonKeyMappers = extract.getNonKeyMappers();
+
         String fieldNames = String.join(",", nonKeyMappers.keySet());
         String placeholders = String.join(",", getNPlaceholders(nonKeyMappers.size()));
 
@@ -100,7 +78,7 @@ public class DataSetSaver<T extends DataSet> {
             }
         };
 
-        return String.format(template, tableName, fieldNames, placeholders);
+        return String.format(template, extract.getTableName(), fieldNames, placeholders);
     }
 
     private List<String> getNPlaceholders(int size) {
@@ -109,6 +87,10 @@ public class DataSetSaver<T extends DataSet> {
 
     private String prepareUpdateQuery() {
         final String template = "UPDATE %s SET %S WHERE %s";
+
+        Map<String, SqlExecutor.PreparedStatementObjSetter> nonKeyMappers = extract.getNonKeyMappers();
+        Map<String, SqlExecutor.PreparedStatementObjSetter> keyMappers = extract.getKeyMappers();
+
         String fieldsAssignments = String.join(",",
                 nonKeyMappers.keySet().stream()
                         .map(name -> name + "=?")
@@ -129,53 +111,7 @@ public class DataSetSaver<T extends DataSet> {
             }
         };
 
-        return String.format(template, tableName, fieldsAssignments, keyCondition);
+        return String.format(template, extract.getTableName(), fieldsAssignments, keyCondition);
     }
 
-    private void collectGetters() {
-        for (Method m : source.getClass().getMethods()) {
-            if (!isApplicableGetter(m)) continue;
-
-            if (isIdMethod(m))
-                keyGetters.add(m);
-            else
-                nonKeyGetters.add(m);
-        }
-    }
-
-    private boolean isIdMethod(Method m) {
-        return m.getAnnotationsByType(ID.class).length > 0;
-    }
-
-    private void buildMappers() {
-        buildMapper(nonKeyGetters, nonKeyMappers);
-        buildMapper(keyGetters, keyMappers);
-    }
-
-    private void buildMapper(Collection<Method> source, Map<String, SqlExecutor.PreparedStatementObjSetter> target) {
-        for (Method m : source) {
-            DbField anno = m.getAnnotationsByType(DbField.class)[0];
-
-            String name = anno.name();
-            if (name == null) name = m.getName().substring(3);
-
-            SqlExecutor.PreparedStatementObjSetter action = (stmt, obj, index) -> {
-                try {
-                    Object value = m.invoke(obj);
-                    anno.type().getPreparedStatementValSetter().set(stmt, value, index);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
-            };
-            target.put(name, action);
-        }
-    }
-
-    private boolean isApplicableGetter(Method m) {
-        if (m.getParameterCount() > 0) return false;
-        if (!m.getName().startsWith("get")) return false;
-        if (m.getDeclaringClass().equals(Object.class)) return false;
-        if (m.getAnnotationsByType(DbField.class).length == 0) return false;
-        return true;
-    }
 }
