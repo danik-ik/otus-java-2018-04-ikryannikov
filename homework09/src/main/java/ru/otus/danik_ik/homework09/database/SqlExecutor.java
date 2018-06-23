@@ -8,6 +8,7 @@ import ru.otus.danik_ik.homework09.storm.DataSetSaver;
 
 import java.lang.reflect.Method;
 import java.sql.*;
+import java.util.function.Consumer;
 
 public class SqlExecutor implements Executor {
     private final Connection connection;
@@ -30,12 +31,17 @@ public class SqlExecutor implements Executor {
     }
 
     public int execUpdate(String update) throws SQLException {
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute(update);
+        return execUpdate(update, null);
+    }
+
+    public int execUpdate(String update, Consumer<PreparedStatement> paramsSetter) throws SQLException {
+        try (PreparedStatement stmt = connection.prepareStatement(update)) {
+            if (paramsSetter != null)
+                paramsSetter.accept(stmt);
+            stmt.execute();
             return stmt.getUpdateCount();
         }
     }
-
     Connection getConnection() {
         return connection;
     }
