@@ -3,7 +3,7 @@ package ru.otus.danik_ik.homework09etc;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import ru.otus.danik_ik.homework09etc.database.SqlExecutor;
+import ru.otus.danik_ik.homework09etc.stormStorage.SqlExecutor;
 import ru.otus.danik_ik.homework09etc.storage.DataSet;
 
 import java.sql.PreparedStatement;

@@ -1,6 +1,6 @@
 package ru.otus.danik_ik.homework09etc;
 
-import ru.otus.danik_ik.homework09etc.database.SqlExecutor;
+import ru.otus.danik_ik.homework09etc.stormStorage.SqlExecutor;
 
 import java.sql.SQLException;
 import java.time.LocalDate;

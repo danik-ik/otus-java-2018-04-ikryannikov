@@ -1,4 +1,4 @@
-package ru.otus.danik_ik.homework09etc.database;
+package ru.otus.danik_ik.homework09etc.stormStorage;
 
 import ru.otus.danik_ik.homework09etc.storage.StorageException;
 

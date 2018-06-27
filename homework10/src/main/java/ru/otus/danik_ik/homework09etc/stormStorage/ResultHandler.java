@@ -1,4 +1,4 @@
-package ru.otus.danik_ik.homework09etc.database;
+package ru.otus.danik_ik.homework09etc.stormStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
