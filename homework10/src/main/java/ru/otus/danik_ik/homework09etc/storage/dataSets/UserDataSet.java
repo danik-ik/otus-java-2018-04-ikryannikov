@@ -1,4 +1,6 @@
 package ru.otus.danik_ik.homework09etc.storage.dataSets;
 
-public class UserDataSet {
+import ru.otus.danik_ik.homework09etc.storage.DataSet;
+
+public class UserDataSet extends DataSet {
 }
