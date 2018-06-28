@@ -1,20 +1,26 @@
 package ru.otus.danik_ik.homework09etc.hibernateStorage;
 
+import org.h2.tools.Server;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import ru.otus.danik_ik.homework09etc.UserDataSet;
+import ru.otus.danik_ik.homework09etc.storage.dataSets.UserDataSet;
+import ru.otus.danik_ik.homework09etc.hibernateStorage.dao.UserDAO;
 import ru.otus.danik_ik.homework09etc.storage.DBService;
 import ru.otus.danik_ik.homework09etc.storage.dataSets.AddressDataSet;
 import ru.otus.danik_ik.homework09etc.storage.dataSets.PhoneDataSet;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class DbServiceImpl implements DBService {
     private final SessionFactory sessionFactory;
 
     public DbServiceImpl() {
+        
         Configuration configuration = new Configuration();
 
         configuration.addAnnotatedClass(UserDataSet.class);
@@ -47,12 +53,18 @@ public class DbServiceImpl implements DBService {
 
     @Override
     public void save(UserDataSet dataSet) {
-        
+        try (Session session = sessionFactory.openSession()) {
+            UserDAO dao = new UserDAO(session);
+            dao.save(dataSet);
+        }
     }
 
     @Override
     public UserDataSet read(long id) {
-        return null;
+        return runInSession(session -> {
+            UserDAO dao = new UserDAO(session);
+            return dao.read(id);
+        });
     }
 
     @Override
@@ -68,5 +80,14 @@ public class DbServiceImpl implements DBService {
     @Override
     public void close() throws Exception {
         sessionFactory.close();
+    }
+
+    private <R> R runInSession(Function<Session, R> function) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            R result = function.apply(session);
+            transaction.commit();
+            return result;
+        }
     }
 }
