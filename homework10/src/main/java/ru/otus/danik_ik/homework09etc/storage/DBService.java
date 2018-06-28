@@ -1,6 +1,6 @@
 package ru.otus.danik_ik.homework09etc.storage;
 
-import ru.otus.danik_ik.homework09etc.UserDataSet;
+import ru.otus.danik_ik.homework09etc.storage.dataSets.UserDataSet;
 
 import java.util.List;
 
