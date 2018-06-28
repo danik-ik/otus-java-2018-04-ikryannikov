@@ -1,5 +1,7 @@
 package ru.otus.danik_ik.homework09etc;
 
+import org.h2.tools.Server;
+import ru.otus.danik_ik.homework09etc.storage.dataSets.UserDataSet;
 import ru.otus.danik_ik.homework09etc.stormStorage.SqlExecutor;
 
 import java.sql.SQLException;
@@ -8,6 +10,8 @@ import java.time.LocalDate;
 public class Main
 {
     public static void main( String[] args ) throws Exception {
+        // http://localhost:8082
+        // Server.createWebServer("-web","-webAllowOthers","-webPort","8082").start();
         try (SqlExecutor executor = new SqlExecutor()) {
             ResourceHelper rh = new ResourceHelper(Main.class);
 
