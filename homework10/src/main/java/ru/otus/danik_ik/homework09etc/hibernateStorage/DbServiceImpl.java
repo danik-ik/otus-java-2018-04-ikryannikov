@@ -14,6 +14,7 @@ import ru.otus.danik_ik.homework09etc.storage.dataSets.AddressDataSet;
 import ru.otus.danik_ik.homework09etc.storage.dataSets.PhoneDataSet;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class DbServiceImpl implements DBService {
@@ -62,7 +63,6 @@ public class DbServiceImpl implements DBService {
         runInSession(session -> {
             UserDAO dao = new UserDAO(session);
             dao.save(dataSet);
-            return null;
         });
     }
 
@@ -97,4 +97,13 @@ public class DbServiceImpl implements DBService {
             return result;
         }
     }
+
+    private void runInSession(Consumer<Session> executor) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            executor.accept(session);
+            transaction.commit();
+        }
+    }
+
 }
