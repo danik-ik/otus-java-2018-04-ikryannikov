@@ -59,10 +59,11 @@ public class DbServiceImpl implements DBService {
 
     @Override
     public void save(UserDataSet dataSet) {
-        try (Session session = sessionFactory.openSession()) {
+        runInSession(session -> {
             UserDAO dao = new UserDAO(session);
             dao.save(dataSet);
-        }
+            return null;
+        });
     }
 
     @Override
