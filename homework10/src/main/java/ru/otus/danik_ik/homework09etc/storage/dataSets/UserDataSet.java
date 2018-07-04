@@ -52,6 +52,7 @@ public class UserDataSet extends DataSet {
         return super.getID();
     }
 
+    @Id
     @Override
     public void setID(long ID) {
         super.setID(ID);

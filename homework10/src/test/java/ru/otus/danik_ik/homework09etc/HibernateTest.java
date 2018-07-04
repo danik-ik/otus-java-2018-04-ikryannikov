@@ -3,6 +3,7 @@ package ru.otus.danik_ik.homework09etc;
 import org.junit.Test;
 import ru.otus.danik_ik.homework09etc.hibernateStorage.DbServiceImpl;
 import ru.otus.danik_ik.homework09etc.storage.DBService;
+import ru.otus.danik_ik.homework09etc.storage.dataSets.UserDataSet;
 import ru.otus.danik_ik.homework09etc.stormStorage.SqlExecutor;
 
 import java.time.LocalDate;
