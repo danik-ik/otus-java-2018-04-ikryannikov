@@ -6,6 +6,8 @@ import ru.otus.danik_ik.homework09etc.storm.annotations.DbTable;
 import ru.otus.danik_ik.homework09etc.storage.DataSet;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
 
@@ -47,12 +49,12 @@ public class UserDataSet extends DataSet {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Override
     public long getID() {
         return super.getID();
     }
 
-    @Id
     @Override
     public void setID(long ID) {
         super.setID(ID);
