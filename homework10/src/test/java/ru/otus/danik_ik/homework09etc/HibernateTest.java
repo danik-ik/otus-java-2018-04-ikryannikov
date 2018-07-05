@@ -8,6 +8,7 @@ import ru.otus.danik_ik.homework09etc.stormStorage.SqlExecutor;
 
 import java.time.LocalDate;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class HibernateTest {
@@ -22,6 +23,7 @@ public class HibernateTest {
             user.setRating(.001F);
             dbService.save(user);
 
+            testSaveAndLoad(dbService, user);
             loadAndPrintUser(dbService, 1);
 
             user.setName("Так это же я!");
@@ -29,8 +31,20 @@ public class HibernateTest {
             user.setRating(100.5F);
             dbService.save(user);
 
+            testSaveAndLoad(dbService, user);
             loadAndPrintUser(dbService, 1);
         }
+    }
+
+    private void testSaveAndLoad(DBService dbService, UserDataSet user) {
+        UserDataSet loadedUser;
+        loadedUser = dbService.read(user.getID());
+        assertNotNull(loadedUser);
+
+        assertEquals(user.getID(), loadedUser.getID());
+        assertEquals(user.getName(), loadedUser.getName());
+        assertEquals(user.getBornDate(), loadedUser.getBornDate());
+        assertEquals(user.getRating(), loadedUser.getRating(), .0001);
     }
 
     private void loadAndPrintUser(DBService dbService, long id) {
