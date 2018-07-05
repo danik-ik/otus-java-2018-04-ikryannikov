@@ -1,14 +1,12 @@
 package ru.otus.danik_ik.homework09etc.storage.dataSets;
 
+import ru.otus.danik_ik.homework09etc.hibernateStorage.convertors.LocalDateAttributeConverter;
 import ru.otus.danik_ik.homework09etc.storm.DbFieldType;
 import ru.otus.danik_ik.homework09etc.storm.annotations.DbField;
 import ru.otus.danik_ik.homework09etc.storm.annotations.DbTable;
 import ru.otus.danik_ik.homework09etc.storage.DataSet;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -28,6 +26,7 @@ public class UserDataSet extends DataSet {
         this.name = name;
     }
 
+    @Convert(converter = LocalDateAttributeConverter.class)
     @DbField(name="bornDate", type = DbFieldType.DATE)
     public LocalDate getBornDate() {
         return bornDate;
