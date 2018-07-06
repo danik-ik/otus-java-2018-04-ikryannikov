@@ -43,9 +43,4 @@ public class UserDataSet extends DataSet {
     public long getID() {
         return super.getID();
     }
-
-    @Override
-    public void setID(long ID) {
-        super.setID(ID);
-    }
 }
