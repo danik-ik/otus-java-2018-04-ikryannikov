@@ -45,10 +45,4 @@ public class UserDataSet extends DataSet {
         this.rating = rating;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Override
-    public long getID() {
-        return super.getID();
-    }
 }

@@ -11,13 +11,6 @@ import javax.persistence.Id;
 public class AddressDataSet extends DataSet {
     private String street;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Override
-    public long getID() {
-        return super.getID();
-    }
-
     public String getStreet() {
         return street;
     }

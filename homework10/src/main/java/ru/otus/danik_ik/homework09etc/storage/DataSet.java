@@ -1,8 +1,15 @@
 package ru.otus.danik_ik.homework09etc.storage;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class DataSet {
-    public static final long UNDEFINED_ID = -1L;
-    private long ID = UNDEFINED_ID; // определяется при загрузке или по факту сохранения
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long ID;
 
     public long getID() {
         return ID;

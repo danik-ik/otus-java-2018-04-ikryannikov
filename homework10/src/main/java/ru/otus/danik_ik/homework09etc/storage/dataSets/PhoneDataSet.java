@@ -11,13 +11,6 @@ import javax.persistence.Id;
 public class PhoneDataSet extends DataSet {
     private String number;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Override
-    public long getID() {
-        return super.getID();
-    }
-
     public String getNumber() {
         return number;
     }
