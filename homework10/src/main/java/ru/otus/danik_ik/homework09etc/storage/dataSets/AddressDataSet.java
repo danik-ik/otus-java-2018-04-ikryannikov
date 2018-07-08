@@ -2,13 +2,13 @@ package ru.otus.danik_ik.homework09etc.storage.dataSets;
 
 import ru.otus.danik_ik.homework09etc.storage.DataSet;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class AddressDataSet extends DataSet {
+    @OneToOne
+    private UserDataSet user;
+
     private String street;
 
     public String getStreet() {

@@ -13,11 +13,14 @@ public class UserDataSet extends DataSet {
     private String name;
     private LocalDate bornDate;
     private float rating;
-    
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private AddressDataSet address;
-    
-    @OneToMany
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+//            fetch = FetchType.EAGER,
+            orphanRemoval = true)
     private List<PhoneDataSet> phones;
 
     public String getName() {
