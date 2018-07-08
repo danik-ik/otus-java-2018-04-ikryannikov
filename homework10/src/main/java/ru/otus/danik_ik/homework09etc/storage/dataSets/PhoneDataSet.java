@@ -10,6 +10,14 @@ public class PhoneDataSet extends DataSet {
     private UserDataSet user;
     private String number;
 
+    public UserDataSet getUser() {
+        return user;
+    }
+
+    public void setUser(UserDataSet user) {
+        this.user = user;
+    }
+
     public String getNumber() {
         return number;
     }

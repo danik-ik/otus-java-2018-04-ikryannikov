@@ -48,4 +48,20 @@ public class UserDataSet extends DataSet {
         this.rating = rating;
     }
 
+    public void setAddress(AddressDataSet address) {
+        this.address = address;
+        address.setUser(this);
+    }
+
+    public AddressDataSet getAddress() {
+        return address;
+    }
+
+    public void setStreet(String street) {
+        this.address = new AddressDataSet(this, street);
+    }
+
+    public String getStreet() {
+        return address.getStreet();
+    }
 }

@@ -11,6 +11,22 @@ public class AddressDataSet extends DataSet {
 
     private String street;
 
+    public AddressDataSet() {
+    }
+
+    public AddressDataSet(UserDataSet user, String street) {
+        this.user = user;
+        this.street = street;
+    }
+
+    public UserDataSet getUser() {
+        return user;
+    }
+
+    public void setUser(UserDataSet user) {
+        this.user = user;
+    }
+
     public String getStreet() {
         return street;
     }
