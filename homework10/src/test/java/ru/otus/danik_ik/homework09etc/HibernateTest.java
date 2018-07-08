@@ -3,12 +3,17 @@ package ru.otus.danik_ik.homework09etc;
 import org.junit.Test;
 import ru.otus.danik_ik.homework09etc.hibernateStorage.DbServiceImpl;
 import ru.otus.danik_ik.homework09etc.storage.DBService;
+import ru.otus.danik_ik.homework09etc.storage.dataSets.PhoneDataSet;
 import ru.otus.danik_ik.homework09etc.storage.dataSets.UserDataSet;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class HibernateTest {
     
@@ -53,6 +58,40 @@ public class HibernateTest {
             assertNotNull(loadedUser.getAddress());
             System.out.println(loadedUser.getStreet());
             assertEquals(user.getStreet(), loadedUser.getStreet());
+        }
+    }
+
+    @Test
+    public void phonesTest() throws Exception {
+        try (DBService dbService = new DbServiceImpl()) {
+            UserDataSet user = new UserDataSet();
+
+            user.setName("Этот, как его...");
+            user.setBornDate(LocalDate.of(1900, 01, 01));
+            user.setRating(.001F);
+            user.addPhone(new PhoneDataSet("+7 654 321 09 87"));
+            user.addPhone(new PhoneDataSet("+7 654 321 09 88"));
+            dbService.save(user);
+
+            UserDataSet loadedUser;
+            loadedUser = dbService.read(user.getID());
+            assertNotNull(loadedUser);
+
+            assertNotNull(loadedUser.getPhones());
+            assertEquals(2, loadedUser.getPhones().size());
+
+            System.out.println(loadedUser.getPhones().get(0).getNumber());
+            System.out.println(loadedUser.getPhones().get(1).getNumber());
+
+            List<String> phones = new ArrayList<>(loadedUser.getPhones()
+                    .stream()
+                    .map(a -> a.getNumber())
+                    .sorted()
+                    .collect(Collectors.toList()));
+
+            assertEquals("+7 654 321 09 87", phones.get(0));
+            assertEquals("+7 654 321 09 88", phones.get(1));
+
         }
     }
 

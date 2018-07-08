@@ -1,11 +1,13 @@
 package ru.otus.danik_ik.homework09etc.storage.dataSets;
 
-import org.hibernate.annotations.Cascade;
 import ru.otus.danik_ik.homework09etc.hibernateStorage.convertors.LocalDateAttributeConverter;
 import ru.otus.danik_ik.homework09etc.storage.DataSet;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -21,7 +23,7 @@ public class UserDataSet extends DataSet {
             cascade = CascadeType.ALL,
 //            fetch = FetchType.EAGER,
             orphanRemoval = true)
-    private List<PhoneDataSet> phones;
+    private List<PhoneDataSet> phones = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -63,5 +65,18 @@ public class UserDataSet extends DataSet {
 
     public String getStreet() {
         return address.getStreet();
+    }
+
+    public List<PhoneDataSet> getPhones() {
+        return Collections.unmodifiableList(phones);
+    }
+
+    public void addPhone (PhoneDataSet phone) {
+        phones.add(phone);
+        phone.setUser(this);
+    }
+
+    public void removePhone(PhoneDataSet phone) {
+        phones.remove(phone);
     }
 }
