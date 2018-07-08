@@ -13,7 +13,7 @@ import static org.junit.Assert.assertNotNull;
 public class HibernateTest {
     
     @Test 
-    public void test1() throws Exception {
+    public void baseTest() throws Exception {
         try (DBService dbService = new DbServiceImpl()) {
             UserDataSet user = new UserDataSet();
 
@@ -32,6 +32,27 @@ public class HibernateTest {
 
             testSaveAndLoad(dbService, user);
             loadAndPrintUser(dbService, 1);
+        }
+    }
+
+    @Test
+    public void addressTest() throws Exception {
+        try (DBService dbService = new DbServiceImpl()) {
+            UserDataSet user = new UserDataSet();
+
+            user.setName("Этот, как его...");
+            user.setBornDate(LocalDate.of(1900, 01, 01));
+            user.setRating(.001F);
+            user.setStreet("Гдетотамовский проспект");
+            dbService.save(user);
+
+            UserDataSet loadedUser;
+            loadedUser = dbService.read(user.getID());
+            assertNotNull(loadedUser);
+
+            assertNotNull(loadedUser.getAddress());
+            System.out.println(loadedUser.getStreet());
+            assertEquals(user.getStreet(), loadedUser.getStreet());
         }
     }
 
