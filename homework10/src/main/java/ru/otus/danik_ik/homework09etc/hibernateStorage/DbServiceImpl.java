@@ -44,8 +44,7 @@ public class DbServiceImpl implements DBService {
     private void setMySqlHibernateProperties(Configuration configuration) {
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/danik_ik" +
-                "?serverTimezone=UTC");
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/danik_ik");
         configuration.setProperty("hibernate.connection.username", "tully");
         configuration.setProperty("hibernate.connection.password", "tully");
         setCommonHibernateProperties(configuration);
