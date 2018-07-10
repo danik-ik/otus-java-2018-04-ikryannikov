@@ -17,16 +17,16 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private final long lifeTimeMs;
     private final long idleTimeMs;
     private final boolean isEternal;
-    private final BiFunction<K, V, CacheEnty<K, V>> cacheEntryFactory;
+    private final BiFunction<K, V, CacheEntry<K, V>> cacheEntryFactory;
 
-    private final Map<K, CacheEnty<K, V>> elements = new LinkedHashMap<>();
+    private final Map<K, CacheEntry<K, V>> elements = new LinkedHashMap<>();
     private final Timer timer = new Timer();
 
     private int hit = 0;
     private int miss = 0;
 
     CacheEngineImpl(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal,
-                    BiFunction<K, V, CacheEnty<K, V>> cacheEntryFactory) {
+                    BiFunction<K, V, CacheEntry<K, V>> cacheEntryFactory) {
         this.maxElements = maxElements;
         this.lifeTimeMs = lifeTimeMs > 0 ? lifeTimeMs : 0;
         this.idleTimeMs = idleTimeMs > 0 ? idleTimeMs : 0;
@@ -57,7 +57,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
 
     @Override
     public V get(K key) {
-        CacheEnty<K, V> element = elements.get(key);
+        CacheEntry<K, V> element = elements.get(key);
         if (element != null) {
             hit++;
             element.setAccessed();
@@ -91,11 +91,11 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         timer.cancel();
     }
 
-    private TimerTask getTimerTask(final K key, Function<CacheEnty<K, V>, Long> timeFunction) {
+    private TimerTask getTimerTask(final K key, Function<CacheEntry<K, V>, Long> timeFunction) {
         return new TimerTask() {
             @Override
             public void run() {
-                CacheEnty<K, V> element = elements.get(key);
+                CacheEntry<K, V> element = elements.get(key);
                 if (element == null || isT1BeforeT2(timeFunction.apply(element), System.currentTimeMillis())) {
                     elements.remove(key);
                     this.cancel();

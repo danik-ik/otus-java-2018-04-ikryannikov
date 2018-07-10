@@ -4,7 +4,7 @@ package ru.otus.danik_ik.homework11.cache;
  * Created by tully.
  */
 @SuppressWarnings("WeakerAccess")
-public interface CacheEnty<K, V> {
+public interface CacheEntry<K, V> {
 
     public K getKey();
 

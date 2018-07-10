@@ -1,7 +1,7 @@
 package ru.otus.danik_ik.homework11.cache;
 
 
-public abstract class CacheEntryBase<K, V> implements CacheEnty<K, V> {
+public abstract class CacheEntryBase<K, V> implements CacheEntry<K, V> {
     private final K key;
     private final long creationTime;
     private long lastAccessTime;
