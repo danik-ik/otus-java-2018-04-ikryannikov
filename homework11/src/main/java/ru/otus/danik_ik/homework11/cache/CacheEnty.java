@@ -4,41 +4,18 @@ package ru.otus.danik_ik.homework11.cache;
  * Created by tully.
  */
 @SuppressWarnings("WeakerAccess")
-public class CacheEnty<K, V> {
-    private final K key;
-    private final V value;
-    private final long creationTime;
-    private long lastAccessTime;
-
-
-    public CacheEnty(K key, V value) {
-        this.key = key;
-        this.value = value;
-        this.creationTime = getCurrentTime();
-        this.lastAccessTime = getCurrentTime();
-    }
-
-    protected long getCurrentTime() {
+public interface CacheEnty<K, V> {
+    default long getCurrentTime() {
         return System.currentTimeMillis();
     }
 
-    public K getKey() {
-        return key;
-    }
+    public K getKey();
 
-    public V getValue() {
-        return value;
-    }
+    public V getValue();
 
-    public long getCreationTime() {
-        return creationTime;
-    }
+    public long getCreationTime();
 
-    public long getLastAccessTime() {
-        return lastAccessTime;
-    }
+    public long getLastAccessTime();
 
-    public void setAccessed() {
-        lastAccessTime = getCurrentTime();
-    }
+    public void setAccessed();
 }
