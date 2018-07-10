@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -16,6 +17,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private final long lifeTimeMs;
     private final long idleTimeMs;
     private final boolean isEternal;
+    private final BiFunction<K, V, CacheEnty<K, V>> cacheEntryFactory;
 
     private final Map<K, CacheEnty<K, V>> elements = new LinkedHashMap<>();
     private final Timer timer = new Timer();
@@ -23,21 +25,23 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private int hit = 0;
     private int miss = 0;
 
-    CacheEngineImpl(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal) {
+    CacheEngineImpl(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal,
+                    BiFunction<K, V, CacheEnty<K, V>> cacheEntryFactory) {
         this.maxElements = maxElements;
         this.lifeTimeMs = lifeTimeMs > 0 ? lifeTimeMs : 0;
         this.idleTimeMs = idleTimeMs > 0 ? idleTimeMs : 0;
         this.isEternal = lifeTimeMs == 0 && idleTimeMs == 0 || isEternal;
+        this.cacheEntryFactory = cacheEntryFactory;
     }
 
-    public void put(CacheEnty<K, V> element) {
+    @Override
+    public void put(K key, V value) {
         if (elements.size() == maxElements) {
             K firstKey = elements.keySet().iterator().next();
             elements.remove(firstKey);
         }
 
-        K key = element.getKey();
-        elements.put(key, element);
+        elements.put(key, cacheEntryFactory.apply(key, value));
 
         if (!isEternal) {
             if (lifeTimeMs != 0) {
@@ -51,15 +55,27 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         }
     }
 
-    public CacheEnty<K, V> get(K key) {
+    @Override
+    public V get(K key) {
         CacheEnty<K, V> element = elements.get(key);
         if (element != null) {
             hit++;
             element.setAccessed();
+            return element.getValue();
         } else {
             miss++;
+            return null;
         }
-        return element;
+    }
+
+    @Override
+    public V getOrCalculate(K key, Function<K, V> externalGetter) {
+        V result = get(key);
+        if (result == null) {
+            result = externalGetter.apply(key);
+            if (result != null) put(key, result);
+        }
+        return result;
     }
 
     public int getHitCount() {
