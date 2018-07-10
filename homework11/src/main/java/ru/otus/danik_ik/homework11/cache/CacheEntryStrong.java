@@ -1,17 +1,19 @@
 package ru.otus.danik_ik.homework11.cache;
 
-import java.lang.ref.SoftReference;
-
-public class CacheSoftEntry< K, V> {
+/**
+ * Created by tully.
+ */
+@SuppressWarnings("WeakerAccess")
+public class CacheEntryStrong<K, V>  implements CacheEnty {
     private final K key;
-    private final SoftReference<V> value;
+    private final V value;
     private final long creationTime;
     private long lastAccessTime;
 
 
-    public CacheSoftEntry(K key, V value) {
+    public CacheEntryStrong(K key, V value) {
         this.key = key;
-        this.value = new SoftReference<>(value);
+        this.value = value;
         this.creationTime = getCurrentTime();
         this.lastAccessTime = getCurrentTime();
     }
@@ -25,7 +27,7 @@ public class CacheSoftEntry< K, V> {
     }
 
     public V getValue() {
-        return value.get();
+        return value;
     }
 
     public long getCreationTime() {
