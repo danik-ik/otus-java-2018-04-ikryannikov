@@ -2,41 +2,16 @@ package ru.otus.danik_ik.homework11.cache;
 
 import java.lang.ref.SoftReference;
 
-public class CacheEntrySoft< K, V> implements CacheEnty{
-    private final K key;
+public class CacheEntrySoft<K, V> extends CacheEntryBase<K, V>{
     private final SoftReference<V> value;
-    private final long creationTime;
-    private long lastAccessTime;
-
 
     public CacheEntrySoft(K key, V value) {
-        this.key = key;
+        super(key);
         this.value = new SoftReference<>(value);
-        this.creationTime = getCurrentTime();
-        this.lastAccessTime = getCurrentTime();
     }
 
-    protected long getCurrentTime() {
-        return System.currentTimeMillis();
-    }
-
-    public K getKey() {
-        return key;
-    }
-
+    @Override
     public V getValue() {
         return value.get();
-    }
-
-    public long getCreationTime() {
-        return creationTime;
-    }
-
-    public long getLastAccessTime() {
-        return lastAccessTime;
-    }
-
-    public void setAccessed() {
-        lastAccessTime = getCurrentTime();
     }
 }
