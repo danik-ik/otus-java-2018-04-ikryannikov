@@ -5,9 +5,6 @@ package ru.otus.danik_ik.homework11.cache;
  */
 @SuppressWarnings("WeakerAccess")
 public interface CacheEnty<K, V> {
-    default long getCurrentTime() {
-        return System.currentTimeMillis();
-    }
 
     public K getKey();
 

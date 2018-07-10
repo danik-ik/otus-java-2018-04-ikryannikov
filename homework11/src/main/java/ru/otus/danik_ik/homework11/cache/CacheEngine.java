@@ -7,11 +7,11 @@ import java.util.function.Function;
  */
 public interface CacheEngine<K, V> {
 
-    void put(CacheEnty<K, V> element);
+    void put(K key, V value);
 
-    CacheEnty<K, V> get(K key);
+    V get(K key);
 
-    CacheEnty<K, V> getOrCalculate(K key, Function<K,V> externalGetter);
+    V getOrCalculate(K key, Function<K,V> externalGetter);
 
     int getHitCount();
 
