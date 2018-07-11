@@ -5,10 +5,7 @@ import ru.otus.danik_ik.homework11.storage.DataSet;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Entity
 public class UserDataSet extends DataSet {
@@ -78,5 +75,22 @@ public class UserDataSet extends DataSet {
 
     public void removePhone(PhoneDataSet phone) {
         phones.remove(phone);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDataSet dataSet = (UserDataSet) o;
+        return Float.compare(dataSet.getRating(), getRating()) == 0 &&
+                Objects.equals(getName(), dataSet.getName()) &&
+                Objects.equals(getBornDate(), dataSet.getBornDate()) &&
+                Objects.equals(getAddress(), dataSet.getAddress());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getName(), getBornDate(), getRating(), getAddress());
     }
 }
