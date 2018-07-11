@@ -1,5 +1,6 @@
 package ru.otus.danik_ik.homework11.cache;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class CacheTest {
@@ -51,6 +52,31 @@ public class CacheTest {
 
         System.out.println("Cache hits: " + cache.getHitCount());
         System.out.println("Cache misses: " + cache.getMissCount());
+
+        cache.dispose();
+    }
+
+    @Test
+    public void softCacheExample() throws InterruptedException {
+        final int blockSize = 10_000_000;
+        int size = (int) (Runtime.getRuntime().maxMemory() / blockSize * 2); 
+        // заполненный полностью кэш должен занять больше реального размера памяти 
+        
+        CacheEngine<Integer, byte[]> cache = new CacheEngineImpl<>(size, 0, 0, true,
+                CacheHelper.SoftEntryFactory());
+
+        System.out.println("Writing to cache more than real memory size");
+        for (int i = 0; i < size; i++) {
+            cache.put(i, new byte[blockSize]);
+        }
+
+        for (int i = 0; i < size; i++) {
+            byte[] it = cache.get(i);
+            System.out.println("at index " + i + ": " + (it != null ? "hit" : "miss"));
+        }
+
+        Assert.assertTrue(cache.getHitCount() > 0);
+        Assert.assertTrue(cache.getMissCount() > 0);
 
         cache.dispose();
     }
