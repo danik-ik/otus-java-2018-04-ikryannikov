@@ -60,12 +60,14 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     public V get(K key) {
         CacheEntry<K, V> element = elements.get(key);
         if (element != null) {
-            hit++;
             V result = element.getValue();
-            if (result == null) 
+            if (result == null) {
                 elements.remove(element);
-            else
+                miss++;
+            } else {
                 element.setAccessed();
+                hit++;
+            }
             return result; 
         } else {
             miss++;
