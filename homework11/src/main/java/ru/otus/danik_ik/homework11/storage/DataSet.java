@@ -12,7 +12,7 @@ public abstract class DataSet {
     private Long ID;
 
     public long getID() {
-        return ID;
+        return ID == null ? 0 : ID;
     }
 
     public void setID(long ID) {

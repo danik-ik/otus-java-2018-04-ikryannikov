@@ -18,6 +18,9 @@ public class DbServiceCached implements DBService {
 
     @Override
     public void save(UserDataSet dataSet) {
+        long id = dataSet.getID();
+        if (id > 0)
+            cache.put(dataSet.getID(), dataSet);
         decoratedService.save(dataSet);
     }
 
