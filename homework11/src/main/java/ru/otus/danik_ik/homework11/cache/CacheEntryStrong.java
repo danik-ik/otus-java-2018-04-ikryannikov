@@ -1,7 +1,7 @@
 package ru.otus.danik_ik.homework11.cache;
 
 /**
- * Created by tully.
+ * Created by danik_ik.
  */
 @SuppressWarnings("WeakerAccess")
 public class CacheEntryStrong<K, V> extends CacheEntryBase<K, V> {

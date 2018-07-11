@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Created by tully.
+ * Created by danik_ik.
  */
 public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private static final int TIME_THRESHOLD_MS = 5;
@@ -36,6 +36,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
 
     @Override
     public void put(K key, V value) {
+        if (value == null) return;
         if (elements.size() == maxElements) {
             K firstKey = elements.keySet().iterator().next();
             elements.remove(firstKey);
@@ -60,8 +61,12 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
         CacheEntry<K, V> element = elements.get(key);
         if (element != null) {
             hit++;
-            element.setAccessed();
-            return element.getValue();
+            V result = element.getValue();
+            if (result == null) 
+                elements.remove(element);
+            else
+                element.setAccessed();
+            return result; 
         } else {
             miss++;
             return null;
