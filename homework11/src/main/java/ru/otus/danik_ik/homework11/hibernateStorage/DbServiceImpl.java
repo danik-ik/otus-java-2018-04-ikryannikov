@@ -86,12 +86,12 @@ public class DbServiceImpl implements DBService {
 
     @Override
     public UserDataSet readByName(String name) {
-        return null;
+        throw new UnsupportedOperationException("...hibernateStorage.DbDerviceImpl.readByName(String name)");
     }
 
     @Override
     public List<UserDataSet> readAll() {
-        return null;
+        throw new UnsupportedOperationException("...hibernateStorage.DbDerviceImpl.readAll()");
     }
 
     @Override
