@@ -57,7 +57,7 @@ public class CacheTest {
     }
 
     @Test
-    public void softCacheExample() throws InterruptedException {
+    public void softCacheMemoryOversize() throws InterruptedException {
         final int blockSize = 10_000_000;
         int size = (int) (Runtime.getRuntime().maxMemory() / blockSize * 2); 
         // заполненный полностью кэш должен занять больше реального размера памяти 
