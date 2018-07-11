@@ -1,6 +1,9 @@
 package ru.otus.danik_ik.homework11;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import ru.otus.danik_ik.homework11.cachedstorage.DbServiceCached;
 import ru.otus.danik_ik.homework11.hibernateStorage.DbServiceImpl;
 import ru.otus.danik_ik.homework11.storage.DBService;
 import ru.otus.danik_ik.homework11.storage.dataSets.PhoneDataSet;
@@ -8,17 +11,35 @@ import ru.otus.danik_ik.homework11.storage.dataSets.UserDataSet;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(Parameterized.class)
 public class HibernateTest {
-    
-    @Test 
+    private final String caption;
+    private final Supplier<DBService> dbServiceSupplier;
+
+    public HibernateTest(String caption, Supplier<DBService> dbServiceSupplier) {
+        this.caption = caption;
+        this.dbServiceSupplier = dbServiceSupplier;
+    }
+
+    @Parameterized.Parameters(name = "{index}: {0}")
+    public static Iterable<Object[]> dataForTest() {
+        return Arrays.asList(new Object[][]{
+                {"Без кэша", (Supplier<DBService>)() -> new DbServiceImpl()},
+                {"С кэшем", (Supplier<DBService>)() -> new DbServiceCached(new DbServiceImpl(), 100)},
+        });
+    }
+
+    @Test
     public void baseTest() throws Exception {
-        try (DBService dbService = new DbServiceImpl()) {
+        try (DBService dbService = dbServiceSupplier.get()) {
             UserDataSet user = new UserDataSet();
 
             user.setName("Этот, как его...");
@@ -28,9 +49,9 @@ public class HibernateTest {
 
             // ВАЖНО: возможны проблемы с сохраннением дат без времени (необратимое изменение
             // со сдвигом на сутки) из-за настройки тайм-зоны сервара.
-            // У меня работает, если таймзона сервера совпадает с клиентом или если таймзона 
+            // У меня работает, если таймзона сервера совпадает с клиентом или если таймзона
             // сервера явно (и при этом правильно) указана в строке подключения
-            
+
             testSaveAndLoad(dbService, user);
             loadAndPrintUser(dbService, 1);
 
@@ -46,7 +67,7 @@ public class HibernateTest {
 
     @Test
     public void addressTest() throws Exception {
-        try (DBService dbService = new DbServiceImpl()) {
+        try (DBService dbService = dbServiceSupplier.get()) {
             UserDataSet user = new UserDataSet();
 
             user.setName("Этот, как его...");
@@ -67,7 +88,7 @@ public class HibernateTest {
 
     @Test
     public void phonesTest() throws Exception {
-        try (DBService dbService = new DbServiceImpl()) {
+        try (DBService dbService = dbServiceSupplier.get()) {
             UserDataSet user = new UserDataSet();
 
             user.setName("Этот, как его...");
