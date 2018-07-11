@@ -10,5 +10,10 @@ public class CacheHelper {
     public static <K, V> BiFunction<K, V, CacheEntry<K, V>> StrongEntryFactory() {
         return (k, v) -> new CacheEntrySoft<>(k, v);
     }
+
+    public static <K, V> CacheEngine<K, V> getSoftCache(int size) {
+        return new CacheEngineImpl<>(size, 0, 0, true,
+                CacheHelper.SoftEntryFactory());
+    }
 }
 

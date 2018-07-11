@@ -62,8 +62,7 @@ public class CacheTest {
         int size = (int) (Runtime.getRuntime().maxMemory() / blockSize * 2); 
         // заполненный полностью кэш должен занять больше реального размера памяти 
         
-        CacheEngine<Integer, byte[]> cache = new CacheEngineImpl<>(size, 0, 0, true,
-                CacheHelper.SoftEntryFactory());
+        CacheEngine<Integer, byte[]> cache = CacheHelper.getSoftCache(size);
 
         System.out.println("Writing to cache more than real memory size");
         for (int i = 0; i < size; i++) {
