@@ -18,15 +18,13 @@ public class DbServiceCached implements DBService {
 
     @Override
     public void save(UserDataSet dataSet) {
-        long id = dataSet.getID();
-        if (id > 0)
-            cache.put(dataSet.getID(), dataSet);
-        decoratedService.save(dataSet);
+        decoratedService.save(dataSet); // Если ID не был заполнен, то теперь заполнился.
+        cache.put(dataSet.getID(), dataSet);
     }
 
     @Override
     public UserDataSet read(long id) {
-        return cache.getOrCalculate(id, id_ -> decoratedService.read(id_));
+        return cache.getOrCalculate(id, decoratedService::read);
     }
 
     @Override
