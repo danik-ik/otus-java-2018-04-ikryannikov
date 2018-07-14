@@ -39,6 +39,7 @@ public class AdminServlet extends HttpServlet {
         //let's get login from session
         String login = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER_NAME);
         pageVariables.put("login", login != null ? login : DEFAULT_USER_NAME);
+        pageVariables.put("loginOk", login != null ? true : false);
 
         return pageVariables;
     }
@@ -48,9 +49,14 @@ public class AdminServlet extends HttpServlet {
 
         Map<String, Object> pageVariables = createPageVariablesMap(request);
 
-        response.setContentType("text/html;charset=utf-8");
-        String page = templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageVariables);
-        response.getWriter().println(page);
-        response.setStatus(HttpServletResponse.SC_OK);
+        if (Boolean.TRUE.equals(pageVariables.get("loginOk"))) {
+            response.setContentType("text/html;charset=utf-8");
+            String page = templateProcessor.getPage(ADMIN_PAGE_TEMPLATE, pageVariables);
+            response.getWriter().println(page);
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.sendRedirect("/login");
+        }
     }
 }
