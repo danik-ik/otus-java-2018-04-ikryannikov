@@ -6,6 +6,9 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import ru.otus.danik_ik.homework11.cache.CacheEngine;
 import ru.otus.danik_ik.homework11.cache.CacheHelper;
+import ru.otus.danik_ik.homework11.cachedstorage.DbServiceCached;
+import ru.otus.danik_ik.homework11.hibernateStorage.DbServiceImpl;
+import ru.otus.danik_ik.homework11.storage.DBService;
 import ru.otus.danik_ik.homework11.storage.dataSets.UserDataSet;
 import ru.otus.danik_ik.homework12.servlet.AdminServlet;
 import ru.otus.danik_ik.homework12.servlet.LoginServlet;
@@ -21,8 +24,8 @@ public class Main
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        CacheEngine<Integer, UserDataSet> cacheEngine = CacheHelper.getSoftCache(1000);
-
+        CacheEngine<Long, UserDataSet> cacheEngine = CacheHelper.getSoftCache(1000);
+        DBService dbService = new DbServiceCached(new DbServiceImpl(), cacheEngine);
 
         context.addServlet(LoginServlet.class, "/login");
         context.addServlet(AdminServlet.class, "/admin");
