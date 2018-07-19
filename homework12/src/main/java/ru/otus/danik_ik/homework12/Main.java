@@ -28,17 +28,19 @@ public class Main
 
         CacheEngine<Long, UserDataSet> cacheEngine = new CacheEngineImpl<>(10, 1000, 0, 
                 false, CacheHelper.SoftEntryFactory());
-        DBService dbService = new DbServiceCached(new DbServiceImpl(), cacheEngine);
+        try (DBService dbService = new DbServiceCached(new DbServiceImpl(), cacheEngine)) {
 
-        // TODO: 19.07.2018 запустить в отдельном потоке эмулятор нагрузки для кэша 
+            // TODO: 19.07.2018 запустить в отдельном потоке эмулятор нагрузки для кэша
 
-        context.addServlet(LoginServlet.class, "/login");
-        context.addServlet(new ServletHolder(new AdminServlet(cacheEngine)), "/admin");
+            context.addServlet(LoginServlet.class, "/login");
+            context.addServlet(new ServletHolder(new AdminServlet(cacheEngine)), "/admin");
 
-        Server server = new Server(PORT);
-        server.setHandler(new HandlerList(resourceHandler, context));
+            Server server = new Server(PORT);
+            server.setHandler(new HandlerList(resourceHandler, context));
 
-        server.start();
-        server.join();
+            server.start();
+            server.join();
+            
+        }
     }
 }
