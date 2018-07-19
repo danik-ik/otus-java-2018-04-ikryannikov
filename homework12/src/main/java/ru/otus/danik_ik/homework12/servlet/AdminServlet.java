@@ -1,5 +1,7 @@
 package ru.otus.danik_ik.homework12.servlet;
 
+import ru.otus.danik_ik.homework11.cache.CacheEngine;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,13 +32,15 @@ public class AdminServlet extends HttpServlet {
         this(cacheEngine, new TemplateProcessor());
     }
 
-    private static Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
+    private Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put("method", request.getMethod());
         pageVariables.put("URL", request.getRequestURL().toString());
         pageVariables.put("locale", request.getLocale());
         pageVariables.put("sessionId", request.getSession().getId());
         pageVariables.put("parameters", request.getParameterMap().toString());
+        pageVariables.put("CacheHitCount", cacheEngine.getHitCount());
+        pageVariables.put("CacheMissCount", cacheEngine.getMissCount());
 
         //let's get login from session
         String login = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER_NAME);
