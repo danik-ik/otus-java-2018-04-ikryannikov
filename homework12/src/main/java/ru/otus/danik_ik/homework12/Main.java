@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import ru.otus.danik_ik.homework11.cache.CacheEngine;
+import ru.otus.danik_ik.homework11.cache.CacheEngineImpl;
 import ru.otus.danik_ik.homework11.cache.CacheHelper;
 import ru.otus.danik_ik.homework11.cachedstorage.DbServiceCached;
 import ru.otus.danik_ik.homework11.hibernateStorage.DbServiceImpl;
@@ -25,8 +26,11 @@ public class Main
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        CacheEngine<Long, UserDataSet> cacheEngine = CacheHelper.getSoftCache(1000);
+        CacheEngine<Long, UserDataSet> cacheEngine = new CacheEngineImpl<>(10, 1000, 0, 
+                false, CacheHelper.SoftEntryFactory());
         DBService dbService = new DbServiceCached(new DbServiceImpl(), cacheEngine);
+
+        // TODO: 19.07.2018 запустить в отдельном потоке эмулятор нагрузки для кэша 
 
         context.addServlet(LoginServlet.class, "/login");
         context.addServlet(new ServletHolder(new AdminServlet(cacheEngine)), "/admin");

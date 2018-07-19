@@ -25,7 +25,7 @@ public class CacheEngineImpl<K, V> implements CacheEngine<K, V> {
     private int hit = 0;
     private int miss = 0;
 
-    CacheEngineImpl(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal,
+    public CacheEngineImpl(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal,
                     BiFunction<K, V, CacheEntry<K, V>> cacheEntryFactory) {
         this.maxElements = maxElements;
         this.lifeTimeMs = lifeTimeMs > 0 ? lifeTimeMs : 0;
