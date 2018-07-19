@@ -17,15 +17,17 @@ public class AdminServlet extends HttpServlet {
     private static final String ADMIN_PAGE_TEMPLATE = "admin.html";
 
     private final TemplateProcessor templateProcessor;
+    private final CacheEngine cacheEngine;
 
     @SuppressWarnings("WeakerAccess")
-    public AdminServlet(TemplateProcessor templateProcessor) {
-        this.templateProcessor = templateProcessor;
+    public AdminServlet(CacheEngine cacheEngine, TemplateProcessor templateProcessor) throws IOException {
+        this.cacheEngine = cacheEngine;
+        this.templateProcessor = new TemplateProcessor();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public AdminServlet() throws IOException {
-        this(new TemplateProcessor());
+    public AdminServlet(CacheEngine cacheEngine) throws IOException {
+        this(cacheEngine, new TemplateProcessor());
     }
 
     private static Map<String, Object> createPageVariablesMap(HttpServletRequest request) {

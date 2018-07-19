@@ -4,6 +4,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import ru.otus.danik_ik.homework11.cache.CacheEngine;
 import ru.otus.danik_ik.homework11.cache.CacheHelper;
 import ru.otus.danik_ik.homework11.cachedstorage.DbServiceCached;
@@ -28,7 +29,7 @@ public class Main
         DBService dbService = new DbServiceCached(new DbServiceImpl(), cacheEngine);
 
         context.addServlet(LoginServlet.class, "/login");
-        context.addServlet(AdminServlet.class, "/admin");
+        context.addServlet(new ServletHolder(new AdminServlet(cacheEngine)), "/admin");
 
         Server server = new Server(PORT);
         server.setHandler(new HandlerList(resourceHandler, context));
