@@ -28,9 +28,10 @@ public class Main
 
         CacheEngine<Long, UserDataSet> cacheEngine = new CacheEngineImpl<>(10, 1000, 0, 
                 false, CacheHelper.SoftEntryFactory());
-        try (DBService dbService = new DbServiceCached(new DbServiceImpl(), cacheEngine)) {
+        try (DBService dbServiceImpl = new DbServiceImpl();
+            DBService dbService = new DbServiceCached(dbServiceImpl, cacheEngine)) {
 
-            // TODO: 19.07.2018 запустить в отдельном потоке эмулятор нагрузки для кэша
+            new LoadingEmulator(dbService).runAsThread();
 
             context.addServlet(LoginServlet.class, "/login");
             context.addServlet(new ServletHolder(new AdminServlet(cacheEngine)), "/admin");
