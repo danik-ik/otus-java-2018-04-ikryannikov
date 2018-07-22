@@ -1,6 +1,7 @@
 package ru.otus.danik_ik.homework12;
 
 import ru.otus.danik_ik.homework11.storage.DBService;
+import ru.otus.danik_ik.homework11.storage.dataSets.UserDataSet;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,7 +16,7 @@ public class LoadingEmulator {
     }
 
     public void runAsThread() {
-        new Thread(() -> this.run()).run();
+        new Thread(this::run).start();
     }
 
     private void run() {
@@ -39,6 +40,10 @@ public class LoadingEmulator {
     }
 
     private void createData() {
-        // TODO: 19.07.2018
+        for (int i = 0; i <= MAX_INDEX; i++) {
+            UserDataSet user = new UserDataSet();
+            user.setName("User " + i);
+            dbService.save(user);
+        }
     }
 }
