@@ -16,6 +16,11 @@ public class DbServiceCached implements DBService {
         this.cache = CacheHelper.getSoftCache(cacheSize);
     }
 
+    public DbServiceCached(DBService decoratedService, CacheEngine<Long, UserDataSet> cache) {
+        this.decoratedService = decoratedService;
+        this.cache = cache;
+    }
+
     @Override
     public void save(UserDataSet dataSet) {
         decoratedService.save(dataSet); // Если ID не был заполнен, то теперь заполнился.
