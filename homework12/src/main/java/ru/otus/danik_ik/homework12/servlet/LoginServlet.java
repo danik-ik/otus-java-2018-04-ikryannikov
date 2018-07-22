@@ -48,8 +48,6 @@ public class LoginServlet extends HttpServlet {
 
         if (requestLogin != null && accessAccepted(requestLogin)) {
             saveToSession(request, requestLogin); //request.getSession().getAttribute("login");
-            saveToServlet(request, requestLogin); //request.getAttribute("login");
-            saveToCookie(response, requestLogin); //request.getCookies();
 
             setOK(response);
             String l = (String) request.getSession().getAttribute("login");
@@ -57,8 +55,6 @@ public class LoginServlet extends HttpServlet {
             response.getWriter().println(page);
         } else {
             saveToSession(request, null); //request.getSession().getAttribute("login");
-            saveToServlet(request, null); //request.getAttribute("login");
-            saveToCookie(response, null); //request.getCookies();
 
             setForbidden(response);
             String l = (String) request.getSession().getAttribute("login");
