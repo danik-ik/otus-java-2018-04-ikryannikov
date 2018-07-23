@@ -1,7 +1,10 @@
 package ru.otus.danik_ik.homework13.servlet;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.otus.danik_ik.homework11.cache.CacheEngine;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +21,14 @@ public class AdminServlet extends HttpServlet {
     private static final String DEFAULT_USER_NAME = "UNKNOWN";
     private static final String ADMIN_PAGE_TEMPLATE = "admin.html";
 
-    private final TemplateProcessor templateProcessor;
-    private final CacheEngine cacheEngine;
+    @Autowired
+    private TemplateProcessor templateProcessor;
+
+    @Autowired
+    private CacheEngine cacheEngine;
+
+    public AdminServlet() {
+    }
 
     @SuppressWarnings("WeakerAccess")
     public AdminServlet(CacheEngine cacheEngine, TemplateProcessor templateProcessor) throws IOException {
@@ -30,6 +39,12 @@ public class AdminServlet extends HttpServlet {
     @SuppressWarnings("WeakerAccess")
     public AdminServlet(CacheEngine cacheEngine) throws IOException {
         this(cacheEngine, new TemplateProcessor());
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
     private Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
