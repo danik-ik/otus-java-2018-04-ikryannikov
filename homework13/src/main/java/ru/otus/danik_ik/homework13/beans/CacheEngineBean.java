@@ -7,8 +7,10 @@ import ru.otus.danik_ik.homework11.storage.dataSets.UserDataSet;
 import java.util.function.BiFunction;
 
 public class CacheEngineBean extends CacheEngineImpl<Long, UserDataSet> {
-    public CacheEngineBean(int maxElements, long lifeTimeMs, long idleTimeMs, boolean isEternal) {
-        super(maxElements, lifeTimeMs, idleTimeMs, isEternal, CacheHelper.SoftEntryFactory());
+    public CacheEngineBean(int maxElements, long lifeTimeMs,
+                           long idleTimeMs, boolean isEternal) {
+        super(maxElements, lifeTimeMs, idleTimeMs,
+                isEternal, CacheHelper.SoftEntryFactory());
     }
 }
 
