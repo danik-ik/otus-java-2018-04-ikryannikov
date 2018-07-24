@@ -17,6 +17,10 @@
         <constructor-arg name="cache" ref="cacheEngine"/>
     </bean>
 
+    <bean id="loadingEmulator" class="ru.otus.danik_ik.homework13.LoadingEmulator">
+        <constructor-arg name="dbService" ref="dbServiceCached"/>
+    </bean>
+
     <bean id="templateProcessor" class="ru.otus.danik_ik.homework13.servlet.TemplateProcessor"/>
 
 </beans>
