@@ -64,7 +64,7 @@ public class AdminServlet extends HttpServlet {
         //let's get login from session
         String login = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER_NAME);
         pageVariables.put("login", login != null ? login : DEFAULT_USER_NAME);
-        pageVariables.put("loginOk", login != null ? true : false);
+        pageVariables.put("loginOk", login != null);
 
         return pageVariables;
     }
