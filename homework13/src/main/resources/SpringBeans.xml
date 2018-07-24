@@ -1,0 +1,26 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="cacheEngine" class="ru.otus.danik_ik.homework13.beans.CacheEngineBean">
+        <constructor-arg name="lifeTimeMs" value="1000"/>
+        <constructor-arg name="idleTimeMs" value="0"/>
+        <constructor-arg name="maxElements" value="1000"/>
+        <constructor-arg name="isEternal" value="false"/>
+    </bean>
+
+    <bean id="dbServiceBase" class="ru.otus.danik_ik.homework11.hibernateStorage.DbServiceImpl"/>
+
+    <bean id="dbServiceCached" class="ru.otus.danik_ik.homework11.cachedstorage.DbServiceCached">
+        <constructor-arg name="decoratedService" ref="dbServiceBase"/>
+        <constructor-arg name="cache" ref="cacheEngine"/>
+    </bean>
+
+    <bean id="loadingEmulator" class="ru.otus.danik_ik.homework13.LoadingEmulator">
+        <constructor-arg name="dbService" ref="dbServiceCached"/>
+    </bean>
+
+    <bean id="templateProcessor" class="ru.otus.danik_ik.homework13.servlet.TemplateProcessor"/>
+
+</beans>
