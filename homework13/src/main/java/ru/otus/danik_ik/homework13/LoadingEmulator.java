@@ -13,6 +13,7 @@ public class LoadingEmulator {
 
     public LoadingEmulator(DBService dbService) {
         this.dbService = dbService;
+        runAsThread();
     }
 
     public void runAsThread() {

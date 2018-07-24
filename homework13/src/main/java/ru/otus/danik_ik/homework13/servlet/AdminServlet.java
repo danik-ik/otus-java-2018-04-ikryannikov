@@ -3,6 +3,7 @@ package ru.otus.danik_ik.homework13.servlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.otus.danik_ik.homework11.cache.CacheEngine;
+import ru.otus.danik_ik.homework13.LoadingEmulator;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -26,6 +27,9 @@ public class AdminServlet extends HttpServlet {
 
     @Autowired
     private CacheEngine cacheEngine;
+
+    @Autowired
+    private LoadingEmulator loadingEmulator;
 
     public AdminServlet() {
     }
