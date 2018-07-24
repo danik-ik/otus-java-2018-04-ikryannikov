@@ -30,6 +30,7 @@ public class AdminServlet extends HttpServlet {
 
     @Autowired
     private LoadingEmulator loadingEmulator;
+    // инжектируется для того, чтобы объект эмулятора был создан и автоматически при этом запустился
 
     public AdminServlet() {
     }
