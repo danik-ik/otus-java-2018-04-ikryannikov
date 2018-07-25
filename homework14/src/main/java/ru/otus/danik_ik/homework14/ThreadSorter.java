@@ -122,6 +122,7 @@ public class ThreadSorter implements AutoCloseable{
     private Future<int[]> getSortedSubarrayFuture(int[] source, int startIndex, int stopIndex) {
         return service.submit(() -> {
             int[] result = new int[stopIndex - startIndex];
+            System.arraycopy(source, startIndex, result, 0, result.length);
             Arrays.sort(result);
             return result;
         });
