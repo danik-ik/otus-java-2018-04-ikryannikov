@@ -54,8 +54,59 @@ public class ThreadSorter implements AutoCloseable{
     }
 
     private List<Future<int[]>> mergePairs(List<Future<int[]>> source) {
-        return null; // TODO: 25.07.2018 <<<<<<<<<<<<<<<<<<<<<
-        // TODO: 25.07.2018 мержить по парам. Непарные пробрасывать насквозняк
+        List<Future<int[]>> result = new LinkedList<>();
+
+        int i = 0;
+        while (i + 2 < source.size()) {
+            // сливаем предварительно отсортированные фрагменты попарно
+            result.add(getMergedFuture(source.get(i), source.get(i + 1)));
+            i = i + minQuantity;
+        }
+        // пробрасываем на следующий уровень непарный фрагмент (если есть)
+        if (i < source.size()) result.add(source.get(i));
+
+        return result;
+    }
+
+    private Future<int[]> getMergedFuture(Future<int[]> future1, Future<int[]> future2) {
+        return service.submit( () -> {
+            while (!future1.isDone()) yield();
+            while (!future2.isDone()) yield();
+            int[] a = future1.get();
+            int[] b = future2.get();
+            return mergeOrderedArrays(a, b);
+        });
+    }
+
+    private int[] mergeOrderedArrays(int[] a, int[] b) {
+        int[] result = new int[a.length + b.length];
+        int rPos = 0;
+        int aPos = 0;
+        int bPos = 0;
+
+        // Мержим, пока не кончится один из массивов
+        while (aPos < a.length && bPos < b.length) {
+            int aVal = a[aPos];
+            int bVal = b[bPos];
+            if (aVal <= bVal) {
+                result[rPos] = aVal;
+                aPos++;
+            } else {
+                result[rPos] = bVal;
+                bPos++;
+            }
+            rPos++;
+        }
+        // остаток второго массива копируем в остаток результата
+        copyTailIfExists(a, aPos, result, rPos);
+        copyTailIfExists(b, bPos, result, rPos);
+
+        return result;
+    }
+
+    private void copyTailIfExists(int[] src, int srcPos, int[] dst, int dstPos) {
+        if (srcPos < src.length)
+            System.arraycopy(src, srcPos, dst, dstPos, src.length - srcPos);
     }
 
     private List<Future<int[]>> splitToSortedFragments(int[] source, int minQuantity) {
