@@ -60,7 +60,7 @@ public class ThreadSorter implements AutoCloseable{
         while (i + 2 < source.size()) {
             // сливаем предварительно отсортированные фрагменты попарно
             result.add(getMergedFuture(source.get(i), source.get(i + 1)));
-            i = i + minQuantity;
+            i = i + 2;
         }
         // пробрасываем на следующий уровень непарный фрагмент (если есть)
         if (i < source.size()) result.add(source.get(i));
