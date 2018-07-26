@@ -20,16 +20,16 @@ public class TreadSorterTest
     @Parameterized.Parameters(name = "{index}: (size: {0}; threadCount: {1}; minQuamtity: {2})")
     public static Iterable<Object[]> dataForTest() {
         return Arrays.asList(new Object[][]{
-//             {0, 1, 1},
-//             {1, 1, 1},
+             {0, 1, 1},
+             {1, 1, 1},
              {3, 1, 1},
-//             {10, 1, 10},
-//             {20, 1, 10},
-//             {0, 3, 1},
-//             {1, 3, 1},
-//             {10, 9, 10},
-//             {20, 9, 10},
-//             {10000, 6, 33},
+             {10, 1, 10},
+             {20, 1, 10},
+             {0, 3, 1},
+             {1, 3, 1},
+             {10, 9, 10},
+             {20, 9, 10},
+             {10000, 6, 33},
         });
     }
 

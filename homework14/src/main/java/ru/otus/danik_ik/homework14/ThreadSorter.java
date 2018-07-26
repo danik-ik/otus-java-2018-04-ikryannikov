@@ -57,7 +57,7 @@ public class ThreadSorter implements AutoCloseable{
         List<Future<int[]>> result = new LinkedList<>();
 
         int i = 0;
-        while (i + 2 < source.size()) {
+        while (i + 1 < source.size()) {
             // сливаем предварительно отсортированные фрагменты попарно
             result.add(getMergedFuture(source.get(i), source.get(i + 1)));
             i = i + 2;
