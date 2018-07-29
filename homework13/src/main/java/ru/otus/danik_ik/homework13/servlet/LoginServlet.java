@@ -1,6 +1,5 @@
 package ru.otus.danik_ik.homework13.servlet;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +63,7 @@ public class LoginServlet extends HttpServlet {
 
     }
 
-    boolean accessAccepted(String requestLogin) {
+    private boolean accessAccepted(String requestLogin) {
         if (requestLogin == null) return false;
         return requestLogin.length() == 18;
     }
