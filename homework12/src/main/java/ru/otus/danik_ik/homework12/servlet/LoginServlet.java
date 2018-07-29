@@ -64,7 +64,7 @@ public class LoginServlet extends HttpServlet {
 
     }
 
-    boolean accessAccepted(String requestLogin) {
+    private boolean accessAccepted(String requestLogin) {
         if (requestLogin == null) return false;
         return requestLogin.length() == 18;
     }
