@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
         this.templateProcessor = templateProcessor;
     }
 
-    public LoginServlet() throws IOException {
+    public LoginServlet() {
         this(new TemplateProcessor());
     }
 
@@ -37,12 +37,12 @@ public class LoginServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request,
-                      HttpServletResponse response) throws ServletException, IOException {
+                      HttpServletResponse response) throws IOException {
         doPost(request, response);
     }
 
     public void doPost(HttpServletRequest request,
-                       HttpServletResponse response) throws ServletException, IOException {
+                       HttpServletResponse response) throws IOException {
         String requestLogin = request.getParameter(LOGIN_PARAMETER_NAME);
         if (requestLogin == null) requestLogin = (String) request.getSession().getAttribute("login");
 

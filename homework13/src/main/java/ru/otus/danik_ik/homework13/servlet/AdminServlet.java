@@ -36,7 +36,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public AdminServlet(CacheEngine cacheEngine, TemplateProcessor templateProcessor) throws IOException {
+    public AdminServlet(CacheEngine cacheEngine, TemplateProcessor templateProcessor) {
         this.cacheEngine = cacheEngine;
         this.templateProcessor = templateProcessor;
     }
@@ -71,7 +71,7 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request,
-                      HttpServletResponse response) throws ServletException, IOException {
+                      HttpServletResponse response) throws IOException {
 
         Map<String, Object> pageVariables = createPageVariablesMap(request);
 
