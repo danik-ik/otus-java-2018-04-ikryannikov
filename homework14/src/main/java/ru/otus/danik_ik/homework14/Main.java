@@ -8,18 +8,6 @@ import static java.lang.Thread.yield;
 public class Main
 {
     public static void main( String[] args ) {
-        ExecutorService service = Executors.newFixedThreadPool(2);
-        try {
-            for(int i = 0; i < 10; i++)
-            {
-                int finalI = i;
-                service.submit(() -> {
-                    System.out.println(finalI);
-                    yield();
-                });
-            }
-        } finally {
-            service.shutdown();
-        }
+        System.out.println( "There is NOTHING. See tests!" );
     }
 }
