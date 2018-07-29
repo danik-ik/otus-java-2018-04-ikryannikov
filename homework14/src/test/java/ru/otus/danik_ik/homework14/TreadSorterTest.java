@@ -9,8 +9,6 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /** Simple parametrized test. */
 @RunWith(Parameterized.class)
@@ -79,7 +77,7 @@ public class TreadSorterTest
 
 
     @Test
-    public void testIt() throws Exception {
+    public void testIt() {
         long startTime;
         startTime = System.nanoTime();
         int[] result = ThreadSorter.sort(src, threadCount, minQuantity);

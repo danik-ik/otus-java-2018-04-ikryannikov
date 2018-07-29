@@ -22,7 +22,6 @@ public class ThreadSorter implements AutoCloseable{
 
     public int[] sort(int[] source) {
         if (source.length == 0) return new int[0];
-        List<Future<int[]>> nextLayer;
 
         Future<int[]> resultFuture = getSortFuture(source);
 
@@ -129,7 +128,7 @@ public class ThreadSorter implements AutoCloseable{
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         service.shutdown();
     }
 }
