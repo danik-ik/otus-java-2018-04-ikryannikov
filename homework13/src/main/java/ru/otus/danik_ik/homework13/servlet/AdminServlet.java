@@ -38,7 +38,7 @@ public class AdminServlet extends HttpServlet {
     @SuppressWarnings("WeakerAccess")
     public AdminServlet(CacheEngine cacheEngine, TemplateProcessor templateProcessor) throws IOException {
         this.cacheEngine = cacheEngine;
-        this.templateProcessor = new TemplateProcessor();
+        this.templateProcessor = templateProcessor;
     }
 
     @SuppressWarnings("WeakerAccess")
