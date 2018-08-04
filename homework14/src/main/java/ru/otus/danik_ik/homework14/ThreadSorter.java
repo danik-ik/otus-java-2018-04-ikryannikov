@@ -25,7 +25,6 @@ public class ThreadSorter implements AutoCloseable{
 
         Future<int[]> resultFuture = getSortFuture(source);
 
-        while (!resultFuture.isDone()) yield();
         try {
             return resultFuture.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -69,8 +68,6 @@ public class ThreadSorter implements AutoCloseable{
 
     private Future<int[]> getMergedFuture(Future<int[]> future1, Future<int[]> future2) {
         return service.submit( () -> {
-            while (!future1.isDone()) yield();
-            while (!future2.isDone()) yield();
             int[] a = future1.get();
             int[] b = future2.get();
             return mergeOrderedArrays(a, b);
